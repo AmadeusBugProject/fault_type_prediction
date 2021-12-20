@@ -16,7 +16,7 @@ More information can be found in the publication:
 # Structure of this repository
 ## `artifact_detection_model`
 The natural language / non-natural lanugage classification model used for preprocessing bug report texts. 
-Due to GitHub file size restrictions, the pretrained model used in our experiments is not included, please see [here](##artifact_detection-model) on how to obtain it.
+Due to GitHub file size restrictions, the pretrained model used in our experiments is not included, please see [here](#artifact_detection-model) on how to obtain it.
 
 ## `dataset`
 The datasets, survey results, and validation datasets are located in [dataset](dataset).
