@@ -1,0 +1,2 @@
+,count,mean,std,min,25%,50%,75%,max,description
+amount_of_lines_in_doc,33.0,43.72727272727273,65.662619087686,3.0,7.0,24.0,42.0,316.0,always_wrong_bug_tickets

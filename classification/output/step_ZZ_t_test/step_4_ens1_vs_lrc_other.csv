@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9928109049797058,0.8763938546180725,Ensemble1 other is normal distributed
+1,dagostino_stat,0.5175905347499152,0.771981056574037,Ensemble1 other is normal distributed
+0,shapiro_stat,0.9834926128387451,0.2460835725069046,LRC other is normal distributed
+1,dagostino_stat,2.0888265089786313,0.3518982335245964,LRC other is normal distributed
+0,t_test_one_sided,2.436102195860122,0.0078666706862817,Ensemble1 other is not greater than LRC other

@@ -1,0 +1,101 @@
+url,RootCause,RootCauseDetail
+https://github.com/MenoData/Time4J/issues/807,Semantic,If condition incorrect
+https://github.com/elastic/elasticsearch/issues/5142,Semantic,Complex change
+https://github.com/speedment/speedment/issues/322,Concurrency,Other
+https://github.com/hazelcast/hazelcast/issues/1501,Semantic,Runaway recursion
+https://github.com/mybatis/mybatis-3/issues/61,Semantic,Wrong/incorrect algorithm
+https://github.com/redisson/redisson/issues/106,Concurrency,Race condition
+https://github.com/eclipse/hono/issues/457,Semantic,Data missing / not propagated
+https://github.com/spring-projects/spring-session/issues/1603,Other,Documentation
+https://github.com/netty/netty/issues/1535,Memory,Resource leak
+https://github.com/google/ExoPlayer/issues/2167,Semantic,Complex change
+https://github.com/google/ExoPlayer/issues/1874,Semantic,Missing case complex
+https://github.com/junit-team/junit5/issues/398,Other,Built system
+https://github.com/netty/netty/issues/6574,Semantic,Superfluous code
+https://github.com/elastic/elasticsearch/issues/15096,Other,Documentation
+https://github.com/spring-projects/spring-boot/issues/4921,Memory,Resource leak
+https://github.com/eclipse/jetty.project/issues/1448,Memory,Other
+https://github.com/spring-projects/spring-boot/issues/10569,Semantic,Wrong evaluation
+https://github.com/nextcloud/android/issues/6135,Other,Built system
+https://github.com/netty/netty/issues/1986,Concurrency,Race condition
+https://github.com/google/guava/issues/3598,Semantic,Complex change
+https://github.com/eclipse/deeplearning4j/issues/4766,Memory,Thread leak
+https://github.com/netty/netty/issues/7383,Memory,Other
+https://github.com/eclipse/eclipse.jdt.ls/issues/661,Other,Built system
+https://github.com/google/guava/issues/1977,Concurrency,Deadlock
+https://github.com/square/okhttp/issues/3422,Semantic,Complex change
+https://github.com/spring-projects/spring-framework/issues/24605,Other,Built system
+https://github.com/elastic/elasticsearch/issues/15338,Semantic,Missing case complex
+https://github.com/brettwooldridge/HikariCP/issues/68,Other,Documentation
+https://github.com/redisson/redisson/issues/1542,Concurrency,Other
+https://github.com/spring-projects/spring-boot/issues/2341,Semantic,Wrong class
+https://github.com/spring-projects/spring-security/issues/3766,Other,Documentation
+https://github.com/elastic/elasticsearch/issues/1147,Concurrency,Deadlock
+https://github.com/netty/netty/issues/6607,Semantic,Data missing / not propagated
+https://github.com/spring-projects/spring-boot/issues/4627,Other,Built system
+https://github.com/hazelcast/hazelcast/issues/12679,Memory,Memory leak
+https://github.com/eclipse/reddeer/issues/420,Semantic,Data missing / not propagated
+https://github.com/netty/netty/issues/5190,Memory,Memory leak
+https://github.com/elastic/elasticsearch/issues/4486,Semantic,Complex change
+https://github.com/spring-projects/spring-boot/issues/836,Semantic,Missing implementation
+https://github.com/apache/pulsar/issues/4790,Concurrency,Race condition
+https://github.com/elastic/elasticsearch/issues/1455,Concurrency,Other
+https://github.com/spring-projects/spring-framework/issues/24886,Memory,Memory leak
+https://github.com/spring-projects/spring-boot/issues/17798,Semantic,Missing implementation
+https://github.com/netty/netty/issues/2252,Semantic,Call missing
+https://github.com/redisson/redisson/issues/1459,Concurrency,Deadlock
+https://github.com/netty/netty/issues/1181,Concurrency,Deadlock
+https://github.com/spring-projects/spring-batch/issues/766,Semantic,If condition incorrect
+https://github.com/netty/netty/issues/1898,Semantic,Exception should not be thrown
+https://github.com/reactor/reactor-core/issues/905,Concurrency,Other
+https://github.com/speedment/speedment/issues/234,Concurrency,Other
+https://github.com/requery/requery/issues/354,Semantic,Runaway recursion
+https://github.com/elastic/elasticsearch/issues/24108,Memory,Memory leak
+https://github.com/eclipse/n4js/issues/560,Semantic,Complex change
+https://github.com/AsyncHttpClient/async-http-client/issues/1049,Concurrency,Race condition
+https://github.com/JetBrains/idea-gitignore/issues/480,Concurrency,Other
+https://github.com/jankotek/mapdb/issues/776,Semantic,Runaway recursion
+https://github.com/elastic/elasticsearch/issues/1118,Memory,Memory leak
+https://github.com/grpc/grpc-java/issues/2985,Other,Built system
+https://github.com/brettwooldridge/HikariCP/issues/44,Memory,Resource leak
+https://github.com/netty/netty/issues/3837,Memory,Memory leak
+https://github.com/redisson/redisson/issues/1326,Memory,Memory leak
+https://github.com/intuit/karate/issues/244,Semantic,Call missing
+https://github.com/reactor/reactor-core/issues/930,Other,Documentation
+https://github.com/eclipse/che/issues/11287,Other,Built system
+https://github.com/facebook/fresco/issues/2039,Other,Built system
+https://github.com/mybatis/mybatis-3/issues/748,Semantic,Call missing
+https://github.com/AsyncHttpClient/async-http-client/issues/1067,Memory,Memory leak
+https://github.com/mapsforge/mapsforge/issues/920,Concurrency,Other
+https://github.com/elastic/elasticsearch/issues/16887,Other,Documentation
+https://github.com/netty/netty/issues/1310,Concurrency,Deadlock
+https://github.com/jankotek/mapdb/issues/561,Semantic,Complex change
+https://github.com/google/ExoPlayer/issues/268,Semantic,Missing case complex
+https://github.com/netty/netty/issues/1817,Concurrency,Deadlock
+https://github.com/junit-team/junit5/issues/1000,Other,Built system
+https://github.com/MenoData/Time4J/issues/809,Semantic,Missing case complex
+https://github.com/elastic/elasticsearch/issues/1321,Semantic,Incorrect value
+https://github.com/spring-projects/spring-security/issues/5163,Semantic,Scope wrong
+https://github.com/grpc/grpc-java/issues/6601,Concurrency,Race condition
+https://github.com/requery/requery/issues/75,Other,Built system
+https://github.com/elastic/elasticsearch/issues/5766,Concurrency,Order violation
+https://github.com/spring-projects/spring-security/issues/7980,Other,Documentation
+https://github.com/JodaOrg/joda-time/issues/261,Other,Documentation
+https://github.com/nextcloud/android/issues/577,Other,Ui resources
+https://github.com/JetBrains/idea-gitignore/issues/373,Memory,Memory leak
+https://github.com/Automattic/simplenote-android/issues/213,Concurrency,Other
+https://github.com/netty/netty/issues/588,Other,Documentation
+https://github.com/redisson/redisson/issues/1294,Semantic,Incorrect value
+https://github.com/OpenRefine/OpenRefine/issues/2286,Other,Built system
+https://github.com/spring-projects/spring-security/issues/7293,Memory,Memory leak
+https://github.com/eclipse/hono/issues/231,Concurrency,Other
+https://github.com/netty/netty/issues/403,Other,Documentation
+https://github.com/checkstyle/checkstyle/issues/3507,Semantic,Missing case complex
+https://github.com/spring-projects/spring-boot/issues/145,Semantic,Null check
+https://github.com/netty/netty/issues/7760,Semantic,Native overflow
+https://github.com/elastic/elasticsearch/issues/5622,Semantic,Missing case complex
+https://github.com/facebook/buck/issues/1518,Concurrency,Race condition
+https://github.com/checkstyle/checkstyle/issues/3962,Memory,Resource leak
+https://github.com/eclipse/hono/issues/110,Concurrency,Race condition
+https://github.com/netty/netty/issues/2086,Concurrency,Race condition
+https://github.com/spring-projects/spring-session/issues/145,Other,Documentation

@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.993215799331665,0.9007338285446167,Ensemble1 concurrency is normal distributed
+1,dagostino_stat,1.0156975596403521,0.6017887674873764,Ensemble1 concurrency is normal distributed
+0,shapiro_stat,0.9820542335510254,0.19154952466487885,LRC concurrency is normal distributed
+1,dagostino_stat,2.6800290600811354,0.2618418639797796,LRC concurrency is normal distributed
+0,t_test_one_sided,1.8249890561320554,0.03476568895437315,Ensemble1 concurrency is not greater than LRC concurrency

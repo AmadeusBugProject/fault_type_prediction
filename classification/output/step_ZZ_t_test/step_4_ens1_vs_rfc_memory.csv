@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9868199825286865,0.4256339967250824,Ensemble1 memory is normal distributed
+1,dagostino_stat,3.2013765249180492,0.2017576080094594,Ensemble1 memory is normal distributed
+0,shapiro_stat,0.9854167699813843,0.34019556641578674,RFC memory is normal distributed
+1,dagostino_stat,1.107900860066031,0.5746751065094935,RFC memory is normal distributed
+0,t_test_one_sided,-1.8884555691614109,0.9697824303771263,Ensemble1 memory is not greater than RFC memory

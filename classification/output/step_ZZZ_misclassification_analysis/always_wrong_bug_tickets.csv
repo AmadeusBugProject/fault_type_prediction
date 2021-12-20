@@ -1,0 +1,1444 @@
+,doc,url,correct,target,prediction,count
+368,"StackOverflowException in URLBuilder
+URIBuilder is not thread-safe. Following scenario causes infinite recursion and StackOverflowException when someone tries to create new URL:
+
+1. `URLBuilder.replaceURLFactory()` - URLBuilder.currentFactory set to null, URL.factory set to custom
+2. `URLBuilder.replaceURLFactory()` - URLBuilder.currentFactory set to custom, URL.factory set to custom again
+3. `new URL(""http://google.com"")` fails on StackOverflowException. Following code is an infinite loop because currentFactory points to ""this"":
+```
+public URLStreamHandler createURLStreamHandler(String protocol) {
+    (...)
+    if (currentFactory != null) {
+        return currentFactory.createURLStreamHandler(protocol);
+    }
+    (...)
+}
+```
+
+Sample stacktrace:
+```
+15:15:06.594 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.594 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.594 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+15:15:06.595 [DEBUG] [TestEventLogger]         at org.redisson.misc.URLBuilder$1.createURLStreamHandler(URLBuilder.java:78)
+```
+
+Affected version: 3.3.0",https://github.com/redisson/redisson/issues/776,0.0,1.0,2.7954545454545454,44
+164,"Improve close behavior for failed pending writes
+When a write is pending, and the callback is failed, we have this stack trace:
+
+```
+""qtp1321203216-579"" #579 prio=5 os_prio=0 tid=0x00007ff48c012800 nid=0x635 waiting on condition [0x00007ff2d423e000]
+   java.lang.Thread.State: WAITING (parking)
+    at sun.misc.Unsafe.park(Native Method)
+    - parking to wait for  <0x00000006fd24d518> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+    at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+    at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+    at org.eclipse.jetty.util.SharedBlockingCallback$Blocker.block(SharedBlockingCallback.java:210)
+    at org.eclipse.jetty.server.HttpOutput.write(HttpOutput.java:164)
+    at org.eclipse.jetty.server.HttpOutput.close(HttpOutput.java:211)
+    at org.eclipse.jetty.server.Response.closeOutput(Response.java:987)
+    at org.eclipse.jetty.server.HttpOutput.closed(HttpOutput.java:256)
+    at org.eclipse.jetty.server.HttpChannel$CommitCallback.failed(HttpChannel.java:791)
+    at org.eclipse.jetty.io.AbstractConnection.failedCallback(AbstractConnection.java:91)
+    at org.eclipse.jetty.server.HttpConnection.access$1200(HttpConnection.java:50)
+    at org.eclipse.jetty.server.HttpConnection$SendCallback.onCompleteFailure(HttpConnection.java:799)
+    at org.eclipse.jetty.util.IteratingCallback.failed(IteratingCallback.java:401)
+    at org.eclipse.jetty.io.WriteFlusher$PendingState.fail(WriteFlusher.java:260)
+    at org.eclipse.jetty.io.WriteFlusher.completeWrite(WriteFlusher.java:401)
+    at org.eclipse.jetty.io.SelectChannelEndPoint$3.run(SelectChannelEndPoint.java:89)
+    at org.eclipse.jetty.io.SelectChannelEndPoint.onSelected(SelectChannelEndPoint.java:177)
+    at org.eclipse.jetty.io.ManagedSelector$SelectorProducer.processSelected(ManagedSelector.java:272)
+    at org.eclipse.jetty.io.ManagedSelector$SelectorProducer.produce(ManagedSelector.java:170)
+    at org.eclipse.jetty.util.thread.strategy.ProduceExecuteConsume.execute(ProduceExecuteConsume.java:50)
+    at org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:143)
+```
+
+The stack trace shows that `WriteFlusher$PendingState.fail()` is called, so there was a write which got congested and when the callback fails we should not try to write more via `HttpOutput.closed()` because we know that the previous write was already congested.
+
+We should just hard close the connection.
+",https://github.com/eclipse/jetty.project/issues/355,0.0,3.0,0.1276595744680851,47
+201,"KitchenSink video playback has an IOException on iOS
+This seems to be a recent regression
+",https://github.com/codenameone/CodenameOne/issues/1595,0.0,1.0,2.7954545454545454,44
+327,"ResourceLeakException in CR7
+During our tests with our benchmark, we saw a Leak which according to us and norman did not make sense.
+
+Test-Case can be found at https://github.com/wasted/netty-websocket-bench
+
+Output from Server:
+
+fbettag@committers:~/netty-bench$ ./sbt 'run-main io.wasted.netty.websocket.bench.Server'
+[info] Loading project definition from /home/fbettag/netty-bench/project
+[info] Set current project to netty-bench (in build file:/home/fbettag/netty-bench/)
+[info] Running io.wasted.netty.websocket.bench.Server 
+22:19:23.818 DEBUG i.n.u.i.l.InternalLoggerFactory - Using SLF4J as the default logging framework
+22:19:23.823 DEBUG i.n.c.MultithreadEventLoopGroup - io.netty.eventLoopThreads: 12
+22:19:23.835 DEBUG i.n.util.internal.PlatformDependent - UID: 1001
+22:19:23.835 DEBUG i.n.util.internal.PlatformDependent - Java version: 7
+22:19:23.838 DEBUG i.n.util.internal.PlatformDependent0 - java.nio.ByteBuffer.cleaner: available
+22:19:23.839 DEBUG i.n.util.internal.PlatformDependent0 - java.nio.Buffer.address: available
+22:19:23.839 DEBUG i.n.util.internal.PlatformDependent0 - sun.misc.Unsafe.theUnsafe: available
+22:19:23.839 DEBUG i.n.util.internal.PlatformDependent0 - sun.misc.Unsafe.copyMemory: available
+22:19:23.839 DEBUG i.n.util.internal.PlatformDependent0 - java.nio.Bits.unaligned: true
+22:19:23.840 DEBUG i.n.util.internal.PlatformDependent - sun.misc.Unsafe: available
+22:19:23.967 DEBUG i.n.util.internal.PlatformDependent - Javassist: available
+22:19:23.967 DEBUG i.n.util.internal.PlatformDependent - io.netty.noPreferDirect: false
+22:19:24.088 DEBUG i.n.buffer.PooledByteBufAllocator - io.netty.allocator.numHeapArenas: 6
+22:19:24.088 DEBUG i.n.buffer.PooledByteBufAllocator - io.netty.allocator.numDirectArenas: 6
+22:19:24.088 DEBUG i.n.buffer.PooledByteBufAllocator - io.netty.allocator.pageSize: 8192
+22:19:24.088 DEBUG i.n.buffer.PooledByteBufAllocator - io.netty.allocator.maxOrder: 11
+22:19:24.088 DEBUG i.n.buffer.PooledByteBufAllocator - io.netty.allocator.chunkSize: 16777216
+22:19:24.104 DEBUG io.netty.util.NetUtil - Loopback interface: lo
+22:19:24.104 DEBUG io.netty.util.NetUtil - Loopback address: /0:0:0:0:0:0:0:1%1 (primary)
+22:19:24.104 DEBUG io.netty.util.NetUtil - Loopback address: /127.0.0.1
+22:19:24.104 DEBUG io.netty.util.NetUtil - /proc/sys/net/core/somaxconn: 128
+22:19:24.129 DEBUG i.n.u.i.JavassistTypeParameterMatcherGenerator - Generated: io.netty.util.internal.**matchers**.io.netty.channel.ChannelMatcher
+22:19:24.141 INFO  Server$ - Listening on 0.0.0.0:5555
+22:19:24.142 INFO  Server$ - Ready
+22:19:24.147 DEBUG io.netty.util.ResourceLeakDetector - io.netty.noResourceLeakDetection: false
+22:19:25.200 INFO  Server$ - -- Stats -- connected: 0
+22:19:26.294 INFO  Server$ - -- Stats -- connected: 0
+22:19:27.394 INFO  Server$ - -- Stats -- connected: 0
+22:19:28.395 INFO  Server$ - -- Stats -- connected: 0
+22:19:29.395 INFO  Server$ - -- Stats -- connected: 0
+22:19:30.495 INFO  Server$ - -- Stats -- connected: 0
+22:19:31.168 DEBUG i.n.u.i.JavassistTypeParameterMatcherGenerator - Generated: io.netty.util.internal.**matchers**.io.netty.handler.codec.http.HttpObjectMatcher
+22:19:31.398 DEBUG i.n.u.i.JavassistTypeParameterMatcherGenerator - Generated: io.netty.util.internal.**matchers**.io.netty.handler.codec.http.websocketx.WebSocketFrameMatcher
+22:19:31.594 INFO  Server$ - -- Stats -- connected: 382
+22:19:32.594 INFO  Server$ - -- Stats -- connected: 1629
+22:19:32.887 WARN  io.netty.util.ResourceLeakDetector - LEAK: ByteBuf was GC'd before being released correctly.
+io.netty.util.ResourceLeakException: io.netty.buffer.DefaultCompositeByteBuf@7572e7e5
+  at io.netty.util.ResourceLeakDetector$DefaultResourceLeak.<init>(ResourceLeakDetector.java:158) ~[netty-all-4.0.0.CR7.jar:na]
+    at io.netty.util.ResourceLeakDetector.open(ResourceLeakDetector.java:103) ~[netty-all-4.0.0.CR7.jar:na]
+    at io.netty.buffer.DefaultCompositeByteBuf.<init>(DefaultCompositeByteBuf.java:60) ~[netty-all-4.0.0.CR7.jar:na]
+    at io.netty.buffer.Unpooled.compositeBuffer(Unpooled.java:353) ~[netty-all-4.0.0.CR7.jar:na]
+    at io.netty.handler.codec.http.HttpObjectAggregator.decode(HttpObjectAggregator.java:137) ~[netty-all-4.0.0.CR7.jar:na]
+    at io.netty.handler.codec.http.HttpObjectAggregator.decode(HttpObjectAggregator.java:49) ~[netty-all-4.0.0.CR7.jar:na]
+    at io.netty.handler.codec.MessageToMessageDecoder.messageReceived(MessageToMessageDecoder.java:82) ~[netty-all-4.0.0.CR7.jar:na]
+    at io.netty.channel.DefaultChannelHandlerContext.invokeMessageReceived(DefaultChannelHandlerContext.java:379) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.channel.DefaultChannelHandlerContext.fireMessageReceived(DefaultChannelHandlerContext.java:364) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.handler.codec.ByteToMessageDecoder.messageReceived(ByteToMessageDecoder.java:187) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.channel.DefaultChannelHandlerContext.invokeMessageReceived(DefaultChannelHandlerContext.java:379) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.channel.DefaultChannelHandlerContext.fireMessageReceived(DefaultChannelHandlerContext.java:364) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.channel.DefaultChannelPipeline.fireMessageReceived(DefaultChannelPipeline.java:786) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:120) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:489) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:464) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:358) [netty-all-4.0.0.CR7.jar:na]
+    at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:101) [netty-all-4.0.0.CR7.jar:na]
+    at java.lang.Thread.run(Thread.java:722) [na:1.7.0_03]
+22:19:33.694 INFO  Server$ - -- Stats -- connected: 3293
+22:19:34.794 INFO  Server$ - -- Stats -- connected: 4434
+22:19:35.895 INFO  Server$ - -- Stats -- connected: 4434
+22:19:36.995 INFO  Server$ - -- Stats -- connected: 4496
+22:19:38.094 INFO  Server$ - -- Stats -- connected: 6172
+22:19:39.095 INFO  Server$ - -- Stats -- connected: 8256
+22:19:40.195 INFO  Server$ - -- Stats -- connected: 10637
+22:19:41.328 INFO  Server$ - -- Stats -- connected: 13811
+22:19:42.394 INFO  Server$ - -- Stats -- connected: 14053
+22:19:43.494 INFO  Server$ - -- Stats -- connected: 14169
+22:19:44.594 INFO  Server$ - -- Stats -- connected: 15114
+22:19:45.695 INFO  Server$ - -- Stats -- connected: 15116
+22:19:46.795 INFO  Server$ - -- Stats -- connected: 15116
+22:19:47.895 INFO  Server$ - -- Stats -- connected: 16018
+22:19:48.995 INFO  Server$ - -- Stats -- connected: 16020
+22:19:50.095 INFO  Server$ - -- Stats -- connected: 16020
+22:19:51.194 INFO  Server$ - -- Stats -- connected: 17850
+22:19:52.195 INFO  Server$ - -- Stats -- connected: 18120
+22:19:53.294 INFO  Server$ - -- Stats -- connected: 18145
+22:19:54.395 INFO  Server$ - -- Stats -- connected: 18752
+22:19:55.495 INFO  Server$ - -- Stats -- connected: 20156
+22:19:56.595 INFO  Server$ - -- Stats -- connected: 20174
+22:19:57.695 INFO  Server$ - -- Stats -- connected: 20198
+22:19:58.794 INFO  Server$ - -- Stats -- connected: 23409
+22:19:59.894 INFO  Server$ - -- Stats -- connected: 26831
+22:20:00.894 INFO  Server$ - -- Stats -- connected: 29504
+22:20:01.994 INFO  Server$ - -- Stats -- connected: 30593
+22:20:03.094 INFO  Server$ - -- Stats -- connected: 30735
+22:20:04.194 INFO  Server$ - -- Stats -- connected: 31655
+22:20:05.294 INFO  Server$ - -- Stats -- connected: 32179
+22:20:06.395 INFO  Server$ - -- Stats -- connected: 32322
+22:20:07.494 INFO  Server$ - -- Stats -- connected: 32612
+22:20:08.594 INFO  Server$ - -- Stats -- connected: 32619
+22:20:09.595 INFO  Server$ - -- Stats -- connected: 32639
+22:20:10.695 INFO  Server$ - -- Stats -- connected: 33241
+22:20:11.794 INFO  Server$ - -- Stats -- connected: 33250
+22:20:12.894 INFO  Server$ - -- Stats -- connected: 33273
+22:20:13.994 INFO  Server$ - -- Stats -- connected: 34017
+22:20:15.094 INFO  Server$ - -- Stats -- connected: 34160
+22:20:16.194 INFO  Server$ - -- Stats -- connected: 34303
+22:20:17.195 INFO  Server$ - -- Stats -- connected: 34696
+22:20:18.295 INFO  Server$ - -- Stats -- connected: 34712
+22:20:19.395 INFO  Server$ - -- Stats -- connected: 34735
+22:20:20.395 INFO  Server$ - -- Stats -- connected: 35236
+22:20:21.495 INFO  Server$ - -- Stats -- connected: 35378
+22:20:22.595 INFO  Server$ - -- Stats -- connected: 35716
+22:20:23.694 INFO  Server$ - -- Stats -- connected: 37473
+22:20:24.694 INFO  Server$ - -- Stats -- connected: 37494
+22:20:25.794 INFO  Server$ - -- Stats -- connected: 37908
+22:20:26.894 INFO  Server$ - -- Stats -- connected: 38825
+22:20:27.994 INFO  Server$ - -- Stats -- connected: 38848
+22:20:29.094 INFO  Server$ - -- Stats -- connected: 39202
+22:20:30.194 INFO  Server$ - -- Stats -- connected: 39346
+22:20:31.295 INFO  Server$ - -- Stats -- connected: 39489
+22:20:32.395 INFO  Server$ - -- Stats -- connected: 39890
+22:20:33.495 INFO  Server$ - -- Stats -- connected: 40032
+22:20:34.594 INFO  Server$ - -- Stats -- connected: 40176
+22:20:35.694 INFO  Server$ - -- Stats -- connected: 40589
+22:20:36.695 INFO  Server$ - -- Stats -- connected: 40721
+22:20:37.795 INFO  Server$ - -- Stats -- connected: 40865
+22:20:38.895 INFO  Server$ - -- Stats -- connected: 41689
+22:20:39.995 INFO  Server$ - -- Stats -- connected: 41712
+22:20:41.094 INFO  Server$ - -- Stats -- connected: 41734
+22:20:42.194 INFO  Server$ - -- Stats -- connected: 42118
+22:20:43.194 INFO  Server$ - -- Stats -- connected: 42249
+22:20:44.294 INFO  Server$ - -- Stats -- connected: 42477
+22:20:45.394 INFO  Server$ - -- Stats -- connected: 42778
+22:20:46.494 INFO  Server$ - -- Stats -- connected: 42923
+22:20:47.595 INFO  Server$ - -- Stats -- connected: 43975
+22:20:48.695 INFO  Server$ - -- Stats -- connected: 43983
+22:20:49.794 INFO  Server$ - -- Stats -- connected: 44006
+22:20:50.795 INFO  Server$ - -- Stats -- connected: 44377
+22:20:51.894 INFO  Server$ - -- Stats -- connected: 44521
+22:20:52.895 INFO  Server$ - -- Stats -- connected: 44649
+22:20:53.995 INFO  Server$ - -- Stats -- connected: 45068
+22:20:55.095 INFO  Server$ - -- Stats -- connected: 45213
+22:20:56.195 INFO  Server$ - -- Stats -- connected: 45360
+22:20:57.295 INFO  Server$ - -- Stats -- connected: 45756
+22:20:58.394 INFO  Server$ - -- Stats -- connected: 45900
+22:20:59.395 INFO  Server$ - -- Stats -- connected: 46033
+22:21:00.494 INFO  Server$ - -- Stats -- connected: 48850
+22:21:01.594 INFO  Server$ - -- Stats -- connected: 51145
+22:21:02.694 INFO  Server$ - -- Stats -- connected: 51674
+22:21:03.794 INFO  Server$ - -- Stats -- connected: 52088
+22:21:04.895 INFO  Server$ - -- Stats -- connected: 52111
+22:21:06.027 INFO  Server$ - -- Stats -- connected: 53118
+22:21:07.094 INFO  Server$ - -- Stats -- connected: 57462
+22:21:08.094 INFO  Server$ - -- Stats -- connected: 57595
+22:21:09.194 INFO  Server$ - -- Stats -- connected: 57740
+22:21:10.295 INFO  Server$ - -- Stats -- connected: 57887
+22:21:11.395 INFO  Server$ - -- Stats -- connected: 58033
+22:21:12.494 INFO  Server$ - -- Stats -- connected: 58178
+22:21:13.595 INFO  Server$ - -- Stats -- connected: 58322
+22:21:14.695 INFO  Server$ - -- Stats -- connected: 58468
+22:21:15.795 INFO  Server$ - -- Stats -- connected: 58614
+22:21:16.895 INFO  Server$ - -- Stats -- connected: 58759
+22:21:17.995 INFO  Server$ - -- Stats -- connected: 58906
+22:21:19.095 INFO  Server$ - -- Stats -- connected: 59053
+22:21:20.195 INFO  Server$ - -- Stats -- connected: 59199
+22:21:21.294 INFO  Server$ - -- Stats -- connected: 59345
+22:21:22.394 INFO  Server$ - -- Stats -- connected: 59487
+22:21:23.494 INFO  Server$ - -- Stats -- connected: 59634
+22:21:24.594 INFO  Server$ - -- Stats -- connected: 59780
+22:21:25.694 INFO  Server$ - -- Stats -- connected: 59927
+22:21:26.794 INFO  Server$ - -- Stats -- connected: 60072
+22:21:27.894 INFO  Server$ - -- Stats -- connected: 60219
+22:21:28.994 INFO  Server$ - -- Stats -- connected: 60366
+22:21:30.095 INFO  Server$ - -- Stats -- connected: 60512
+22:21:31.195 INFO  Server$ - -- Stats -- connected: 60658
+22:21:32.295 INFO  Server$ - -- Stats -- connected: 60801
+22:21:33.395 INFO  Server$ - -- Stats -- connected: 60948
+22:21:34.495 INFO  Server$ - -- Stats -- connected: 61095
+22:21:35.594 INFO  Server$ - -- Stats -- connected: 61241
+22:21:36.595 INFO  Server$ - -- Stats -- connected: 61375
+22:21:37.694 INFO  Server$ - -- Stats -- connected: 61521
+22:21:38.794 INFO  Server$ - -- Stats -- connected: 61667
+22:21:39.894 INFO  Server$ - -- Stats -- connected: 61814
+22:21:40.994 INFO  Server$ - -- Stats -- connected: 61958
+22:21:42.095 INFO  Server$ - -- Stats -- connected: 62105
+22:21:43.195 INFO  Server$ - -- Stats -- connected: 62252
+22:21:44.294 INFO  Server$ - -- Stats -- connected: 62399
+22:21:45.395 INFO  Server$ - -- Stats -- connected: 62547
+22:21:46.495 INFO  Server$ - -- Stats -- connected: 62696
+22:21:47.595 INFO  Server$ - -- Stats -- connected: 62844
+22:21:48.695 INFO  Server$ - -- Stats -- connected: 62993
+22:21:49.794 INFO  Server$ - -- Stats -- connected: 63137
+22:21:50.795 INFO  Server$ - -- Stats -- connected: 63272
+22:21:51.895 INFO  Server$ - -- Stats -- connected: 63421
+22:21:52.995 INFO  Server$ - -- Stats -- connected: 63569
+22:21:54.095 INFO  Server$ - -- Stats -- connected: 63718
+22:21:55.194 INFO  Server$ - -- Stats -- connected: 63866
+22:21:56.195 INFO  Server$ - -- Stats -- connected: 64001
+22:21:57.294 INFO  Server$ - -- Stats -- connected: 64149
+22:21:58.295 INFO  Server$ - -- Stats -- connected: 64285
+22:21:59.395 INFO  Server$ - -- Stats -- connected: 64429
+22:22:00.494 INFO  Server$ - -- Stats -- connected: 64579
+22:22:01.495 INFO  Server$ - -- Stats -- connected: 64715
+22:22:02.594 INFO  Server$ - -- Stats -- connected: 64863
+22:22:03.595 INFO  Server$ - -- Stats -- connected: 64997
+22:22:04.695 INFO  Server$ - -- Stats -- connected: 65146
+22:22:05.794 INFO  Server$ - -- Stats -- connected: 65296
+22:22:06.894 INFO  Server$ - -- Stats -- connected: 65445
+22:22:07.994 INFO  Server$ - -- Stats -- connected: 65594
+22:22:09.095 INFO  Server$ - -- Stats -- connected: 65738
+22:22:10.195 INFO  Server$ - -- Stats -- connected: 65887
+22:22:11.294 INFO  Server$ - -- Stats -- connected: 66036
+22:22:12.295 INFO  Server$ - -- Stats -- connected: 66172
+22:22:13.395 INFO  Server$ - -- Stats -- connected: 66320
+22:22:14.494 INFO  Server$ - -- Stats -- connected: 66470
+22:22:15.495 INFO  Server$ - -- Stats -- connected: 66606
+22:22:16.594 INFO  Server$ - -- Stats -- connected: 66756
+22:22:17.694 INFO  Server$ - -- Stats -- connected: 66901
+22:22:18.794 INFO  Server$ - -- Stats -- connected: 67051
+22:22:19.894 INFO  Server$ - -- Stats -- connected: 67200
+22:22:20.994 INFO  Server$ - -- Stats -- connected: 67350
+22:22:22.095 INFO  Server$ - -- Stats -- connected: 67499
+22:22:23.195 INFO  Server$ - -- Stats -- connected: 67648
+22:22:24.294 INFO  Server$ - -- Stats -- connected: 67799
+22:22:25.394 INFO  Server$ - -- Stats -- connected: 67948
+22:22:26.495 INFO  Server$ - -- Stats -- connected: 68097
+22:22:27.595 INFO  Server$ - -- Stats -- connected: 68243
+22:22:28.695 INFO  Server$ - -- Stats -- connected: 68393
+22:22:29.795 INFO  Server$ - -- Stats -- connected: 68542
+22:22:30.795 INFO  Server$ - -- Stats -- connected: 68679
+22:22:31.894 INFO  Server$ - -- Stats -- connected: 68829
+22:22:32.895 INFO  Server$ - -- Stats -- connected: 68964
+22:22:33.994 INFO  Server$ - -- Stats -- connected: 69114
+22:22:34.995 INFO  Server$ - -- Stats -- connected: 69251
+22:22:36.095 INFO  Server$ - -- Stats -- connected: 69398
+22:22:37.195 INFO  Server$ - -- Stats -- connected: 69546
+22:22:38.295 INFO  Server$ - -- Stats -- connected: 69694
+22:22:39.395 INFO  Server$ - -- Stats -- connected: 69844
+22:22:40.494 INFO  Server$ - -- Stats -- connected: 69994
+22:22:41.594 INFO  Server$ - -- Stats -- connected: 70142
+22:22:42.694 INFO  Server$ - -- Stats -- connected: 70292
+22:22:43.794 INFO  Server$ - -- Stats -- connected: 70441
+22:22:44.895 INFO  Server$ - -- Stats -- connected: 70591
+22:22:45.995 INFO  Server$ - -- Stats -- connected: 70732
+22:22:47.095 INFO  Server$ - -- Stats -- connected: 70874
+22:22:48.195 INFO  Server$ - -- Stats -- connected: 71023
+22:22:49.295 INFO  Server$ - -- Stats -- connected: 71172
+22:22:50.395 INFO  Server$ - -- Stats -- connected: 71322
+22:22:51.495 INFO  Server$ - -- Stats -- connected: 71472
+22:22:52.595 INFO  Server$ - -- Stats -- connected: 71621
+22:22:53.695 INFO  Server$ - -- Stats -- connected: 71770
+22:22:54.794 INFO  Server$ - -- Stats -- connected: 71920
+22:22:55.894 INFO  Server$ - -- Stats -- connected: 72066
+22:22:56.994 INFO  Server$ - -- Stats -- connected: 72216
+22:22:58.094 INFO  Server$ - -- Stats -- connected: 72365
+22:22:59.194 INFO  Server$ - -- Stats -- connected: 72515
+22:23:00.294 INFO  Server$ - -- Stats -- connected: 72665
+22:23:01.395 INFO  Server$ - -- Stats -- connected: 72815
+22:23:02.495 INFO  Server$ - -- Stats -- connected: 72963
+22:23:03.595 INFO  Server$ - -- Stats -- connected: 73113
+22:23:04.695 INFO  Server$ - -- Stats -- connected: 73264
+22:23:05.794 INFO  Server$ - -- Stats -- connected: 73411
+22:23:06.894 INFO  Server$ - -- Stats -- connected: 73560
+22:23:07.994 INFO  Server$ - -- Stats -- connected: 73689
+22:23:09.094 INFO  Server$ - -- Stats -- connected: 73816
+22:23:10.195 INFO  Server$ - -- Stats -- connected: 73945
+22:23:11.295 INFO  Server$ - -- Stats -- connected: 74088
+22:23:12.394 INFO  Server$ - -- Stats -- connected: 74215
+22:23:13.395 INFO  Server$ - -- Stats -- connected: 74330
+22:23:14.495 INFO  Server$ - -- Stats -- connected: 74452
+22:23:15.595 INFO  Server$ - -- Stats -- connected: 74579
+22:23:16.695 INFO  Server$ - -- Stats -- connected: 74706
+22:23:17.794 INFO  Server$ - -- Stats -- connected: 74833
+22:23:18.795 INFO  Server$ - -- Stats -- connected: 74948
+22:23:19.894 INFO  Server$ - -- Stats -- connected: 75075
+22:23:20.895 INFO  Server$ - -- Stats -- connected: 75190
+22:23:21.995 INFO  Server$ - -- Stats -- connected: 75317
+22:23:23.094 INFO  Server$ - -- Stats -- connected: 75443
+22:23:24.095 INFO  Server$ - -- Stats -- connected: 75556
+22:23:25.194 INFO  Server$ - -- Stats -- connected: 75683
+22:23:26.195 INFO  Server$ - -- Stats -- connected: 75799
+22:23:27.294 INFO  Server$ - -- Stats -- connected: 75925
+22:23:28.394 INFO  Server$ - -- Stats -- connected: 76052
+22:23:29.494 INFO  Server$ - -- Stats -- connected: 76178
+22:23:30.594 INFO  Server$ - -- Stats -- connected: 76305
+22:23:31.694 INFO  Server$ - -- Stats -- connected: 76432
+22:23:32.794 INFO  Server$ - -- Stats -- connected: 76555
+22:23:33.895 INFO  Server$ - -- Stats -- connected: 76682
+22:23:34.995 INFO  Server$ - -- Stats -- connected: 76809
+22:23:36.095 INFO  Server$ - -- Stats -- connected: 76936
+22:23:37.195 INFO  Server$ - -- Stats -- connected: 77063
+22:23:38.295 INFO  Server$ - -- Stats -- connected: 77189
+22:23:39.395 INFO  Server$ - -- Stats -- connected: 77316
+22:23:40.495 INFO  Server$ - -- Stats -- connected: 77443
+22:23:41.594 INFO  Server$ - -- Stats -- connected: 77570
+22:23:42.595 INFO  Server$ - -- Stats -- connected: 77685
+22:23:43.695 INFO  Server$ - -- Stats -- connected: 77807
+22:23:44.795 INFO  Server$ - -- Stats -- connected: 77934
+22:23:45.895 INFO  Server$ - -- Stats -- connected: 78061
+22:23:46.995 INFO  Server$ - -- Stats -- connected: 78188
+22:23:48.095 INFO  Server$ - -- Stats -- connected: 78315
+22:23:49.195 INFO  Server$ - -- Stats -- connected: 78441
+22:23:50.294 INFO  Server$ - -- Stats -- connected: 78568
+22:23:51.394 INFO  Server$ - -- Stats -- connected: 78695
+22:23:52.494 INFO  Server$ - -- Stats -- connected: 78818
+22:23:53.594 INFO  Server$ - -- Stats -- connected: 78945
+22:23:54.694 INFO  Server$ - -- Stats -- connected: 78992
+22:23:55.794 INFO  Server$ - -- Stats -- connected: 78992
+22:23:56.894 INFO  Server$ - -- Stats -- connected: 78992
+22:23:57.994 INFO  Server$ - -- Stats -- connected: 78992
+22:23:59.094 INFO  Server$ - -- Stats -- connected: 78992
+22:24:00.194 INFO  Server$ - -- Stats -- connected: 78992
+^C22:24:00.729 INFO  Server$ - Shutting down
+22:24:00.733 INFO  Server$ - Shutdown complete
+",https://github.com/netty/netty/issues/1508,0.0,2.0,1.0,38
+27,"BearerTokenServerAuthenticationEntryPoint should delay work
+<!--
+For Security Vulnerabilities, please use https://pivotal.io/security#reporting
+-->
+
+### Summary
+
+BearerTokenServerAuthenticationEntryPoint should not do any work until something subscribes",https://github.com/spring-projects/spring-security/issues/5742,0.0,3.0,2.0,38
+411,"Use of new DefaultResourceLoader() is dangerous as it captures the thread context classloader at the time of the call
+Hi,
+
+recently the following tests started to fail sporadically:
+
+- `LogFileWebEndpointAutoConfigurationTests.logFileWebEndpointIsAutoConfiguredWhenExternalFileIsSet `
+- `DiskSpaceHealthContributorAutoConfigurationTests.runWhenPathDoesNotExistShouldCreateIndicator `
+
+Both seem to be throwing similar errors like this:
+
+```
+Caused by: org.springframework.core.convert.ConversionFailedException: Failed to convert from type [java.lang.String] to type [java.io.File] for value 'external.log'; nested exception is java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load [external.log]. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+ 	at org.springframework.core.convert.support.ConversionUtils.invokeConverter(ConversionUtils.java:47)
+ 	at org.springframework.core.convert.support.GenericConversionService.convert(GenericConversionService.java:191)
+ 	at org.springframework.boot.context.properties.bind.BindConverter$CompositeConversionService.convert(BindConverter.java:170)
+ 	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:96)
+ 	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:88)
+ 	at org.springframework.boot.context.properties.bind.Binder.bindProperty(Binder.java:434)
+ 	at org.springframework.boot.context.properties.bind.Binder.bindObject(Binder.java:379)
+ 	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:319)
+ 	... 142 more
+ Caused by: java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load [external.log]. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+ 	at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1385)
+ 	at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:1038)
+ 	at org.springframework.core.io.ClassPathResource.resolveURL(ClassPathResource.java:155)
+ 	at org.springframework.core.io.ClassPathResource.exists(ClassPathResource.java:142)
+ 	at org.springframework.boot.convert.StringToFileConverter.convert(StringToFileConverter.java:48)
+ 	at org.springframework.boot.convert.StringToFileConverter.convert(StringToFileConverter.java:34)
+ 	at org.springframework.core.convert.support.GenericConversionService$ConverterAdapter.convert(GenericConversionService.java:385)
+ 	at org.springframework.core.convert.support.ConversionUtils.invokeConverter(ConversionUtils.java:41)
+```
+
+I tried fixing it directly, but I can't see what's going wrong in these cases.
+
+Cheers,
+Christoph",https://github.com/spring-projects/spring-boot/issues/20900,0.0,1.0,0.0,46
+344,"Search context is not cleaned when scroll search is cancelled
+Cancelling search with scroll can leave some search contexts behind. See test failure in https://elasticsearch-ci.elastic.co/job/elastic+elasticsearch+master+multijob-unix-compatibility/os=ubuntu/160/console
+",https://github.com/elastic/elasticsearch/issues/21126,0.0,0.0,2.272727272727273,44
+358,"Slider not showing in simulator iOs skins
+Original [issue 1161](https://code.google.com/p/codenameone/issues/detail?id=1161) created by codenameone on 2014-07-30T14:31:42.000Z:
+
+The slider is not showing in the simulator on iOs skins. Other skins are showing the slider.
+
+<b>What steps will reproduce the problem?</b>
+1. Add a slider to the main form
+2. Run in simulator in an iOs skin
+
+<b>What is the expected output? What do you see instead?</b>
+
+The expected output is a slider on the screen. I see nothing. When I set 'setRenderValueOnTop' to true and I slide to left and right on the place the slider should be, I can see the number going up and down. So there is a slider, but it's not visible.
+
+<b>What version of the product are you using? On what operating system?</b>
+
+Netbeans 8, Java 1.8, Linux, CodenameOne plugin: latest (I can't find the version in Netbeans, last check was today and there is no newer version).
+
+<b>Please provide any additional information below.</b>
+
+In all other platforms (simulated), there is a slider showing. I didn't test on real devices.
+",https://github.com/codenameone/CodenameOne/issues/1160,0.0,2.0,0.5625,48
+31,"Build Failure: org.elasticsearch.search.aggregations.bucket.SignificantTermsSignificanceScoreIT.testScriptScore
+Unable to replicate, but I do not have a Windows machine for testing.
+
+REPRODUCE WITH: gradle :core:integTest -Dtests.seed=4DA46F7D8DF8CF05 -Dtests.class=org.elasticsearch.search.aggregations.bucket.SignificantTermsSignificanceScoreIT -Dtests.method=""testScriptScore"" -Des.logger.level=DEBUG -Dtests.security.manager=true -Dtests.nightly=false -Dtests.heap.size=1024m -Dtests.jvm.argline=""-server -XX:+UseConcMarkSweepGC -XX:-UseCompressedOops -XX:+AggressiveOpts"" -Dtests.locale=sr-Latn-RS -Dtests.timezone=Asia/Chongqing
+
+Build Failure: (http://build-us-00.elastic.co/job/es_core_master_window-2008/3699/testReport/junit/org.elasticsearch.search.aggregations.bucket/SignificantTermsSignificanceScoreIT/testScriptScore/)
+",https://github.com/elastic/elasticsearch/issues/18120,0.0,0.0,2.7142857142857144,42
+354,"SimpleChannelUpstreamHandler.channelConnected misleading documentation (Netty 3.9)
+The documentation says ""Be aware that this event is fired from within the Boss-Thread"". But it seems to me that the connected event is fired from the Worker-Thread: https://github.com/netty/netty/blob/3.9/src/main/java/org/jboss/netty/channel/socket/nio/NioWorker.java#L162
+
+Did I miss something?
+",https://github.com/netty/netty/issues/2130,0.0,2.0,0.34782608695652173,46
+390,"Tomcat 7.0.50 shutdown issue
+After updating HikariCP from 1.2.8 to 1.3.0 during shutdown Apache Tomcat 7.0.50 I'm getting these messages in catalina.log:
+
+Mar 02, 2014 5:27:40 PM org.apache.catalina.core.StandardServer await
+INFO: A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+Mar 02, 2014 5:27:40 PM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler [""http-apr-8080""]
+Mar 02, 2014 5:27:40 PM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler [""ajp-apr-8009""]
+Mar 02, 2014 5:27:40 PM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service Catalina
+Mar 02, 2014 5:27:40 PM org.apache.catalina.core.ApplicationContext log
+INFO: Closing Spring root WebApplicationContext
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@af5dd35]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@4034afa3]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@4034afa3]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@af5dd35]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@af5dd35]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@af5dd35]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@4034afa3]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@4034afa3]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@af5dd35]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.catalina.loader.WebappClassLoader checkThreadLocalMapForLeaks
+SEVERE: The web application [/test] created a ThreadLocal with key of type [com.zaxxer.hikari.util.ConcurrentBag$1](value [com.zaxxer.hikari.util.ConcurrentBag$1@1b6f3995]) and a value of type [java.util.LinkedList](value [[com.zaxxer.hikari.proxy.ConnectionJavassistProxy@af5dd35]]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+Mar 02, 2014 5:27:40 PM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler [""http-apr-8080""]
+Mar 02, 2014 5:27:40 PM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler [""ajp-apr-8009""]
+Mar 02, 2014 5:27:40 PM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler [""http-apr-8080""]
+Mar 02, 2014 5:27:40 PM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler [""ajp-apr-8009""]
+",https://github.com/brettwooldridge/HikariCP/issues/39,0.0,3.0,1.0,42
+35,"ByteBuf corruption under high load with simple echo server
+I have a simple echo server.  However, I send a long and short message at the same time repeatedly.  This is all from the same client.  This means there are two message being rapidly send down the same channel.
+
+This works fine for the first few messages back and forth, but then eventually the long message gets truncated to the short message.
+
+When I send the different messages down, I am using writeAndFlush, and from my understanding that will prevent message interleaving.  I believe I am allowed to use the channel in this way.
+
+I've attached complete working code that reproduces the problem.  You might need to run it a few times, but eventually the stream will get corrupted.
+
+Netty 4.0.24.Final
+
+```
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=512m; support was removed in 8.0
+Apache Maven 3.2.3 (33f8c3e1027c3ddde99d3cdebad2656a31e8fdf4; 2014-08-11T13:58:10-07:00)
+Maven home: /usr/local/Cellar/maven/3.2.3/libexec
+Java version: 1.8.0_25, vendor: Oracle Corporation
+Java home: /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: ""mac os x"", version: ""10.10"", arch: ""x86_64"", family: ""mac""
+```
+
+```
+package com.github.pyrolistical;
+
+import io.netty.bootstrap.Bootstrap;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.MessageToByteEncoder;
+import org.junit.Test;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+
+public class FailureUnderLoadTest {
+
+    @Test
+    public void pingPong() throws Exception {
+        try (Server server = new Server(8888)) {
+            try (ClientManager clientManager = new ClientManager()) {
+                Client client = new Client(clientManager.connect(""localhost"", 8888));
+                client.addMessageConsumer(message -> {
+                    if (message.equals(""really long message to highlight the problem"")) {
+                        client.sendMessage(""really long message to highlight the problem"");
+                    }
+                });
+                client.addMessageConsumer(message -> {
+                    if (message.equals(""shorty"")) {
+                        client.sendMessage(""shorty"");
+                    }
+                });
+
+                client.sendMessage(""really long message to highlight the problem"");
+                client.sendMessage(""shorty"");
+
+                Thread.sleep(1000);
+                client.close();
+            }
+        }
+        Thread.sleep(100);
+    }
+
+    public static class Server implements Closeable {
+        private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+        public Server(int port) throws Exception {
+            new ServerBootstrap()
+                    .option(ChannelOption.SO_BACKLOG, 1024)
+                    .group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(SocketChannel channel) throws Exception {
+                            channel.pipeline()
+                                    .addLast(new Decoder())
+                                    .addLast(new Encoder())
+                                    .addLast(new SimpleChannelInboundHandler<String>() {
+                                        @Override
+                                        protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
+                                            System.out.println(msg);
+                                            ctx.writeAndFlush(msg);
+                                        }
+                                    });
+                        }
+                    }).bind(port).sync();
+        }
+
+        @Override
+        public void close() throws IOException {
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
+        }
+    }
+
+    public static class ClientManager implements Closeable {
+        private final EventLoopGroup workers = new NioEventLoopGroup();
+        private final Bootstrap bootstrap;
+
+        public ClientManager() {
+            bootstrap = new Bootstrap();
+            bootstrap.group(workers)
+                    .channel(NioSocketChannel.class)
+                    .option(ChannelOption.SO_KEEPALIVE, true)
+                    .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel channel) throws Exception {
+                            channel.pipeline()
+                                    .addLast(new Decoder())
+                                    .addLast(new Encoder());
+                        }
+                    });
+        }
+
+        public Channel connect(String host, int port) throws Exception {
+            return bootstrap.connect(host, port).sync().channel();
+        }
+
+        @Override
+        public void close() throws IOException {
+            workers.shutdownGracefully();
+        }
+    }
+
+    public static class Client implements Closeable {
+        private final Channel channel;
+        private List<Consumer<String>> consumers = Collections.synchronizedList(new ArrayList<>());
+
+        public Client(Channel channel) {
+            this.channel = channel;
+            channel.pipeline()
+                    .addLast(new SimpleChannelInboundHandler<String>() {
+                        @Override
+                        protected void channelRead0(ChannelHandlerContext ctx, String result) throws Exception {
+                            for (Consumer<String> consumer : consumers) {
+                                consumer.accept(result);
+                            }
+                        }
+                    });
+        }
+
+        public void sendMessage(String message) {
+            channel.writeAndFlush(message);
+        }
+
+        public void addMessageConsumer(Consumer<String> consumer) {
+            consumers.add(consumer);
+        }
+
+        @Override
+        public void close() throws IOException {
+            channel.close();
+        }
+    }
+
+    public static class Encoder extends MessageToByteEncoder<String> {
+        @Override
+        protected void encode(ChannelHandlerContext ctx, String msg, ByteBuf out) throws Exception {
+            out.writeInt(msg.length());
+            out.writeBytes(msg.getBytes(Charset.forName(""UTF-8"")));
+        }
+    }
+
+    public static class Decoder extends ByteToMessageDecoder {
+        @Override
+        protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+            if (in.readableBytes() < 4) {
+                return;
+            }
+            int length = in.getInt(0);
+            if (in.readableBytes() < 4 + length) {
+                return;
+            }
+            in.skipBytes(4);
+            out.add(in.readBytes(length).toString(Charset.forName(""UTF-8"")));
+        }
+    }
+}
+```
+",https://github.com/netty/netty/issues/3184,0.0,2.0,1.4166666666666667,48
+387,"ThrottleRequestFilter swallows interfaces
+The ThrottleRequestFilter wraps the AsyncHandler with an AsyncHandlerWrapper. This way all additional interfaces implemented by the originating AsyncHandler get lost. E.g. ProgressAsyncHandler, ResumableAsyncHandler or any custom interfaces.
+
+Suggestion: Maybe use a dynamic proxy which implements all interfaces of the originating AsyncHandler instead of using AsyncHandlerWrapper.
+",https://github.com/AsyncHttpClient/async-http-client/issues/1314,0.0,0.0,3.0,47
+211,"Map clear does not work with persistent maps (worked in 3.1, broken in 3.2)
+In 3.1 then `MapStore.deleteAll(...)` is called when `clear()` is called on a persistent map, but in 3.2 the call to `MapStore.deleteAll(...)` does not happen.
+
+I will try and get a test case together for this in the next week or two.
+",https://github.com/hazelcast/hazelcast/issues/2137,0.0,2.0,1.183673469387755,49
+38,"Can't change html when using ""spring-boot-starter-mustache"" with Eclipse.
+I want to use SpringBoot, SpringDevtool, Mustache, Gradle, and Eclipse on Windows10.
+But not work.
+1. I run as ""Spring Boot app"" at Eclipse, and Tomcat start.
+2. I can change html in ""src/main/templates""
+3. I access ""localhost:8080"" by chrome browser.
+4. I change html, then Eclipse error `The project was not built due to ""Could not delete '/${projectname}/bin/templates'."". Fix the problem, then try refreshing this project and building it since it may be inconsistent` occurred, so ""localhost:8080"" return error.
+
+Are SpringBoot and Mustache and Eclipse bad combination?
+
+My build.gradle is ...
+
+```
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot' 
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(""org.springframework.boot:spring-boot-gradle-plugin:1.3.1.RELEASE"")
+    }
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web:1.3.1.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-mustache:1.3.1.RELEASE'
+}
+```
+",https://github.com/spring-projects/spring-boot/issues/4921,0.0,1.0,2.0,43
+193,"Java Netty 3.3.1.Final, DynamicChannelBuffer.java:75, infinite loop, a bug?
+I am using Netty 3.3.1.Final for our needs of a custom server. Our execution is blocked in an infinite loop at: org.jboss.netty.buffer.DynamicChannelBuffer.ensureWritableBytes(DynamicChannelBuffer.java:75)
+
+Going into the code with the debuger will show an infinite loop starting with the initial values: minNewCapacity=2147483647 newCapacity=256
+(Binary 1111111111111111111111111111111)
+(Binary 0000000000000000000000100000000)
+
+The reason is <<= operator will cause newCapacity to reach a maximum value of 1000000000000000000000000000000 and at the next step newCapacity will become 0 for ever.
+
+This part of the code lacks documentation so I cannot go deeper in my analyzis, but I would like to know if this is a known issue, and if I can use another version of netty?
+
+``` java
+    @Override
+    public void ensureWritableBytes(int minWritableBytes) {
+        if (minWritableBytes <= writableBytes()) {
+            return;
+        }
+
+        int newCapacity;
+        if (capacity() == 0) {
+            newCapacity = 1;
+        } else {
+            newCapacity = capacity();
+        }
+        int minNewCapacity = writerIndex() + minWritableBytes;
+        //INFINITE LOOP HERE
+        while (newCapacity < minNewCapacity) {
+            newCapacity <<= 1;
+        }
+
+        ChannelBuffer newBuffer = factory().getBuffer(order(), newCapacity);
+        newBuffer.writeBytes(buffer, 0, writerIndex());
+        buffer = newBuffer;
+    }
+```
+
+Thanks for your help,
+
+Renaud
+
+Added comment:
+
+This is method causing the minNewCapacity to be so high wich seems not good because it will lead to a huge memory buffer... org.jboss.netty.ReplayingDecoderBuffer.readableBytes(ReplayingDecoderBuffer.java:301)
+
+``` java
+public int readableBytes() {
+        if (terminated) {
+            return buffer.readableBytes();
+        } else {
+            return Integer.MAX_VALUE - buffer.readerIndex();
+        }
+    }
+```
+
+Added comment 2012/04/13
+
+I finally decided to not use the ReplayingDecoder because it leads to some very strange behaviour. In particular, it looks like it is not safe to use the mark() and reset() methods of the ChannelBuffer argument in the decode() method. When I tried to use buffer.slice() to wrap the ChannelBuffer in a ""private"" container, I got an exception, something like ""Slice is not a replayable method..."".
+
+Below is what I do right now: I am using a custom FrameDecoder as a ReplayingDecoder, but I am loosing the Checkpoint facilities. Codec is an interface I introduced to be able to combine different Protocol layer:
+
+``` java
+public static ChannelUpstreamHandler decoder(final Codec codec) {
+        return new FrameDecoder() {
+
+            @Override
+            protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+                try {
+                    //Wrap the argument buffer inside a private buffer with other readerIndex and writerIndex.
+                    ChannelBuffer privateBuffer = ChannelBuffers.wrappedBuffer(buffer);
+                    Object result = codec.decode(privateBuffer);
+                    buffer.skipBytes(privateBuffer.readerIndex());
+                    return result;
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+        };
+    }
+```
+",https://github.com/netty/netty/issues/258,0.0,3.0,0.9772727272727273,44
+49,"Changes object type of the previous value in StringRepeatCountEncodingStrategy
+#### Description
+Current previous value is stored as a String, if input value is [null, null, ""value"", ""value""], it is impossible to distinguish between the initial value and the previous value.
+To save the previous value, change it to AtomicReference.
+",https://github.com/naver/pinpoint/issues/3369,0.0,0.0,3.0,58
+210,"Many Bootsraps attempting to register to the event loop will cause deadlocks
+The majority of this discussion will be stemming from https://github.com/ElasticPortalSuite/BungeeCord/issues/206 an issue currently plaguing my software, which may or may not be Netty related, but it happens to basically every user.
+
+Basically after an undetermined amount of time, all existing connections are terminated (via my read timeout handler) and no new connections are made. Unfortunately I cannot reproduce this locally, probably due to the fact I do not run a production server that cycles through 1000+ connections a minute, however given the amount of users reporting this (all Linux, Java 7), it doesn't appear to be constrained to one particular setup.
+
+The biggest breakthrough of information I have so far, is this screenshot from VisualVM before and after the issue. Beforehand, the Netty IO threads are runnable (as is the case even when no connections are present), and after the issue occurs and all channels have been dropped, they appear to enter some sort of wait; no new connections can be made.
+You can view the screenshot here: http://d.pr/i/mJb7
+
+Unfortunately the VisualVM snapshot provided was useless, however I have informed my users of YourKit, and some of them have downloaded the free trial, and promise to get me useful CPU and heap dumps as soon as possible.
+
+Thanks for the hard work you put into Netty and I hope we can solve this final blocker for me (and I'm assuming 4.0 can't ship with this)
+",https://github.com/netty/netty/issues/1175,0.0,0.0,1.0,34
+128,"FilePart file not properly closed on UnknownHostException
+Running Java command line application on machine with the following specs:
+
+Windows 7 Professional - 64 bit
+Service Pack 1
+32 GB RAM
+Java Version 1.8.0_91
+Java SE Runtime Environment (build 1.8.0_91-b15)
+Java HotSpot 64-bit Server VM (build 25.91-b15, mixed mode)
+
+If synchronous execute() method called and UnknownHostException thrown, FilePart file is not closed and a subsequent ATOMIC_MOVE call fails with error: 'The process cannot access the file because it is being used by another process.'
+
+```
+    // code snippet with sensitive portions removed
+    void transmit(final File file) {
+        try {
+            String authorization = """";
+
+           ** stuff here to get authorization code
+
+            BoundRequestBuilder request = client.preparePost(String.format(""%s/api/files/save"", url))
+                    .addHeader(""Authorization"", authorization)
+                    .addHeader(""Content-Type"", ""multipart/form-data"")
+                    .addBodyPart(new StringPart(""transferId"", UUID.randomUUID().toString()))
+                    .addBodyPart(new StringPart(""timestamp"", Timestamp.from(Instant.now()).toString()))
+                    .addBodyPart(new FilePart(""file"", file, ""text/plain""));
+
+            Response response = request.execute().get();
+            if ( response != null ) {
+                 // do stuff with response here
+            }
+        } catch ( Exception ex ) {
+           // code to copy file to a different folder fails here
+           // Reason: The process cannot access the file because it is being used by another process.
+           // using the following code to move the file
+           Files.move(<source path>, <dest path>, ATOMIC_MOVE);
+        }
+    }
+
+```",https://github.com/AsyncHttpClient/async-http-client/issues/1418,0.0,1.0,0.3125,48
+492,"websocket sample does not receive session expired events
+The websocket sample is not receiving session destroyed events from Redis despite being configured to receive keyspace notifications.
+",https://github.com/spring-projects/spring-session/issues/81,0.0,1.0,2.404255319148936,47
+252,"Netty fails to determine type parameters
+``` java
+
+/usr/lib/jvm/jdk1.7-u17/bin/java -Didea.launcher.port=7538 -Didea.launcher.bin.path=/home/courtney/bin/idea/bin -Dfile.encoding=UTF-8 -classpath /usr/lib/jvm/jdk1.7-u17/jre/lib/jfxrt.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/jfr.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/rt.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/resources.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/jsse.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/deploy.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/javaws.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/jce.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/management-agent.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/plugin.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/charsets.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/ext/zipfs.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/ext/dnsns.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/ext/localedata.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/ext/sunpkcs11.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/ext/sunjce_provider.jar:/usr/lib/jvm/jdk1.7-u17/jre/lib/ext/sunec.jar:/home/courtney/projects/Higgs/higgs-boson/target/classes:/home/courtney/projects/Higgs/higgs-core/target/classes:/home/courtney/.m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar:/home/courtney/.m2/repository/org/slf4j/slf4j-log4j12/1.7.0/slf4j-log4j12-1.7.0.jar:/home/courtney/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar:/home/courtney/.m2/repository/com/google/guava/guava/13.0.1/guava-13.0.1.jar:/home/courtney/.m2/repository/io/netty/netty-all/4.0.0.CR2-SNAPSHOT/netty-all-4.0.0.CR2-SNAPSHOT.jar:/home/courtney/.m2/repository/com/esotericsoftware/kryo/kryo/2.21/kryo-2.21.jar:/home/courtney/.m2/repository/com/esotericsoftware/reflectasm/reflectasm/1.07/reflectasm-1.07-shaded.jar:/home/courtney/.m2/repository/org/ow2/asm/asm/4.0/asm-4.0.jar:/home/courtney/.m2/repository/com/esotericsoftware/minlog/minlog/1.2/minlog-1.2.jar:/home/courtney/.m2/repository/org/objenesis/objenesis/1.2/objenesis-1.2.jar:/home/courtney/.m2/repository/junit/junit/4.8.2/junit-4.8.2.jar:/home/courtney/bin/idea/lib/idea_rt.jar com.intellij.rt.execution.application.AppMain io.higgs.boson.demo.DemoClient
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,059 DEBUG InternalLoggerFactory:71 - Using SLF4J as the default logging framework
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,067 DEBUG MultithreadEventLoopGroup:76 - io.netty.eventLoopThreads: 16
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,082 DEBUG NioEventLoop:76 - io.netty.selectorAutoRebuildThreshold: 512
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,108 DEBUG PlatformDependent:71 - Platform: Android
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,117 DEBUG PlatformDependent:76 - UID: 1000
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,118 DEBUG PlatformDependent:76 - Java version: 7
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,120 DEBUG PlatformDependent0:76 - java.nio.ByteBuffer.cleaner: available
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,120 DEBUG PlatformDependent0:76 - java.nio.Buffer.address: available
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,121 DEBUG PlatformDependent0:76 - sun.misc.Unsafe.theUnsafe: available
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,121 DEBUG PlatformDependent0:71 - sun.misc.Unsafe.copyMemory: available
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,122 DEBUG PlatformDependent0:76 - java.nio.Bits.unaligned: true
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,122 DEBUG PlatformDependent:76 - sun.misc.Unsafe: available
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,123 DEBUG PlatformDependent:71 - Javassist: unavailable
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,124  WARN PlatformDependent:131 - You don't have Javassist in your class path or you don't have enough permission to load dynamically generated classes.  Please check the configuration for better performance.
+io.netty.util.internal.logging.Slf4JLogger 07:28:10,124 DEBUG PlatformDependent:76 - io.netty.preferDirect: false
+io.higgs.EventTunnel$1 07:28:10,144  WARN BosonClient:52 - Unhandled exception
+java.lang.IllegalStateException: cannot determine the type of the type parameter 'SM': class io.higgs.EventProcessor
+    at io.netty.util.internal.TypeParameterMatcher.fail(TypeParameterMatcher.java:171)
+    at io.netty.util.internal.TypeParameterMatcher.find0(TypeParameterMatcher.java:165)
+    at io.netty.util.internal.TypeParameterMatcher.find(TypeParameterMatcher.java:93)
+    at io.netty.channel.ChannelInboundMessageHandlerAdapter.<init>(ChannelInboundMessageHandlerAdapter.java:63)
+    at io.higgs.EventProcessor.<init>(EventProcessor.java:85)
+    at io.higgs.boson.BosonClient.newConnectFuture(BosonClient.java:67)
+    at io.higgs.HiggsClient.connect(HiggsClient.java:57)
+    at io.higgs.boson.BosonClient.connect(BosonClient.java:63)
+    at io.higgs.boson.demo.DemoClient.main(DemoClient.java:25)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:601)
+    at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
+
+Process finished with exit code 1
+
+```
+
+Refactored some code just now to use a generic class as a handler and it results in this.
+Why is it necessary for Netty to determine the type parameters of the handler?
+
+Assuming I've got this right, It's also determined that the OS is Android somehow which is incorrect, running Ubuntu 12.10
+",https://github.com/netty/netty/issues/1247,0.0,2.0,1.6744186046511629,43
+263,"NullPointerException in AbstractRecord.getLockCount
+We found the following exception in our cluster logs this morning. This looks to be a concurrency edge case - getLockCount is relying on a volatile variable being non-null.
+
+This was found on Hazelcast 2.1 with the Sun JDK 1.6.0_31 i386 on CentOS 5.8 x86_64.
+
+```
+java.lang.NullPointerException
+    at com.hazelcast.impl.AbstractRecord.getLockCount(AbstractRecord.java:417)
+    at com.hazelcast.impl.AbstractRecord.isEvictable(AbstractRecord.java:153)
+    at com.hazelcast.impl.CMap.startCleanup(CMap.java:1332)
+    at com.hazelcast.impl.ConcurrentMapManager$4.run(ConcurrentMapManager.java:431)
+    at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+    at java.lang.Thread.run(Thread.java:662)
+```
+",https://github.com/hazelcast/hazelcast/issues/166,0.0,3.0,0.0,46
+265,"Nullpointer in SimpleInMemoryRepository
+We're using spring boot 1.3.2 with Angel.SR6 for spring cloud. The service is a reverse proxy with zuul and occasionally we get this exception in the log:
+
+```
+2016-05-26T13:33:09.221+0200;1.3;0.0.0;http-nio-10.5.31.21-8080-exec-74:140;-;-;WARN ;org.springframework.boot.actuate.autoconfigure.MetricsFilter;[Unable to submit counter metric 'status.500.userservice-rest.star-star']
+    java.lang.NullPointerException: null
+    at org.springframework.boot.actuate.metrics.util.SimpleInMemoryRepository.update(SimpleInMemoryRepository.java:44)
+    at org.springframework.boot.actuate.metrics.repository.InMemoryMetricRepository.increment(InMemoryMetricRepository.java:51)
+    at org.springframework.boot.actuate.metrics.writer.DefaultCounterService.increment(DefaultCounterService.java:44)
+    at org.springframework.boot.actuate.autoconfigure.MetricsFilter.incrementCounter(MetricsFilter.java:205)
+    at org.springframework.boot.actuate.autoconfigure.MetricsFilter.recordMetrics(MetricsFilter.java:138)
+    at org.springframework.boot.actuate.autoconfigure.MetricsFilter.doFilterInternal(MetricsFilter.java:110)
+    at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+    at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:239)
+    at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+    at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:212)
+    at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:106)
+    at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+    at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:616)
+    at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:616)
+    at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:141)
+    at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+    at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88)
+    at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:521)
+    at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1096)
+    at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:674)
+    at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1500)
+    at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1456)
+    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+    at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+    at java.lang.Thread.run(Thread.java:745)
+```
+
+It usually occurs at night on a test system with not much traffic.
+",https://github.com/spring-projects/spring-boot/issues/6115,0.0,1.0,0.12,50
+472,"multithreaded http2 GET occasionally hang
+When running multithreaded HTTP2 GET requests against nginx server, okhttp 3.8.1 occasionally hangs with all client threads stuck with the stacktrace like the one below and no `Http2Connection$ReaderRunnable` thread running. This is on OSX using Oracle java 1.8.0_131 jdk, if this makes any difference.
+
+The problem may be related to server [limiting the number of requests using the same connection to 1000](http://nginx.org/en/docs/http/ngx_http_v2_module.html#http2_max_requests), then sending `GOAWAY` frame. But I am not sure how to setup a standalone test for this hypothesis and generally out of ideas how to troubleshoot this further.
+
+
+```
+""pool-1-thread-1"" #27 prio=5 os_prio=31 tid=0x00007fdc1f9bd800 nid=0x8603 in Object.wait() [0x0000700002c18000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	at java.lang.Object.wait(Object.java:502)
+	at okhttp3.internal.http2.Http2Stream.waitForIo(Http2Stream.java:577)
+	at okhttp3.internal.http2.Http2Stream.takeResponseHeaders(Http2Stream.java:143)
+	- locked <0x00000003c109ef90> (a okhttp3.internal.http2.Http2Stream)
+	at okhttp3.internal.http2.Http2Codec.readResponseHeaders(Http2Codec.java:120)
+	at okhttp3.internal.http.CallServerInterceptor.intercept(CallServerInterceptor.java:75)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:92)
+	at okhttp3.internal.connection.ConnectInterceptor.intercept(ConnectInterceptor.java:45)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:92)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:67)
+	at okhttp3.internal.cache.CacheInterceptor.intercept(CacheInterceptor.java:93)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:92)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:67)
+	at okhttp3.internal.http.BridgeInterceptor.intercept(BridgeInterceptor.java:93)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:92)
+	at okhttp3.internal.http.RetryAndFollowUpInterceptor.intercept(RetryAndFollowUpInterceptor.java:120)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:92)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:67)
+	at okhttp3.logging.HttpLoggingInterceptor.intercept(HttpLoggingInterceptor.java:211)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:92)
+	at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:67)
+	at okhttp3.RealCall.getResponseWithInterceptorChain(RealCall.java:185)
+	at okhttp3.RealCall.execute(RealCall.java:69)
+	at io.takari.generation.aether.connector.OkhttpContentLoader.get(OkhttpContentLoader.java:105)
+...
+```",https://github.com/square/okhttp/issues/3422,0.0,3.0,0.030303030303030304,33
+266,"ODB server doesn't totally respect the ""storage.diskCache.pageSize"" directive
+according to the default value of the ""storage.diskCache.pageSize"" directive (64k), during an ""import database"" test I observed these write bytes size distribution:
+
+```
+     value  ------------- Distribution ------------- count
+           0 |                                         0
+           1 |@@@@@@@@@@@@@@@@@@@@@@@@@                8811
+           2 |                                         0
+           4 |                                         0
+           8 |@                                        407
+          16 |                                         77
+          32 |@                                        182
+          64 |                                         6
+         128 |                                         0
+         256 |                                         13
+         512 |                                         12
+        1024 |                                         26
+        2048 |                                         47
+        4096 |                                         35
+        8192 |                                         0
+       16384 |                                         0
+       32768 |                                         0
+       65536 |@@@@@@@@@@@@                             4363
+      131072 |                                         0
+```
+
+It means that there were 8811 writes of 1 byte and 4363 writes of 65536 bytes (as expected), and so on.
+
+After setting the ""storage.diskCache.pageSize"" value to ""32"", I observed these details  for the same process:
+
+ zfs pwrite /zones/orientdbZone/root/opt/orientdb-community-1.6.4/databases
+
+```
+       value  ------------- Distribution ------------- count
+           0 |                                         0
+           1 |@@@@@                                    275
+           2 |                                         0
+           4 |                                         0
+           8 |@@@@@@@                                  399
+          16 |                                         0
+          32 |                                         0
+          64 |                                         0
+         128 |                                         0
+         256 |                                         13
+         512 |                                         12
+        1024 |                                         26
+        2048 |@                                        47
+        4096 |@                                        35
+        8192 |                                         0
+       16384 |                                         0
+       32768 |@@@@@@@@@@@@@@@@@@@@@@@@@@@              1604
+       65536 |                                         0
+```
+
+ zfs write /zones/orientdbZone/root/opt/orientdb-community-1.6.4/databases
+
+```
+       value  ------------- Distribution ------------- count
+           0 |                                         0
+           1 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@        8536
+           2 |                                         0
+           4 |                                         0
+           8 |                                         8
+          16 |                                         77
+          32 |@                                        182
+          64 |                                         6
+         128 |                                         0
+         256 |                                         0
+         512 |                                         0
+        1024 |                                         0
+        2048 |                                         0
+        4096 |                                         0
+        8192 |                                         0
+       16384 |                                         0
+       32768 |                                         0
+       65536 |@@@@@@                                   1526
+      131072 |                                         0
+```
+
+It seems that the pwrite() function respects the new page size setup, but the write() function doesn't.
+
+I traced the syscalls during a simple ""create database"", trying to investigate the JVM at the same time:
+
+zfs pwrite /zones/orientdbZone/root/opt/orientdb-community-1.6.4/databases
+
+```
+       value  ------------- Distribution ------------- count
+           0 |                                         0
+           1 |@@@@                                     26
+           2 |                                         0
+           4 |                                         0
+           8 |@@@@@@@                                  39
+          16 |                                         0
+          32 |                                         0
+          64 |                                         0
+         128 |                                         0
+         256 |@@                                       13
+         512 |                                         0
+        1024 |                                         0
+        2048 |                                         0
+        4096 |                                         0
+        8192 |                                         0
+       16384 |                                         0
+       32768 |@@@@@@@@@@@@@@@@@@@@@@@@@@@              160
+       65536 |                                         0
+```
+
+ zfs write /zones/orientdbZone/root/opt/orientdb-community-1.6.4/databases
+
+```
+       value  ------------- Distribution ------------- count
+           0 |                                         0
+           1 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         460
+           2 |                                         0
+           4 |                                         0
+           8 |                                         4
+          16 |@                                        18
+          32 |                                         3
+          64 |                                         0
+         128 |                                         0
+         256 |                                         0
+         512 |                                         0
+        1024 |                                         0
+        2048 |                                         0
+        4096 |                                         0
+        8192 |                                         0
+       16384 |                                         0
+       32768 |                                         0
+       65536 |@@@@@@                                   92
+      131072 |                                         0
+```
+
+Here the JVM methods executed a suspicious number of times, during the ""create database"" process:
+
+METHODS EXECUTED 460 TIMES (1 B)
+
+java/io/RandomAccessFile.write0
+
+METHODS EXECUTED 92 TIMES (64K)
+
+com/orientechnologies/orient/core/db/ODatabaseWrapperAbstract.getName
+com/orientechnologies/orient/core/storage/impl/local/paginated/wal/OWALPage.getFilledUpTo
+ com/orientechnologies/orient/core/storage/impl/local/paginated/wal/OWriteAheadLog$LogSegment$FlushTask.flushPage
+java/lang/StringBuffer.append
+java/util/concurrent/ConcurrentLinkedQueue$Itr.next
+
+METHODS EXECUTED 26 TIMES (1B)
+
+com/orientechnologies/orient/core/storage/fs/OAbstractFile.<init>
+com/orientechnologies/orient/core/storage/fs/OAbstractFile.create
+com/orientechnologies/orient/core/storage/fs/OAbstractFile.lock
+com/orientechnologies/orient/core/storage/fs/OAbstractFile.openChannel
+com/orientechnologies/orient/core/storage/fs/OAbstractFile.setHeaderDirty
+com/orientechnologies/orient/core/storage/fs/OFileClassic.<init>
+com/orientechnologies/orient/core/storage/fs/OFileClassic.create
+com/orientechnologies/orient/core/storage/fs/OFileClassic.getBuffer
+com/orientechnologies/orient/core/storage/fs/OFileClassic.setFilledUpTo
+com/orientechnologies/orient/core/storage/fs/OFileClassic.setSize
+com/orientechnologies/orient/core/storage/fs/OFileClassic.setSoftlyClosed
+com/orientechnologies/orient/core/storage/fs/OFileClassic.setVersion
+com/orientechnologies/orient/core/storage/impl/local/paginated/OLocalPaginatedStorage.getMode
+
+METHODS EXECUTED 39 TIMES (8B)
+
+com/orientechnologies/orient/core/storage/fs/OFileClassic.getWriteBuffer
+
+METHODS EXECUTED 13 TIMES (256B)
+
+com/orientechnologies/orient/core/storage/fs/OFileClassic.writeInt
+java/io/OutputStream.<init>
+",https://github.com/orientechnologies/orientdb/issues/2121,0.0,3.0,0.06818181818181818,44
+162,"Image building ignores failures in CNB build phases
+Currently, when attempting to use the Maven plugin to build an image using Cloud Native Buildpacks (`spring-boot:build-image`) if one of the phases results in a failure, the plugin continues on rather than failing immediately.  As an example, specifying an invalid value for  `$BP_JAVA_VERSION` results in the build failing but some sort of image being exported:
+
+```shell
+ > Running builder
+    [builder]     
+    [builder]     Cloud Foundry OpenJDK Buildpack v1.0.80
+    [builder]     
+    [builder]     Cloud Foundry OpenJDK Buildpack v1.0.80
+    [builder]       no valid dependencies for openjdk-jre, 13.0.2, and io.buildpacks.stacks.bionic in [(openjdk-jre, 8.0.232, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jre, 11.0.5, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jre, 13.0.1, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jdk, 8.0.232, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jdk, 11.0.5, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jdk, 13.0.1, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3])]
+    [builder]     ERROR: failed to build: exit status 102
+ > Running exporter
+    [exporter]    Adding layer 'app'
+    [exporter]    Adding layer 'config'
+    [exporter]    Reusing layer 'launcher'
+    [exporter]    Reusing layer 'org.cloudfoundry.openjdk:openjdk-jre'
+    [exporter]    Reusing layer 'org.cloudfoundry.jvmapplication:executable-jar'
+    [exporter]    Reusing layer 'org.cloudfoundry.springboot:spring-boot'
+    [exporter]    Reusing layer 'org.cloudfoundry.springautoreconfiguration:auto-reconfiguration'
+    [exporter]    ERROR: failed to export: read build metadata: open /layers/config/metadata.toml: no such file or directory
+ > Running cacher
+    [cacher]      Reusing layer 'org.cloudfoundry.openjdk:2f08c469c9a8adea1b6ee3444ba2a8242a7e99d87976a077faf037a9eb7f884b'
+    [cacher]      Reusing layer 'org.cloudfoundry.jvmapplication:executable-jar'
+    [cacher]      Reusing layer 'org.cloudfoundry.springboot:spring-boot'
+    [cacher]      Reusing layer 'org.cloudfoundry.springautoreconfiguration:46ab131165317d91fd4ad3186abf755222744e2d277dc413def06f3ad45ab150'
+Successfully built image 'docker.io/library/build-image-test:0.0.1-SNAPSHOT'
+```
+
+The same failure simulated on `pack` results in the following:
+
+```shell
+$ pack build applications/jar --path applications/jar --builder cloudfoundry/cnb:bionic --env BP_JAVA_VERSION=""13.0.1""
+bionic: Pulling from cloudfoundry/cnb
+Digest: sha256:efe9b17ac151ab53d8eaa1149d0fd44357f9cd0842a7bfb5a2894c02ae143ab7
+Status: Image is up to date for cloudfoundry/cnb:bionic
+base-cnb: Pulling from cloudfoundry/run
+Digest: sha256:ba9998ae4bb32ab43a7966c537aa1be153092ab0c7536eeef63bcd6336cbd0db
+Status: Image is up to date for cloudfoundry/run:base-cnb
+===> DETECTING
+[detector] 6 of 13 buildpacks participating
+[detector] org.cloudfoundry.openjdk                   v1.1.8
+[detector] org.cloudfoundry.jvmapplication            v1.0.136
+[detector] org.cloudfoundry.tomcat                    v1.1.102
+[detector] org.cloudfoundry.springboot                v1.1.2
+[detector] org.cloudfoundry.distzip                   v1.0.171
+[detector] org.cloudfoundry.springautoreconfiguration v1.0.187
+===> ANALYZING
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:java-security-properties"" from app image
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:jvmkill"" from app image
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:link-local-dns"" from app image
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:memory-calculator"" from app image
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:openjdk-jre"" from app image
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:security-provider-configurer"" from app image
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:class-counter"" from app image
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:a3092627b082cb3cdbbe4b255d35687126aa604e6b613dcda33be9f7e1277162"" from cache
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:897f16fe8e056395209e35d2384013bd1ff250e717465769079e3f4793628c34"" from cache
+[analyzer] Restoring metadata for ""org.cloudfoundry.openjdk:90d40eab6959a7b4059c6409c4505040e8a04f75a481f7282e53430df3edda3e"" from cache
+===> RESTORING
+[restorer] Restoring data for ""org.cloudfoundry.openjdk:897f16fe8e056395209e35d2384013bd1ff250e717465769079e3f4793628c34"" from cache
+[restorer] Restoring data for ""org.cloudfoundry.openjdk:90d40eab6959a7b4059c6409c4505040e8a04f75a481f7282e53430df3edda3e"" from cache
+[restorer] Restoring data for ""org.cloudfoundry.openjdk:a3092627b082cb3cdbbe4b255d35687126aa604e6b613dcda33be9f7e1277162"" from cache
+===> BUILDING
+[builder] 
+[builder] Cloud Foundry OpenJDK Buildpack v1.1.8
+[builder] 
+[builder] Cloud Foundry OpenJDK Buildpack v1.1.8
+[builder]   no valid dependencies for openjdk-jre, 13.0.1, and io.buildpacks.stacks.bionic in [(openjdk-jre, 8.0.242, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jre, 11.0.6, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jre, 13.0.2, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jdk, 8.0.242, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jdk, 11.0.6, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (openjdk-jdk, 13.0.2, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (jvmkill, 1.16.0, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3]), (memory-calculator, 4.0.0, [io.buildpacks.stacks.bionic org.cloudfoundry.stacks.cflinuxfs3])]
+[builder] ERROR: failed to build: exit status 102
+ERROR: failed with status code: 7
+```
+
+Any failure state generated by the lifecycle should cause failure of the build of the image.",https://github.com/spring-projects/spring-boot/issues/19949,0.0,3.0,2.0,46
+79,"Correctly write until EAGAIN when using native transport
+We need to continue write until we hit EAGAIN to make sure we not see an starvation
+",https://github.com/netty/netty/issues/2667,0.0,0.0,2.911111111111111,45
+466,"ignore_missing removed from _aliases
+Continuing discussion from:
+https://github.com/elasticsearch/elasticsearch/pull/7234#issuecomment-55948380
+
+It appears that the recent Get Indices API removes ignore_missing:
+
+Elasticsearch 1.3.2
+
+```
+curl -XGET  http://localhost:9200/logstash-2014.09.16,logstash-2014.09.17/_aliases?ignore_missing=true;echo
+{""logstash-2014.09.16"":{""aliases"":{}}}
+```
+
+Elasticsearch 1.4 branch
+
+```
+$ curl -XGET  http://localhost:9200/logstash-2014.09.16,logstash-2014.09.17/_aliases?ignore_missing=true;echo
+{""error"":""IndexMissingException[[logstash-2014.09.17] missing]"",""status"":404}
+```
+
+Technically ignore_missing was slated for removal in Elasticsearch 1.0 (http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/_parameters.html#_parameters), however it was not removed from this API, meaning this this will introduce a breaking change for 1.4. 
+
+It might be better to deprecate ignore_missing and remove it in Elasticsearch 2.0.
+",https://github.com/elastic/elasticsearch/issues/7793,0.0,3.0,2.0,45
+459,"epoll force closes connection
+a small (visual) regression when doing nio vs epoll: 
+
+When _proxy_ is running on epoll, and the connection to backend is disconnected, the backend server shows a message:
+Player lost connection: Internal Exception: java.io.IOException: Error while read(...): Connection reset by peer
+
+instead of ""Player lost connection: disconnected""
+
+Any idea of what could be the cause?
+(I'll update when I find the piece of code in epoll that could cause this regression)
+
+random guess: there should be a shutdown() syscall before close().
+where to look for comparsion: java nio socketchannel.close()
+",https://github.com/netty/netty/issues/4170,0.0,3.0,0.9090909090909091,44
+362,"Spring Boot - Maven Plugin shutdown broken
+As of 2.2.0 the shutdown of a spring-boot application is broken and results in a Build Failure when executed.
+
+I ran ```mvnw clean install package spring-boot:run``` as a command.
+
+In attachment the executable file of a boot from https://start.spring.io/ and the resulted build fail. I ran with Java 8, and the Maven wrapper included in the project. 
+
+[output.txt](https://github.com/spring-projects/spring-boot/files/3822172/output.txt)
+",https://github.com/spring-projects/spring-boot/issues/18936,0.0,0.0,2.0,46
+242,"NPE during NettyClientTransport.start() if keepAlive is enabled
+### What version of gRPC are you using?
+GRPC 1.1.2
+
+### What JVM are you using (`java -version`)?
+1.8.0_112
+
+### What did you do?
+Just simply call io.grpc.netty.NettyChannelBuilder#enableKeepAlive(boolean) during channel build. and the grpc always throw NPE exception.
+
+```
+java.lang.NullPointerException: null
+	at io.grpc.netty.NettyClientTransport.start(NettyClientTransport.java:169)
+	at io.grpc.internal.ForwardingConnectionClientTransport.start(ForwardingConnectionClientTransport.java:44)
+	at io.grpc.internal.TransportSet.startNewTransport(TransportSet.java:233)
+	at io.grpc.internal.TransportSet.obtainActiveTransport(TransportSet.java:203)
+	at io.grpc.internal.ManagedChannelImpl$3.getTransport(ManagedChannelImpl.java:739)
+	at io.grpc.internal.ManagedChannelImpl$3.getTransport(ManagedChannelImpl.java:677)
+	at io.grpc.PickFirstBalancerFactory$PickFirstBalancer$1.get(PickFirstBalancerFactory.java:129)
+	at io.grpc.internal.DelayedClientTransport$2.run(DelayedClientTransport.java:271)
+	at java.util.concurrent.ForkJoinTask$RunnableExecuteAction.exec(ForkJoinTask.java:1402)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+```
+
+and inspect the code(io.grpc.netty.NettyClientTransport#start):
+
+```java
+ @SuppressWarnings(""unchecked"")
+  @Override
+  public Runnable start(Listener transportListener) {
+    lifecycleManager = new ClientTransportLifecycleManager(
+        Preconditions.checkNotNull(transportListener, ""listener""));
+
+    if (enableKeepAlive) {
+      keepAliveManager = new KeepAliveManager(this, channel.eventLoop(), keepAliveDelayNanos,
+          keepAliveTimeoutNanos);
+    }
+    ....
+}
+```
+
+i believe the field `channel` is never initialized right now, so NPE is throw by field call `channel.eventLoop()`.",https://github.com/grpc/grpc-java/issues/2726,0.0,3.0,0.06382978723404255,47
+452,"auto_expand_replicas: [0-all] can cause data loss when nodes are removed
+Hiya - there is a bug with `auto_expand_replicas: [0-all]` in v 0.16.1 which causes loss of all data in that index.
+
+To replicate:
+- start two nodes
+- run the script below
+- count for index `bar` : 3
+- kill the node that holds the primary shard for index `bar`
+- count for index `bar`: 0
+
+If you change auto expand to `[1-all]` then data is not lost.
+
+```
+curl -XDELETE 'http://127.0.0.1:9200/bar,foo/?pretty=1'
+
+curl -XPUT 'http://127.0.0.1:9200/foo/?pretty=1'  -d '
+{
+   ""settings"" : {
+      ""number_of_replicas"" : 0,
+      ""number_of_shards"" : 1
+   }
+}
+'
+
+curl -XPUT 'http://127.0.0.1:9200/bar/?pretty=1'  -d '
+{
+   ""settings"" : {
+      ""index"" : {
+         ""number_of_replicas"" : 0,
+         ""number_of_shards"" : 1
+      }
+   }
+}
+'
+
+
+curl -XGET 'http://127.0.0.1:9200/_cluster/health/bar?pretty=1&wait_for_status=green' 
+
+
+curl -XPOST 'http://127.0.0.1:9200/_bulk?pretty=1'  -d '
+{""index"" : {""_index"" : ""bar"", ""_type"" : ""name""}}
+{""tokens"" : [""stuart"", ""watt""], ""context"" : ""/2850246/all"", ""rank"" : 1}
+{""index"" : {""_index"" : ""bar"", ""_type"" : ""name""}}
+{""tokens"" : [""stuart"", ""watt""], ""context"" : ""/2850246/jpnw/all"", ""rank"" : 1}
+{""index"" : {""_index"" : ""bar"", ""_type"" : ""name""}}
+{""tokens"" : [""stuart"", ""watt""], ""context"" : ""/2850246/jpnw_pres/all"", ""rank"" : 1}
+{""index"" : {""_index"" : ""bar"", ""_type"" : ""name""}}
+'
+
+curl -XPOST 'http://127.0.0.1:9200/bar/_refresh?pretty=1' 
+
+curl -XPUT 'http://127.0.0.1:9200/bar/_settings?pretty=1'  -d '
+{
+   ""index"" : {
+      ""auto_expand_replicas"" : ""0-all""
+   }
+}
+'
+
+curl -XGET 'http://127.0.0.1:9200/_cluster/health/bar?pretty=1&wait_for_status=green' 
+
+
+curl -XGET 'http://127.0.0.1:9200/bar/_count?pretty=1'  -d '
+{
+   ""match_all"" : {}
+}
+'
+```
+",https://github.com/elastic/elasticsearch/issues/934,0.0,0.0,3.0,44
+78,"Contradictory JavaDoc in NioChannelConfig.setWriteBufferHighWaterMark 
+I think the JavaDoc of setWriteBufferHighWaterMark and setWriteBufferLowWaterMark is wrong.
+
+setWriteBufferHighWaterMark:
+""If the number of bytes queued in the write buffer exceeds this value, Channel.isWritable() will start to return true."" 
+
+Doesn't it return ""false"" when the the buffer exceeds the highwatermark?
+",https://github.com/netty/netty/issues/403,0.0,2.0,2.3684210526315788,38

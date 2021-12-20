@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9868199825286865,0.4256339967250824,Ensemble1 memory is normal distributed
+1,dagostino_stat,3.2013765249180492,0.2017576080094594,Ensemble1 memory is normal distributed
+0,shapiro_stat,0.984623908996582,0.29827189445495605,LRC memory is normal distributed
+1,dagostino_stat,3.3530318032943627,0.18702445380859006,LRC memory is normal distributed
+0,t_test_one_sided,6.173022077086447,1.8924391773580354e-09,Ensemble1 memory is not greater than LRC memory

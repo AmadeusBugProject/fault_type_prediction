@@ -1,0 +1,2945 @@
+,doc,url,correct,target,prediction,count
+10,"Add jsp-api to security sample
+",https://github.com/spring-projects/spring-session/issues/279,1.0,2.0,2.0,280
+353,"[BUG] gitignore file imperfect
+I forked the project and checkout branch dev-db, Then i run 'mvn clean install -Prelease -Dmaven.test.skip=true' to build the project. I found 
+`dolphinscheduler-dist/dolphinscheduler-backend/target` 
+`dolphinscheduler-dist/dolphinscheduler-front/target/` 
+`dolphinscheduler-dist/dolphinscheduler-src/target/` 
+`dolphinscheduler-ui/dist` 
+`dolphinscheduler-ui/node` 
+was in the untracked files list.
+
+I checked the .gitignore file and found it is imperfect. To solve it we can edit the .gitignore file and add this lines:
+`**/**/target/**`
+`dolphinscheduler-ui/dist`
+`dolphinscheduler-ui/dist`
+
+@qiaozhanwei  
+Is it a bug? And can I update the .gitignore file?",https://github.com/apache/incubator-dolphinscheduler/issues/1420,1.0,2.0,2.0,7
+404,"v3.1/4.0: Javadoc-Fix for ChronoFormatter#toFormat()
+In version v3.0, updating the javadoc was forgotten. Some new elements are missing in current javadoc describing the mapping from Time4J-elements to `DateFormat.Field`-constants.
+",https://github.com/MenoData/Time4J/issues/267,1.0,2.0,2.0,77
+113,"Fix WebClient Memory Leaks
+<!--
+For Security Vulnerabilities, please use https://pivotal.io/security#reporting
+-->
+
+### Summary
+
+The [documentation](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/web-reactive.html#webflux-client-exchange) states:
+
+> When you use exchange(), you must always use any of the body or toEntity methods of ClientResponse to ensure resources are released and to avoid potential issues with HTTP connection pooling. You can use bodyToMono(Void.class) if no response content is expected. However, if the response does have content, the connection is closed and is not placed back in the pool.
+
+There are multiple places where the status is looked at and if it isn't 2xx then it throws an exception without consuming the body which causes a leak.
+",https://github.com/spring-projects/spring-security/issues/7293,1.0,1.0,1.0,63
+122,"Generated code doesn't compile when custom type mapper maps to a nullable primitive type
+The generated `hashCode()` attempts to take `Integer.hashCode(myEntity.getMyIntField())` even though `myEntity.getMyIntField()` returns an `OptionalInt`.",https://github.com/speedment/speedment/issues/628,1.0,3.0,3.0,35
+128,"Hazelcast do not clean up lock after member restart
+We have hazelcast cluster with 3 members: arbiter and 2 nodes, and quorum rule with two members to manage some lock. Nodes trying to get lock, arbiter do nothing.
+Sometimes both nodes can start to indefinitely wait lock, for example:
+1. arbiter, node1 and node2 started
+2. node1 got lock, node2 waits
+3. node1 shutdown
+4. node2 got lock
+5. node2 shutdown
+6. node2 starts again
+7. node2 indefinitely wait lock, lock owner uuid = {previous instance of node2} that was already gracefully (or not, tested both) shutdowned
+
+Tested on 3.10.1, 3.10.6, 3.11. jdk1.8.0_181
+
+Example:
+```java
+package hazelcast;
+
+import com.hazelcast.config.Config;
+import com.hazelcast.config.LockConfig;
+import com.hazelcast.config.QuorumConfig;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ILock;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class HazelcastLockTest {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(HazelcastLockTest.class);
+
+	private static final String LOCK = ""MY_LOCK"";
+
+	@Test
+	public void testLock() {
+		final Config config = new Config();
+		config.getGroupConfig().setName(""test"");
+		config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
+		config.getNetworkConfig().getJoin().getTcpIpConfig()
+				.setEnabled(true)
+				.addMember(""127.0.0.1:13703"")
+				.addMember(""127.0.0.1:13704"")
+				.addMember(""127.0.0.1:13705"");
+		config.getQuorumConfigs()
+				.put(""quorumRuleWithTwoMembers"", new QuorumConfig(""quorumRuleWithTwoMembers"", true, 2));
+		config.addLockConfig(new LockConfig(LOCK).setQuorumName(""quorumRuleWithTwoMembers""));
+
+		// Start arbiter and two nodes: primary and secondary
+		config.getNetworkConfig().setPort(13703);
+		final HazelcastInstance arbiter = Hazelcast.newHazelcastInstance(config);
+
+		config.getNetworkConfig().setPort(13704);
+		final HazelcastInstance primary = Hazelcast.newHazelcastInstance(config);
+
+		config.getNetworkConfig().setPort(13705);
+		final HazelcastInstance secondary = Hazelcast.newHazelcastInstance(config);
+
+		{
+			final ILock primaryLock = primary.getLock(LOCK);
+			LOGGER.info(""PRIMARY READY TO GET LOCK: {} is {}, {}"", primaryLock.getLockCount(),
+					primaryLock.isLocked(), primaryLock.getLockCount());
+			primaryLock.lock();
+			LOGGER.info(""PRIMARY LOCKED"");
+		}
+
+		// Shutdown primary
+		primary.shutdown();
+
+		{
+			final ILock secondaryLock = secondary.getLock(LOCK);
+			LOGGER.info(""SECONDARY READY TO GET LOCK: {} is {}, {}"", secondaryLock.getLockCount(),
+					secondaryLock.isLocked(), secondaryLock.getLockCount());
+			secondaryLock.lock();
+			LOGGER.info(""SECONDARY LOCKED"");
+		}
+
+		// Shutdown secondary
+		secondary.shutdown();
+
+		// Start secondary again
+		config.getNetworkConfig().setPort(13705);
+		final HazelcastInstance secondaryRestarted = Hazelcast.newHazelcastInstance(config);
+
+		{
+			final ILock secondaryLock = secondaryRestarted.getLock(LOCK);
+			LOGGER.info(""SECONDARY READY TO GET LOCK again: {} is {}, {}"", secondaryLock.getLockCount(),
+					secondaryLock.isLocked(), secondaryLock.getLockCount());
+			secondaryLock.lock(); // TODO fails here, indefinitely wait
+		}
+
+		// Shutdown arbiter and secondary
+		arbiter.shutdown();
+		secondaryRestarted.shutdown();
+	}
+
+}
+```
+",https://github.com/hazelcast/hazelcast/issues/14215,1.0,0.0,0.0,196
+350,"Wrong Dependency in Spring Boot Tutorial
+I just noticed that the 'spring-boot-starter-redis' dependency in the spring boot tutorial (https://docs.spring.io/spring-session/docs/current/reference/html5/guides/boot.html) is not longer valid and should be 'spring-boot-starter-data-redis' instead.",https://github.com/spring-projects/spring-session/issues/952,1.0,2.0,2.0,280
+132,"HonoConnection.shutdown() blocks for 5s if called on event loop thread
+`HonoConnection.shutdown()` blocks the current thread for 5s waiting for the close frame from the remote peer.
+If the current thread is the thread of the vertx context that the HonoConnection operates on, the response from the remote peer can't be processed while the thread is blocked, causing for the 5s timeout to occur.
+
+Same applies to the `disconnect` method.",https://github.com/eclipse/hono/issues/1750,1.0,0.0,0.0,42
+5,"2.4.2 RC1: Connection leak detection false positive
+I tried 2.4.2 RC1 in replacement to 2.4.1.
+
+Without any changes to the app, HikariCP reports a connection leak after pool-initialization.
+But there is no leaking connection: one connection in pool, one idle, one connection to the database.
+
+Excerpt from log (pool configuration and leak alert):
+
+```
+[#| 16.10.2015 14:01:05.887 | ... | DEBUG com.zaxxer.hikari.HikariConfig 
+dev - configuration:
+allowPoolSuspension.............false
+autoCommit......................true
+catalog.........................
+connectionInitSql...............
+connectionTestQuery.............
+connectionTimeout...............2000
+dataSource......................
+dataSourceClassName.............org.postgresql.ds.PGSimpleDataSource
+dataSourceJNDI..................
+dataSourceProperties............{serverName=…, socketTimeout=15, user=…, databaseName=…, tcpKeepAlive=true, prepareThreshold=0, password=<masked>, portNumber=, loginTimeout=15}
+driverClassName.................
+healthCheckProperties...........{}
+healthCheckRegistry.............
+idleTimeout.....................1200000
+initializationFailFast..........true
+isolateInternalQueries..........false
+jdbc4ConnectionTest.............false
+jdbcUrl.........................
+leakDetectionThreshold..........10000
+maxLifetime.....................43200000
+maximumPoolSize.................50
+metricRegistry..................com.codahale.metrics.MetricRegistry@148da145
+metricsTrackerFactory...........
+minimumIdle.....................0
+password........................<masked>
+poolName........................dev
+readOnly........................false
+registerMbeans..................true
+scheduledExecutorService........
+threadFactory……………….<customClass>$1@21540445
+transactionIsolation............
+username........................
+validationTimeout...............2000
+dev - is starting.
+dev - Connection.setNetworkTimeout() is not supported (...)
+|#]
+
+[#| 16.10.2015 14:01:05.927 | … | DEBUG com.zaxxer.hikari.pool.HikariPool 
+dev - Added connection org.postgresql.jdbc4.Jdbc4Connection@3a4a6161
+|#]
+
+[#| 16.10.2015 14:01:05.928 | ... | DEBUG com.zaxxer.hikari.pool.PoolBase 
+dev - Closing connection org.postgresql.jdbc4.Jdbc4Connection@3a4a6161: (connection evicted by user)
+|#]
+
+
+…<no action from app>...
+
+
+[#| 16.10.2015 14:01:15.948 | ... | WARN  com.zaxxer.hikari.pool.ProxyLeakTask 
+Connection leak detection triggered for connection org.postgresql.jdbc4.Jdbc4Connection@3a4a6161, stack trace follows
+java.lang.Exception: Apparent connection leak detected
+    at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:138) ~[HikariCP-2.4.2-RC1.jar:na]
+    at com.zaxxer.hikari.HikariDataSource.<init>(HikariDataSource.java:71) ~[HikariCP-2.4.2-RC1.jar:na]
+    ...
+|#]
+
+[#| 16.10.2015 14:01:35.897 | … | DEBUG com.zaxxer.hikari.pool.HikariPool 
+Before cleanup  pool dev stats (total=1, active=0, idle=1, waiting=0)
+```
+",https://github.com/brettwooldridge/HikariCP/issues/465,1.0,1.0,1.0,119
+133,"IMA Extension Memory Leak
+### Issue description
+Using IMA Extension and in the sample main demo app, a memory leak happens when you serve a VMAP and quit the player activity during content playback and after ad/pods playback.
+
+In my opinion, it's an IMA problem and managed to reproduce the issue even without an IMA Extension and following exactly their integration guide but according to them they're claiming it's an IMA-Extension problem and not theirs
+https://groups.google.com/forum/#!topic/ima-sdk/ZM-WsPL1xdQ
+
+
+### Reproduction steps
+- In the Main Demo app, use any video and set the following sample adtag uri:
+https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpostlongpod&cmsid=496&vid=short_tencue&correlator=
+- When pre-roll finishes and content video plays for few seconds, press back to return to the home screen, PlayerActivity gets leaked
+
+
+### Link to test content
+Provide a link to media that reproduces the issue. If you don't wish to post it
+publicly, please submit the issue, then email the link to
+dev.exoplayer@gmail.com using a subject in the format ""Issue #1234"".
+
+
+### Version of ExoPlayer being used
+V2.7.3
+
+
+### Device(s) and version(s) of Android being used
+Tested on Pixel XL (Oreo 8.1), Xperia XZ (Oreo 8.0) but can be reproduced on any device",https://github.com/google/ExoPlayer/issues/4114,1.0,1.0,1.0,189
+102,"ExpandCollapseSearchResponseListener potentially executes blocking calls on a network thread
+We use ExpandCollapseSearchResponseListener for field collapsing but this listener executes heavy operations in a blocking fashion. This could happen on a transport thread. We should do this in an async way.
+
+I just spoke with @jimczi how to fix it and he is taking it over. For now I will put a fix into 5.x and master since this triggers quite often due to a recent change.
+
+Note: this code is unreleased",https://github.com/elastic/elasticsearch/issues/23048,1.0,0.0,0.0,546
+112,"Fix Typo in Reference Docs
+### Summary
+
+Backport of #4767",https://github.com/spring-projects/spring-security/issues/4976,1.0,2.0,2.0,63
+389,"mvn clean install -Psql -Pdeploy fails because deploy-apps.sh can't be found
+When trying to deploy Kapua in the Vagrant box using `/deploy-apps.sh`, I get an error when the assembly is trying to execute the `vagrant_console_deploy`:
+
+```
+[ERROR] Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.1:exec (vagrant_console_deploy) on project org.eclipse.kapua.assembly: Result of /bin/sh -c cd /Users/kartben/Repositories/kapua/org.eclipse.kapua.assembly/../org.eclipse.kapua.dev-tools/src/main/vagrant/demo && ./deployScript/deploy-apps.sh execution is: '127'. -> [Help 1]
+```
+
+Looks like `org.eclipse.kapua.dev-tools` is now `dev-tools`?
+",https://github.com/eclipse/kapua/issues/1,1.0,2.0,2.0,49
+127,"GrizzlyResponse object reachable from SelectorRunner thread local
+Hi,
+
+We are using grizzly through AHC to perform some HTTP requests. After those requests have finished, in a thread dump i can still see the response objects being referenced, and not being garbage collected. Attached is a screenshot of there references from a heap dump:
+
+![screen shot 2015-12-22 at 9 37 37 am](https://cloud.githubusercontent.com/assets/8010105/11955732/211f42b4-a893-11e5-8885-4c7eb7553764.png)
+
+In a case where the size of the transferred data is big, i see some heavy memory usage.
+
+The problem seems to be with the reference chain TCPNIOConnection -> IndexedAttributeHolder -> $Snapshot -> HttpTransactionContext. Perhaps at least one of those references should be discarded after the request has completed, or provide a way to an app to clear that.
+
+The following test can reproduce this issue.
+
+```
+    @Test
+    public void referencedResponseHC() throws InterruptedException
+    {
+        AsyncHttpClientConfig config = new AsyncHttpClientConfig.Builder().build();
+        AsyncHttpClient client = new AsyncHttpClient(new GrizzlyAsyncHttpProvider(config), config);
+
+        final CountDownLatch responseLatch = new CountDownLatch(1);
+        final AtomicReference<Response> responseRef = new AtomicReference<>();
+
+        client.prepareGet(""http://www.ning.com/"").execute(new AsyncCompletionHandler<Response>()
+        {
+
+            @Override
+            public Response onCompleted(Response response) throws Exception
+            {
+                responseLatch.countDown();
+                responseRef.set(response);
+                return response;
+            }
+
+            @Override
+            public void onThrowable(Throwable t)
+            {
+                // Something wrong happened.
+            }
+        });
+
+        responseLatch.await(5, TimeUnit.SECONDS);
+        verifyNotLeaked(new PhantomReference<>(responseRef.getAndSet(null), new ReferenceQueue<>()));
+    }
+
+    private void verifyNotLeaked(PhantomReference possibleLeakPhantomRef) throws InterruptedException
+    {
+        for (int i = 0; i < 10; ++i)
+        {
+            System.gc();
+            Thread.sleep(100);
+            if (possibleLeakPhantomRef.isEnqueued())
+            {
+                break;
+            }
+        }
+        assertTrue(possibleLeakPhantomRef.isEnqueued());
+    }
+```
+
+Thanks in advance,
+",https://github.com/AsyncHttpClient/async-http-client/issues/1067,1.0,1.0,1.0,224
+379,"groovy scripting docs are buggy for 'multiValued'
+The documentation (https://www.elastic.co/guide/en/elasticsearch/reference/master/modules-scripting-groovy.html#_doc_value_properties_and_methods) states that you can do this:
+
+```
+doc['field_name'].multiValued
+    A boolean indicating that the field has several values within the corpus. 
+```
+
+This does not work though, we don't have any actual code to support it. I don't think we need it either, since someone could just look at `doc['field_name'].size() > 1` or a number of other ways, but we should fix the docs.
+",https://github.com/elastic/elasticsearch/issues/18164,1.0,2.0,2.0,546
+367,"_missing_ is missing?
+`_missing_` doesn't appear to have made it into 5.0 (it's in the [2.4 docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html)), but it's not in the [breaking changes](https://www.elastic.co/guide/en/elasticsearch/reference/5.0/breaking_50_search_changes.html).
+
+Was this removed?",https://github.com/elastic/elasticsearch/issues/21226,1.0,2.0,2.0,546
+365,"[doc] 404 error Pulsar IO
+**Describe the bug**
+404 error Pulsar IO.
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to 'http://pulsar.apache.org/docs/en/2.4.2/io-quickstart'
+2. Click on 'Get started'
+3. Scroll down to ' Install Pulsar and builtin connector'
+4.Click `here` like.
+4. See error
+
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Screenshots**
+![图片](https://user-images.githubusercontent.com/29513837/72712701-85958500-3ba6-11ea-989c-2f3fae85d423.png)
+
+
+**Desktop (please complete the following information):**
+ - OS: [e.g. iOS]
+
+**Additional context**
+Add any other context about the problem here.
+",https://github.com/apache/pulsar/issues/6100,1.0,2.0,2.0,98
+93,"Entities not building after updating to beta12
+After upgrading to beta12, my project will no longer build.
+
+I receive the following in the gradle build messages:
+
+```
+Error:Execution failed for task ':app:compileDebugJavaWithJavac'.
+> java.lang.NoSuchMethodError: com.squareup.javapoet.TypeSpec.classBuilder(Lcom/squareup/javapoet/ClassName;)Lcom/squareup/javapoet/TypeSpec$Builder;
+```
+
+I can have `requery`, and `requery-android` at beta12 and `requery-processor` at beta11 and the project will build fine. But upgrading `requery-processor` to beta12 will stop it from building.
+",https://github.com/requery/requery/issues/75,1.0,2.0,2.0,21
+397,"runtime-compute: Improve JavaDoc
+The following classes need JavaDocs which can be derived from the class `HasPow`:
+```
+HasDivide
+HasMinus
+HasMultiply
+HasPlus
+ToNullable
+```
+
+The default methods in the following classes needs JavaDoc:
+```
+ToBigDecimalNullable
+ToBooleanNullable
+ToByteNullable
+ToCharNullable
+ToShortNullable
+ToDoubleNullable
+ToEnumNullable
+ToFloatNullable
+ToLongNullable
+ToStringNullable
+```
+The following classes need JavaDocs which can be derived from similar classes:
+```
+ComposedExpression
+JoiningExpression
+```",https://github.com/speedment/speedment/issues/626,1.0,2.0,2.0,35
+398,"spring-boot-sample-simple does not build with gradle
+Output: 
+
+``` text
+* What went wrong:
+A problem occurred evaluating root project 'spring-boot-sample-simple'.
+> Could not find method run() for arguments [build_54mbijt3lmz0e8z5tqchytm9o$_run_closure2@14feec07] on root project 'spring-boot-sample-simple'.
+```
+
+I don't know enough about Gradle or Spring Boot to provide further info. 
+",https://github.com/spring-projects/spring-boot/issues/4627,1.0,2.0,2.0,91
+362,"[core] Thread lock
+**Checks before report**
+- [+] check [latest unstable build](https://bintray.com/skylot/jadx/unstable/_latestVersion#files) (maybe issue already fixed)
+- [+] search existing issues by exception message
+- [+] check [Troubleshooting Q&A](https://github.com/skylot/jadx/wiki/Troubleshooting-Q&A) section on wiki
+
+**Describe error**
+Hi, I've noticed that an app is never decompiled. I run jadx with the following arguments
+```
+--no-replace-consts --show-bad-code --threads-count 8 --no-inline-anonymous --no-imports --deobf --deobf-min 2 --deobf-rewrite-cfg
+```
+jstack output
+```
+2019-07-29 12:53:48
+Full thread dump Java HotSpot(TM) 64-Bit Server VM (25.201-b09 mixed mode):
+
+""Java2D Disposer"" #16 daemon prio=10 os_prio=2 tid=0x0000000045548800 nid=0xd34 in Object.wait() [0x000000004e0af000]
+   java.lang.Thread.State: WAITING (on object monitor)
+        at java.lang.Object.wait(Native Method)
+        - waiting on <0x0000000408b02e00> (a java.lang.ref.ReferenceQueue$Lock)
+        at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:144)
+        - locked <0x0000000408b02e00> (a java.lang.ref.ReferenceQueue$Lock)
+        at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:165)
+        at sun.java2d.Disposer.run(Disposer.java:148)
+        at java.lang.Thread.run(Thread.java:748)
+
+   Locked ownable synchronizers:
+        - None
+
+""pool-1-thread-4"" #14 prio=5 os_prio=0 tid=0x0000000045942000 nid=0xec4 waiting for monitor entry [0x000000004d1ae000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+        at jadx.core.ProcessClass.process(ProcessClass.java:46)
+        - waiting to lock <0x0000000407e3b578> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.process(ProcessClass.java:25)
+        at jadx.core.dex.nodes.ClassNode.loadAndProcess(ClassNode.java:248)
+        at jadx.core.codegen.InsnGen.processOverloadedArg(InsnGen.java:794)
+        at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:765)
+        at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:709)
+        at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:353)
+        at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:235)
+        at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:206)
+        at jadx.core.dex.visitors.regions.CheckRegions.getBlockInsnStr(CheckRegions.java:93)
+        at jadx.core.dex.visitors.regions.CheckRegions.visit(CheckRegions.java:64)
+        at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:30)
+        at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:15)
+        at jadx.core.dex.visitors.DepthTraversal$$Lambda$31/253399104.accept(Unknown Source)
+        at java.util.ArrayList.forEach(ArrayList.java:1257)
+        at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:15)
+        at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:14)
+        at jadx.core.dex.visitors.DepthTraversal$$Lambda$30/993888079.accept(Unknown Source)
+        at java.util.ArrayList.forEach(ArrayList.java:1257)
+        at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+        at jadx.core.ProcessClass.process(ProcessClass.java:54)
+        - locked <0x0000000407f76398> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.generateCode(ProcessClass.java:30)
+        at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:255)
+        at jadx.api.JavaClass.decompile(JavaClass.java:61)
+        - locked <0x000000040a3135d0> (a jadx.api.JavaClass)
+        at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:211)
+        at jadx.api.JadxDecompiler$$Lambda$24/914942811.run(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at java.lang.Thread.run(Thread.java:748)
+
+   Locked ownable synchronizers:
+        - <0x0000000408d053d0> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-3"" #13 prio=5 os_prio=0 tid=0x0000000045941800 nid=0xe14 waiting for monitor entry [0x000000004c2ae000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+        at jadx.core.ProcessClass.process(ProcessClass.java:46)
+        - waiting to lock <0x0000000407f76398> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.processDependencies(ProcessClass.java:78)
+        at jadx.core.ProcessClass.process(ProcessClass.java:59)
+        - locked <0x0000000407e3b578> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.generateCode(ProcessClass.java:30)
+        at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:255)
+        at jadx.api.JavaClass.decompile(JavaClass.java:61)
+        - locked <0x000000040a313580> (a jadx.api.JavaClass)
+        at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:211)
+        at jadx.api.JadxDecompiler$$Lambda$24/914942811.run(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at java.lang.Thread.run(Thread.java:748)
+
+   Locked ownable synchronizers:
+        - <0x0000000408c05780> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-2"" #12 prio=5 os_prio=0 tid=0x0000000045940800 nid=0x4f4 waiting for monitor entry [0x000000004b3ae000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+        at jadx.core.ProcessClass.process(ProcessClass.java:46)
+        - waiting to lock <0x0000000407f76398> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.processDependencies(ProcessClass.java:78)
+        at jadx.core.ProcessClass.process(ProcessClass.java:59)
+        - locked <0x00000004082e4090> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.generateCode(ProcessClass.java:30)
+        at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:255)
+        at jadx.api.JavaClass.decompile(JavaClass.java:61)
+        - locked <0x000000040a3135f8> (a jadx.api.JavaClass)
+        at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:211)
+        at jadx.api.JadxDecompiler$$Lambda$24/914942811.run(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at java.lang.Thread.run(Thread.java:748)
+
+   Locked ownable synchronizers:
+        - <0x0000000408b02fe0> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-1"" #11 prio=5 os_prio=0 tid=0x00000000484bb000 nid=0x7dc waiting for monitor entry [0x000000004a4ae000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+        at jadx.core.ProcessClass.process(ProcessClass.java:46)
+        - waiting to lock <0x0000000407f76398> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.processDependencies(ProcessClass.java:78)
+        at jadx.core.ProcessClass.process(ProcessClass.java:59)
+        - locked <0x0000000407fd04d8> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.generateCode(ProcessClass.java:30)
+        at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:255)
+        at jadx.api.JavaClass.decompile(JavaClass.java:61)
+        - locked <0x000000040a312a18> (a jadx.api.JavaClass)
+        at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:211)
+        at jadx.api.JadxDecompiler$$Lambda$24/914942811.run(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at java.lang.Thread.run(Thread.java:748)
+
+   Locked ownable synchronizers:
+        - <0x0000000408d055b8> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""Service Thread"" #10 daemon prio=9 os_prio=0 tid=0x000000003ccdd000 nid=0x130c runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+        - None
+
+""C1 CompilerThread2"" #9 daemon prio=9 os_prio=2 tid=0x000000003cc5a000 nid=0x81c waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+        - None
+
+""C2 CompilerThread1"" #8 daemon prio=9 os_prio=2 tid=0x000000003cc56000 nid=0x12c8 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+        - None
+
+""C2 CompilerThread0"" #7 daemon prio=9 os_prio=2 tid=0x000000003cc54000 nid=0xf64 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+        - None
+
+""Attach Listener"" #6 daemon prio=5 os_prio=2 tid=0x000000003cc50000 nid=0xe90 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+        - None
+
+""Signal Dispatcher"" #5 daemon prio=9 os_prio=2 tid=0x000000003cc4d000 nid=0x1460 runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+        - None
+
+""Surrogate Locker Thread (Concurrent GC)"" #4 daemon prio=9 os_prio=0 tid=0x000000003cc4b800 nid=0x1010 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+        - None
+
+""Finalizer"" #3 daemon prio=8 os_prio=1 tid=0x000000003cc2e800 nid=0xee0 in Object.wait() [0x000000003edaf000]
+   java.lang.Thread.State: WAITING (on object monitor)
+        at java.lang.Object.wait(Native Method)
+        - waiting on <0x0000000401806718> (a java.lang.ref.ReferenceQueue$Lock)
+        at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:144)
+        - locked <0x0000000401806718> (a java.lang.ref.ReferenceQueue$Lock)
+        at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:165)
+        at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:216)
+
+   Locked ownable synchronizers:
+        - None
+
+""Reference Handler"" #2 daemon prio=10 os_prio=2 tid=0x000000003cc21000 nid=0x280 in Object.wait() [0x000000003deaf000]
+   java.lang.Thread.State: WAITING (on object monitor)
+        at java.lang.Object.wait(Native Method)
+        - waiting on <0x0000000401705c60> (a java.lang.ref.Reference$Lock)
+        at java.lang.Object.wait(Object.java:502)
+        at java.lang.ref.Reference.tryHandlePending(Reference.java:191)
+        - locked <0x0000000401705c60> (a java.lang.ref.Reference$Lock)
+        at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:153)
+
+   Locked ownable synchronizers:
+        - None
+
+""main"" #1 prio=5 os_prio=0 tid=0x0000000002d53800 nid=0x1434 waiting on condition [0x0000000002d4f000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+        at sun.misc.Unsafe.park(Native Method)
+        - parking to wait for  <0x0000000408d05600> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+        at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+        at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+        at java.util.concurrent.ThreadPoolExecutor.awaitTermination(ThreadPoolExecutor.java:1475)
+        at jadx.api.JadxDecompiler.save(JadxDecompiler.java:153)
+        at jadx.api.JadxDecompiler.save(JadxDecompiler.java:138)
+        at jadx.cli.JadxCLI.processAndSave(JadxCLI.java:37)
+        at jadx.cli.JadxCLI.main(JadxCLI.java:18)
+
+   Locked ownable synchronizers:
+        - None
+
+""VM Thread"" os_prio=2 tid=0x000000003cbfc800 nid=0xea4 runnable
+
+""Gang worker#0 (Parallel GC Threads)"" os_prio=2 tid=0x0000000002d6c000 nid=0xf18 runnable
+
+""Gang worker#1 (Parallel GC Threads)"" os_prio=2 tid=0x0000000002d6d800 nid=0xda0 runnable
+
+""Gang worker#2 (Parallel GC Threads)"" os_prio=2 tid=0x0000000002d6f000 nid=0x15c4 runnable
+
+""Gang worker#3 (Parallel GC Threads)"" os_prio=2 tid=0x0000000002d71000 nid=0x12b8 runnable
+
+""G1 Main Concurrent Mark GC Thread"" os_prio=2 tid=0x0000000002e1f800 nid=0x174c runnable
+
+""Gang worker#0 (G1 Parallel Marking Threads)"" os_prio=2 tid=0x0000000002e20800 nid=0xe84 runnable
+
+""G1 Concurrent Refinement Thread#0"" os_prio=2 tid=0x0000000002d7c800 nid=0xe24 runnable
+
+""G1 Concurrent Refinement Thread#1"" os_prio=2 tid=0x0000000002d7a800 nid=0xbf4 runnable
+
+""G1 Concurrent Refinement Thread#2"" os_prio=2 tid=0x0000000002d79000 nid=0xf00 runnable
+
+""G1 Concurrent Refinement Thread#3"" os_prio=2 tid=0x0000000002d76000 nid=0x1214 runnable
+
+""G1 Concurrent Refinement Thread#4"" os_prio=2 tid=0x0000000002d75000 nid=0x1300 runnable
+
+""VM Periodic Task Thread"" os_prio=2 tid=0x000000003ccf6800 nid=0x16d8 waiting on condition
+
+JNI global references: 517
+
+
+Found one Java-level deadlock:
+=============================
+""pool-1-thread-4"":
+  waiting to lock monitor 0x0000000047032988 (object 0x0000000407e3b578, a jadx.core.dex.info.ClassInfo),
+  which is held by ""pool-1-thread-3""
+""pool-1-thread-3"":
+  waiting to lock monitor 0x0000000048aeb628 (object 0x0000000407f76398, a jadx.core.dex.info.ClassInfo),
+  which is held by ""pool-1-thread-4""
+
+Java stack information for the threads listed above:
+===================================================
+""pool-1-thread-4"":
+        at jadx.core.ProcessClass.process(ProcessClass.java:46)
+        - waiting to lock <0x0000000407e3b578> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.process(ProcessClass.java:25)
+        at jadx.core.dex.nodes.ClassNode.loadAndProcess(ClassNode.java:248)
+        at jadx.core.codegen.InsnGen.processOverloadedArg(InsnGen.java:794)
+        at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:765)
+        at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:709)
+        at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:353)
+        at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:235)
+        at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:206)
+        at jadx.core.dex.visitors.regions.CheckRegions.getBlockInsnStr(CheckRegions.java:93)
+        at jadx.core.dex.visitors.regions.CheckRegions.visit(CheckRegions.java:64)
+        at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:30)
+        at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:15)
+        at jadx.core.dex.visitors.DepthTraversal$$Lambda$31/253399104.accept(Unknown Source)
+        at java.util.ArrayList.forEach(ArrayList.java:1257)
+        at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:15)
+        at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:14)
+        at jadx.core.dex.visitors.DepthTraversal$$Lambda$30/993888079.accept(Unknown Source)
+        at java.util.ArrayList.forEach(ArrayList.java:1257)
+        at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+        at jadx.core.ProcessClass.process(ProcessClass.java:54)
+        - locked <0x0000000407f76398> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.generateCode(ProcessClass.java:30)
+        at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:255)
+        at jadx.api.JavaClass.decompile(JavaClass.java:61)
+        - locked <0x000000040a3135d0> (a jadx.api.JavaClass)
+        at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:211)
+        at jadx.api.JadxDecompiler$$Lambda$24/914942811.run(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at java.lang.Thread.run(Thread.java:748)
+""pool-1-thread-3"":
+        at jadx.core.ProcessClass.process(ProcessClass.java:46)
+        - waiting to lock <0x0000000407f76398> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.processDependencies(ProcessClass.java:78)
+        at jadx.core.ProcessClass.process(ProcessClass.java:59)
+        - locked <0x0000000407e3b578> (a jadx.core.dex.info.ClassInfo)
+        at jadx.core.ProcessClass.generateCode(ProcessClass.java:30)
+        at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:255)
+        at jadx.api.JavaClass.decompile(JavaClass.java:61)
+        - locked <0x000000040a313580> (a jadx.api.JavaClass)
+        at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:211)
+        at jadx.api.JadxDecompiler$$Lambda$24/914942811.run(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at java.lang.Thread.run(Thread.java:748)
+
+Found 1 deadlock.
+```
+
+APK: https://drive.google.com/file/d/16KjFNIb20qGCWREbQ64maNHlrsKurWkK/view?usp=sharing",https://github.com/skylot/jadx/issues/726,1.0,0.0,0.0,42
+117,"Fix potential thread safe problem in InterceptorScope
+InterceptorScopePool Field of DefaultProfilerPluginContext is not thread safe.
+
+fixed version : 1.6.0-RC2",https://github.com/naver/pinpoint/issues/2259,1.0,0.0,0.0,112
+116,"Fix concurrency issue in DeadlockThreadRegistry
+#### Description
+
+If addDeadlockedThread and getDeadlockedThreadIdSet operation performed concurrently on deadlockedThreadIdSet in DeadlockThreadRegistry class.
+
+Concurrency issue will occur.
+```java
+public class DeadlockThreadRegistry implements DeadlockThreadLocator {
+
+    private final Set<Long> deadlockedThreadIdSet = new HashSet<Long>();
+
+    boolean addDeadlockedThread(long threadId);
+
+    public Set<Long> getDeadlockedThreadIdSet();
+}
+```
+
+
+related issue #2941 
+
+",https://github.com/naver/pinpoint/issues/3712,1.0,0.0,0.0,112
+107,"File#mkdirs gets stuck, might be concurrency issue
+In 0.16, only create it under a global mutex lock. In 0.17, lets try and be smarted and detect that its stuck....
+",https://github.com/elastic/elasticsearch/issues/1147,1.0,0.0,0.0,546
+92,"Ensure double-checked locking when loading Jwk definitions
+https://github.com/spring-projects/spring-security-oauth/blob/cc4c0a52086309a6eed3fd8a2304b31055e7c9d7/spring-security-oauth2/src/main/java/org/springframework/security/oauth2/provider/token/store/jwk/JwkDefinitionSource.java#L89
+
+JwkDefinitionSource.getDefinitionLoadIfNecessary should check if the definition has been loaded in the synchronized before clearing and loading definitions. The current implementation has the side effect of a second thread waiting for the lock will attempt to also reload the definitions. 
+
+The following code should prevent this duplicate work.
+
+```
+JwkDefinitionHolder getDefinitionLoadIfNecessary(String keyId) {
+	JwkDefinitionHolder result = this.getDefinition(keyId);
+	if (result != null) {
+		return result;
+	}
+	synchronized (this.jwkDefinitions) {
+		result = this.getDefinition(keyId);
+		if(result != null) {
+			return result;
+		}
+		this.jwkDefinitions.clear();
+		for (URL jwkSetUrl : jwkSetUrls) {
+			this.jwkDefinitions.putAll(loadJwkDefinitions(jwkSetUrl));
+		}
+		return this.getDefinition(keyId);
+	}
+}
+```",https://github.com/spring-projects/spring-security-oauth/issues/1405,1.0,0.0,0.0,21
+400,"spring-security-bom provides dependency management for itself
+### Summary
+
+In 5.0.0.RELEASE, `spring-security-bom` has started providing dependency management for itself.
+
+### Actual Behavior
+
+`spring-security-bom` provides dependency management for an `org.springframework.security:spring-security-bom` jar artifact that does not exist.
+
+### Expected Behavior
+
+`spring-security-bom` does not provide dependency management for a `org.springframework.security:spring-security-bom` jar artifact.
+
+### Configuration
+
+N/A
+
+### Version
+
+5.0.0.RELEASE
+
+### Sample
+
+N/A
+",https://github.com/spring-projects/spring-security/issues/4878,1.0,2.0,2.0,63
+360,"[core] Deadlock
+Hi @skylot,
+
+I've noticed that a lot of apps are not decompiled completely. I caught one of them with a deadlock 
+
+jadx-cli args
+```
+--no-replace-consts --show-bad-code --threads-count 8 --no-inline-anonymous --no-imports --deobf --deobf-min 2 --deobf-rewrite-cfg
+```
+
+Output of ``` jstack ```
+```
+Full thread dump Java HotSpot(TM) 64-Bit Server VM (12.0.2+10 mixed mode, sharing):
+
+Threads class SMR info:
+_java_thread_list=0x00007ffec3f45cc0, length=21, elements={
+0x00007ffec200b000, 0x00007ffec60b1800, 0x00007ffec2004000, 0x00007ffec5834000,
+0x00007ffec5833000, 0x00007ffec5837000, 0x00007ffec5008800, 0x00007ffec5860000,
+0x00007ffec508f800, 0x00007ffec2923000, 0x00007ffec662e000, 0x00007ffec7755000,
+0x00007ffec30af000, 0x00007ffec30b2000, 0x00007ffec4115000, 0x00007ffec32f3800,
+0x00007ffec4116000, 0x00007ffec32fe800, 0x00007ffec5a9a000, 0x00007ffec742f000,
+0x00007ffec8341800
+}
+
+""main"" #1 prio=5 os_prio=31 cpu=6028.67ms elapsed=150.42s tid=0x00007ffec200b000 nid=0x2203 waiting on condition  [0x000070000eb68000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+	at jdk.internal.misc.Unsafe.park(java.base@12.0.2/Native Method)
+	- parking to wait for  <0x000000046b2754d0> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@12.0.2/LockSupport.java:235)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(java.base@12.0.2/AbstractQueuedSynchronizer.java:2123)
+	at java.util.concurrent.ThreadPoolExecutor.awaitTermination(java.base@12.0.2/ThreadPoolExecutor.java:1454)
+	at jadx.api.JadxDecompiler.save(JadxDecompiler.java:143)
+	at jadx.api.JadxDecompiler.save(JadxDecompiler.java:128)
+	at jadx.cli.JadxCLI.processAndSave(JadxCLI.java:39)
+	at jadx.cli.JadxCLI.main(JadxCLI.java:19)
+
+   Locked ownable synchronizers:
+	- None
+
+""Reference Handler"" #2 daemon prio=10 os_prio=31 cpu=1.32ms elapsed=150.40s tid=0x00007ffec60b1800 nid=0x4403 waiting on condition  [0x000070001007d000]
+   java.lang.Thread.State: RUNNABLE
+	at java.lang.ref.Reference.waitForReferencePendingList(java.base@12.0.2/Native Method)
+	at java.lang.ref.Reference.processPendingReferences(java.base@12.0.2/Reference.java:241)
+	at java.lang.ref.Reference$ReferenceHandler.run(java.base@12.0.2/Reference.java:213)
+
+   Locked ownable synchronizers:
+	- None
+
+""Finalizer"" #3 daemon prio=8 os_prio=31 cpu=0.20ms elapsed=150.40s tid=0x00007ffec2004000 nid=0x3703 in Object.wait()  [0x0000700010f80000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(java.base@12.0.2/Native Method)
+	- waiting on <0x000000044479a3d0> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(java.base@12.0.2/ReferenceQueue.java:155)
+	- locked <0x000000044479a3d0> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(java.base@12.0.2/ReferenceQueue.java:176)
+	at java.lang.ref.Finalizer$FinalizerThread.run(java.base@12.0.2/Finalizer.java:170)
+
+   Locked ownable synchronizers:
+	- None
+
+""Signal Dispatcher"" #4 daemon prio=9 os_prio=31 cpu=0.26ms elapsed=150.40s tid=0x00007ffec5834000 nid=0x3d03 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+""C2 CompilerThread0"" #5 daemon prio=9 os_prio=31 cpu=9832.54ms elapsed=150.40s tid=0x00007ffec5833000 nid=0xa903 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+   Locked ownable synchronizers:
+	- None
+
+""C1 CompilerThread0"" #8 daemon prio=9 os_prio=31 cpu=3159.32ms elapsed=150.40s tid=0x00007ffec5837000 nid=0x5603 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+   Locked ownable synchronizers:
+	- None
+
+""Sweeper thread"" #9 daemon prio=9 os_prio=31 cpu=82.48ms elapsed=150.40s tid=0x00007ffec5008800 nid=0xa603 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+""Service Thread"" #10 daemon prio=9 os_prio=31 cpu=4.99ms elapsed=150.38s tid=0x00007ffec5860000 nid=0x5903 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+""Common-Cleaner"" #11 daemon prio=8 os_prio=31 cpu=1.34ms elapsed=150.38s tid=0x00007ffec508f800 nid=0x5c03 in Object.wait()  [0x0000700014e95000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait(java.base@12.0.2/Native Method)
+	- waiting on <no object reference available>
+	at java.lang.ref.ReferenceQueue.remove(java.base@12.0.2/ReferenceQueue.java:155)
+	- locked <0x000000044479ad88> (a java.lang.ref.ReferenceQueue$Lock)
+	at jdk.internal.ref.CleanerImpl.run(java.base@12.0.2/CleanerImpl.java:148)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+	at jdk.internal.misc.InnocuousThread.run(java.base@12.0.2/InnocuousThread.java:134)
+
+   Locked ownable synchronizers:
+	- None
+
+""pool-1-thread-1"" #12 prio=5 os_prio=31 cpu=2235.01ms elapsed=143.88s tid=0x00007ffec2923000 nid=0x8f03 waiting for monitor entry  [0x0000700016ecb000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a58f28> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass$$Lambda$153/0x000000080127a840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x00000004423df9f0> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- <0x000000046b276298> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-2"" #13 prio=5 os_prio=31 cpu=4026.55ms elapsed=143.88s tid=0x00007ffec662e000 nid=0x8c03 waiting for monitor entry  [0x0000700017dce000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a53c20> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass$$Lambda$153/0x000000080127a840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x00000004423d76b8> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- <0x000000046b2eadd8> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-3"" #14 prio=5 os_prio=31 cpu=2233.49ms elapsed=143.88s tid=0x00007ffec7755000 nid=0x7003 waiting for monitor entry  [0x0000700018cd0000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a58f28> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.dex.nodes.ClassNode.loadAndProcess(ClassNode.java:251)
+	at jadx.core.dex.nodes.RootNode.getClassGenerics(RootNode.java:279)
+	at jadx.core.utils.TypeUtils.replaceClassGenerics(TypeUtils.java:35)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.invokeListener(TypeUpdate.java:296)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$45/0x00000008011adc40.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:148)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.apply(TypeUpdate.java:73)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.apply(TypeUpdate.java:50)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.applyImmutableType(TypeInferenceVisitor.java:155)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.setImmutableType(TypeInferenceVisitor.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor$$Lambda$126/0x000000080126b840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.runTypePropagation(TypeInferenceVisitor.java:102)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.visit(TypeInferenceVisitor.java:71)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:30)
+	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:15)
+	at jadx.core.dex.visitors.DepthTraversal$$Lambda$90/0x0000000801246840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:15)
+	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:14)
+	at jadx.core.dex.visitors.DepthTraversal$$Lambda$89/0x0000000801247440.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+	at jadx.core.ProcessClass.process(ProcessClass.java:43)
+	- locked <0x0000000444a53c20> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass$$Lambda$153/0x000000080127a840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x00000004422eb2f0> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- <0x000000046b3604f8> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-4"" #15 prio=5 os_prio=31 cpu=2264.72ms elapsed=143.88s tid=0x00007ffec30af000 nid=0x8703 waiting for monitor entry  [0x0000700019bd4000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a58f28> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass$$Lambda$153/0x000000080127a840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x00000004423f94e8> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- <0x000000046b3d5550> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-5"" #16 prio=5 os_prio=31 cpu=2017.32ms elapsed=143.88s tid=0x00007ffec30b2000 nid=0x7203 waiting for monitor entry  [0x000070001aad7000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a53c20> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass$$Lambda$153/0x000000080127a840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x00000004423a1f28> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- <0x000000046b000360> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-6"" #17 prio=5 os_prio=31 cpu=2136.99ms elapsed=143.88s tid=0x00007ffec4115000 nid=0x7303 waiting for monitor entry  [0x000070001b9da000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a53c20> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:60)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x000000044243a208> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- <0x000000046b0eac38> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-7"" #18 prio=5 os_prio=31 cpu=2134.24ms elapsed=143.88s tid=0x00007ffec32f3800 nid=0x7403 waiting for monitor entry  [0x000070001c8db000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a53c20> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass.process(ProcessClass.java:27)
+	at jadx.core.dex.nodes.ClassNode.loadAndProcess(ClassNode.java:251)
+	at jadx.core.dex.nodes.RootNode.getClassGenerics(RootNode.java:279)
+	at jadx.core.utils.TypeUtils.replaceClassGenerics(TypeUtils.java:35)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.invokeListener(TypeUpdate.java:296)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$45/0x00000008011adc40.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:148)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.moveListener(TypeUpdate.java:324)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$36/0x00000008011af840.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:148)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.moveListener(TypeUpdate.java:324)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$36/0x00000008011af840.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:142)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.moveListener(TypeUpdate.java:324)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$36/0x00000008011af840.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:148)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.apply(TypeUpdate.java:73)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.apply(TypeUpdate.java:50)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.applyImmutableType(TypeInferenceVisitor.java:155)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.setImmutableType(TypeInferenceVisitor.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor$$Lambda$126/0x000000080126b840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.runTypePropagation(TypeInferenceVisitor.java:102)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.visit(TypeInferenceVisitor.java:71)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:30)
+	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:15)
+	at jadx.core.dex.visitors.DepthTraversal$$Lambda$90/0x0000000801246840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:15)
+	at jadx.core.ProcessClass.process(ProcessClass.java:43)
+	- locked <0x0000000444a58f28> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:60)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x00000004423a5b08> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- <0x000000046b075828> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""pool-1-thread-8"" #19 prio=5 os_prio=31 cpu=2154.06ms elapsed=143.87s tid=0x00007ffec4116000 nid=0x8003 waiting for monitor entry  [0x000070001d7e0000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a58f28> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass$$Lambda$153/0x000000080127a840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x0000000446a769b8> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- <0x000000046b2eb100> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+""Java2D Disposer"" #21 daemon prio=10 os_prio=31 cpu=1.86ms elapsed=141.24s tid=0x00007ffec32fe800 nid=0x7907 in Object.wait()  [0x000070001e6e3000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(java.base@12.0.2/Native Method)
+	- waiting on <0x000000046b3d56f8> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(java.base@12.0.2/ReferenceQueue.java:155)
+	- locked <0x000000046b3d56f8> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(java.base@12.0.2/ReferenceQueue.java:176)
+	at sun.java2d.Disposer.run(java.desktop@12.0.2/Disposer.java:144)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- None
+
+""AppKit Thread"" #22 daemon prio=5 os_prio=31 cpu=264.56ms elapsed=141.21s tid=0x00007ffec5a9a000 nid=0x307 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+""Java2D Queue Flusher"" #24 daemon prio=10 os_prio=31 cpu=83.59ms elapsed=140.95s tid=0x00007ffec742f000 nid=0xf507 in Object.wait()  [0x00007000207fb000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait(java.base@12.0.2/Native Method)
+	- waiting on <no object reference available>
+	at sun.java2d.opengl.OGLRenderQueue$QueueFlusher.run(java.desktop@12.0.2/OGLRenderQueue.java:205)
+	- locked <0x000000046b075b48> (a sun.java2d.opengl.OGLRenderQueue$QueueFlusher)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+   Locked ownable synchronizers:
+	- None
+
+""Attach Listener"" #54 daemon prio=9 os_prio=31 cpu=0.61ms elapsed=0.57s tid=0x00007ffec8341800 nid=0xc063 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+""VM Thread"" os_prio=31 cpu=583.42ms elapsed=150.41s tid=0x00007ffec5832000 nid=0x4503 runnable  
+
+""GC Thread#0"" os_prio=31 cpu=357.17ms elapsed=150.42s tid=0x00007ffec581e800 nid=0x4f03 runnable  
+
+""GC Thread#1"" os_prio=31 cpu=372.99ms elapsed=149.43s tid=0x00007ffec60a1800 nid=0x5f07 runnable  
+
+""GC Thread#2"" os_prio=31 cpu=364.40ms elapsed=149.43s tid=0x00007ffec6158000 nid=0x5e07 runnable  
+
+""GC Thread#3"" os_prio=31 cpu=363.83ms elapsed=149.43s tid=0x00007ffec6159000 nid=0x6207 runnable  
+
+""GC Thread#4"" os_prio=31 cpu=378.84ms elapsed=149.43s tid=0x00007ffec2018000 nid=0xa003 runnable  
+
+""GC Thread#5"" os_prio=31 cpu=374.66ms elapsed=149.43s tid=0x00007ffec6152000 nid=0x6403 runnable  
+
+""GC Thread#6"" os_prio=31 cpu=245.64ms elapsed=148.57s tid=0x00007ffec290d000 nid=0x6e03 runnable  
+
+""GC Thread#7"" os_prio=31 cpu=247.52ms elapsed=148.57s tid=0x00007ffec304e000 nid=0x9103 runnable  
+
+""G1 Main Marker"" os_prio=31 cpu=0.56ms elapsed=150.42s tid=0x00007ffec500a000 nid=0x4d03 runnable  
+
+""G1 Conc#0"" os_prio=31 cpu=230.08ms elapsed=150.42s tid=0x00007ffec581f800 nid=0x4a03 runnable  
+
+""G1 Conc#1"" os_prio=31 cpu=235.44ms elapsed=148.63s tid=0x00007ffec49d7800 nid=0x6d03 runnable  
+
+""G1 Refine#0"" os_prio=31 cpu=285.65ms elapsed=150.41s tid=0x00007ffec60a0000 nid=0x3003 runnable  
+
+""G1 Refine#1"" os_prio=31 cpu=116.28ms elapsed=148.85s tid=0x00007ffec3099000 nid=0x9b03 runnable  
+
+""G1 Refine#2"" os_prio=31 cpu=81.27ms elapsed=148.85s tid=0x00007ffec5861800 nid=0x9a03 runnable  
+
+""G1 Refine#3"" os_prio=31 cpu=56.36ms elapsed=148.85s tid=0x00007ffec309a000 nid=0x9803 runnable  
+
+""G1 Refine#4"" os_prio=31 cpu=50.29ms elapsed=148.85s tid=0x00007ffec291f000 nid=0x9603 runnable  
+
+""G1 Refine#5"" os_prio=31 cpu=27.60ms elapsed=148.85s tid=0x00007ffec40c3800 nid=0x6a03 runnable  
+
+""G1 Refine#6"" os_prio=31 cpu=26.09ms elapsed=148.85s tid=0x00007ffec309a800 nid=0x9403 runnable  
+
+""G1 Refine#7"" os_prio=31 cpu=27.13ms elapsed=148.84s tid=0x00007ffec309b800 nid=0x6b03 runnable  
+
+""G1 Young RemSet Sampling"" os_prio=31 cpu=129.26ms elapsed=150.41s tid=0x00007ffec60a1000 nid=0x4803 runnable  
+""VM Periodic Task Thread"" os_prio=31 cpu=118.62ms elapsed=150.38s tid=0x00007ffec508e800 nid=0xa303 waiting on condition  
+
+JNI global refs: 77, weak refs: 2
+
+
+Found one Java-level deadlock:
+=============================
+""pool-1-thread-1"":
+  waiting to lock monitor 0x000000014600b200 (object 0x0000000444a58f28, a jadx.core.dex.info.ClassInfo),
+  which is held by ""pool-1-thread-7""
+""pool-1-thread-7"":
+  waiting to lock monitor 0x0000000145e9ee00 (object 0x0000000444a53c20, a jadx.core.dex.info.ClassInfo),
+  which is held by ""pool-1-thread-3""
+""pool-1-thread-3"":
+  waiting to lock monitor 0x000000014600b200 (object 0x0000000444a58f28, a jadx.core.dex.info.ClassInfo),
+  which is held by ""pool-1-thread-7""
+
+Java stack information for the threads listed above:
+===================================================
+""pool-1-thread-1"":
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a58f28> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass$$Lambda$153/0x000000080127a840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x00000004423df9f0> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+""pool-1-thread-7"":
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a53c20> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass.process(ProcessClass.java:27)
+	at jadx.core.dex.nodes.ClassNode.loadAndProcess(ClassNode.java:251)
+	at jadx.core.dex.nodes.RootNode.getClassGenerics(RootNode.java:279)
+	at jadx.core.utils.TypeUtils.replaceClassGenerics(TypeUtils.java:35)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.invokeListener(TypeUpdate.java:296)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$45/0x00000008011adc40.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:148)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.moveListener(TypeUpdate.java:324)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$36/0x00000008011af840.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:148)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.moveListener(TypeUpdate.java:324)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$36/0x00000008011af840.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:142)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.moveListener(TypeUpdate.java:324)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$36/0x00000008011af840.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:148)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.apply(TypeUpdate.java:73)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.apply(TypeUpdate.java:50)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.applyImmutableType(TypeInferenceVisitor.java:155)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.setImmutableType(TypeInferenceVisitor.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor$$Lambda$126/0x000000080126b840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.runTypePropagation(TypeInferenceVisitor.java:102)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.visit(TypeInferenceVisitor.java:71)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:30)
+	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:15)
+	at jadx.core.dex.visitors.DepthTraversal$$Lambda$90/0x0000000801246840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:15)
+	at jadx.core.ProcessClass.process(ProcessClass.java:43)
+	- locked <0x0000000444a58f28> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:60)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x00000004423a5b08> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+""pool-1-thread-3"":
+	at jadx.core.ProcessClass.process(ProcessClass.java:35)
+	- waiting to lock <0x0000000444a58f28> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.dex.nodes.ClassNode.loadAndProcess(ClassNode.java:251)
+	at jadx.core.dex.nodes.RootNode.getClassGenerics(RootNode.java:279)
+	at jadx.core.utils.TypeUtils.replaceClassGenerics(TypeUtils.java:35)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.invokeListener(TypeUpdate.java:296)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate$$Lambda$45/0x00000008011adc40.update(Unknown Source)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.runListeners(TypeUpdate.java:190)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdate(TypeUpdate.java:171)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.requestUpdateForSsaVar(TypeUpdate.java:148)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeForSsaVar(TypeUpdate.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.updateTypeChecked(TypeUpdate.java:116)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.apply(TypeUpdate.java:73)
+	at jadx.core.dex.visitors.typeinference.TypeUpdate.apply(TypeUpdate.java:50)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.applyImmutableType(TypeInferenceVisitor.java:155)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.setImmutableType(TypeInferenceVisitor.java:136)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor$$Lambda$126/0x000000080126b840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.runTypePropagation(TypeInferenceVisitor.java:102)
+	at jadx.core.dex.visitors.typeinference.TypeInferenceVisitor.visit(TypeInferenceVisitor.java:71)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:30)
+	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:15)
+	at jadx.core.dex.visitors.DepthTraversal$$Lambda$90/0x0000000801246840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:15)
+	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:14)
+	at jadx.core.dex.visitors.DepthTraversal$$Lambda$89/0x0000000801247440.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+	at jadx.core.ProcessClass.process(ProcessClass.java:43)
+	- locked <0x0000000444a53c20> (a jadx.core.dex.info.ClassInfo)
+	at jadx.core.ProcessClass$$Lambda$153/0x000000080127a840.accept(Unknown Source)
+	at java.util.ArrayList.forEach(java.base@12.0.2/ArrayList.java:1540)
+	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:262)
+	- locked <0x00000004422eb2f0> (a jadx.core.dex.nodes.ClassNode)
+	at jadx.api.JavaClass.getCodeInfo(JavaClass.java:53)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:201)
+	at jadx.api.JadxDecompiler$$Lambda$74/0x00000008011f0040.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@12.0.2/ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@12.0.2/ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(java.base@12.0.2/Thread.java:835)
+
+Found 1 deadlock.
+```
+
+APK: https://drive.google.com/file/d/18wPwqqSeeppz5LDybFX3CLvAZJ3sB7JJ/view?usp=sharing",https://github.com/skylot/jadx/issues/743,1.0,0.0,0.0,42
+402,"threads blocked waiting on CountDownLatch
+Hello,
+
+We are facing an an issue where some threads get blocked indefinitely waiting on the CountDownLatch in `CommandAsyncService.get()`. Relevant section of the thread dump:
+```
+- waiting on java.util.concurrent.CountDownLatch$Sync@1f2311a9
+at java.util.concurrent.locks.LockSupport.park(LockSupport.java: at java.util.concurrent.locks.AbstractQueuedSynchronizer.parkAndCheckInterrupt(AbstractQueuedSynchronizer.java:
+at java.util.concurrent.locks.AbstractQueuedSynchronizer.doAcquireSharedInterruptibly(AbstractQueuedSynchronizer.java:
+at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireSharedInterruptibly(AbstractQueuedSynchronizer.java:
+at java.util.concurrent.CountDownLatch.await(CountDownLatch.java:232)
+at org.redisson.command.CommandAsyncService.get(CommandAsyncService.java:186)
+...
+```
+The reason for why the requests aren't able to complete isn't relevant here (we are deploying redis in kubernetes, and are working through various upgrade/failure scenarios that currently can result in severed connections). However, it's strange to me that the `CommandAsyncService.get()` method doesn't respect timeout configuration, and simply calls `l.await()`.
+Is there any way around this? Please let me know if I am misunderstanding the situation.
+
+### Expected behavior
+`CommandAsyncService.get()` should throw an exception if the future is unable to complete within a timeout.
+
+### Actual behavior
+Many threads are hanging indefinitely in the `CommandAsyncService.get()` method.
+
+### Redis version
+5.0.5
+
+### Redisson version
+3.10.7
+
+### Redisson configuration
+nettyThreads=16
+masterConnectionPoolSize=200
+masterConnectionMinimumIdleSize=100
+subscriptionConnectionPoolSize=200
+subscriptionConnectionMinimumIdleSize=100
+subscriptionsPerConnection=10
+connectionTimeout=10000
+retryInterval=3000
+retryAttempts=10
+keepAlive=true
+tcpNoDelay=true
+clusterScanInterval=2000
+pingConnectionInterval=10000",https://github.com/redisson/redisson/issues/2304,1.0,0.0,0.0,371
+358,"[ci] Release Notes are not generated and uploaded automatically
+Something's wrong here:
+
+```
+/home/travis/.rvm/rubies/ruby-2.4.1/lib/ruby/site_ruby/2.4.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- liquid (LoadError)
+	from /home/travis/.rvm/rubies/ruby-2.4.1/lib/ruby/site_ruby/2.4.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from .travis/render_release_notes.rb:11:in `<main>'
+```
+(https://travis-ci.org/pmd/pmd/jobs/497700742#L7815)
+
+Which means, the ""Readme.md"" file is missing in https://sourceforge.net/projects/pmd/files/pmd/6.12.0/ 
+(I've uploaded it now manually).
+
+But it's also missing for the snapshots, e.g. https://sourceforge.net/projects/pmd/files/pmd/6.13.0-SNAPSHOT/
+
+It works in the deploy phase of travis, since the release notes are automatically added to github:
+https://github.com/pmd/pmd/releases/tag/pmd_releases/6.12.0
+
+",https://github.com/pmd/pmd/issues/1695,1.0,2.0,2.0,35
+99,"ExecutorServiceCancelOnPartitionMessageTask blocks partition thread during migrations 
+How to reproduce: 
+
+submit tasks from client to ExecutorService using `submitToKeyOwner` method: 
+
+                    IExecutorService es = client.getExecutorService(""es1"");
+                    Future result = es.submitToKeyOwner(new SimpleExecutorImpl(), partitionKey);
+
+Then get the result using timeout. If it timeouts, cancel the task: 
+
+                    try {
+                        Object resultValue = result.get(20, TimeUnit.MILLISECONDS);
+                    } catch (TimeoutException e) {
+                        result.cancel(false);
+                    } 
+
+While continuously sending tasks from the client side, kill 1 of the members in the cluster to initiate partition migrations. 
+
+
+-------------
+
+
+
+ExecutorServiceCancelOnPartitionMessageTask creates CancellationOperation which runs on partition threads. 
+However, it doesn't retry when the partition is migrating. See below stack traces. 
+
+The result is stuck migration operation. 
+
+Why don't we call `ExecutorService.cancel`  instead of creating CancellationOperation which runs on partition threads? 
+
+The task is routed to the member using the partition ID. However, the partition could migrate to another member but the task would still be running at the same member. In this case, cancel operation would route to the wrong member to cancel the task. Wdyt? 
+
+Blocked partition thread: 
+
+```
+""hz._hzInstance_1_oz.partition-operation.thread-0"" #17 prio=5 os_prio=31 tid=0x00007f9d8a313800 nid=0x6203 waiting on condition [0x0000700005ed8000]
+   java.lang.Thread.State: WAITING (parking)
+	at sun.misc.Unsafe.park(Native Method)
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:304)
+	at com.hazelcast.spi.impl.AbstractInvocationFuture.get(AbstractInvocationFuture.java:161)
+	at com.hazelcast.client.impl.protocol.task.executorservice.AbstractExecutorServiceCancelMessageTask.call(AbstractExecutorServiceCancelMessageTask.java:52)
+	at com.hazelcast.client.impl.protocol.task.AbstractCallableMessageTask.processMessage(AbstractCallableMessageTask.java:35)
+	at com.hazelcast.client.impl.protocol.task.AbstractMessageTask.initializeAndProcessMessage(AbstractMessageTask.java:129)
+	at com.hazelcast.client.impl.protocol.task.AbstractMessageTask.run(AbstractMessageTask.java:109)
+	at com.hazelcast.spi.impl.operationservice.impl.OperationRunnerImpl.run(OperationRunnerImpl.java:163)
+	at com.hazelcast.spi.impl.operationexecutor.impl.OperationThread.process(OperationThread.java:159)
+	at com.hazelcast.spi.impl.operationexecutor.impl.OperationThread.process(OperationThread.java:127)
+	at com.hazelcast.spi.impl.operationexecutor.impl.OperationThread.run(OperationThread.java:110)
+```
+
+Blocked migration thread: 
+
+```
+""hz._hzInstance_1_oz.migration"" #38 prio=5 os_prio=31 tid=0x00007f9d8a312800 nid=0x5f03 waiting on condition [0x0000700005bcf000]
+   java.lang.Thread.State: WAITING (parking)
+	at sun.misc.Unsafe.park(Native Method)
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:304)
+	at com.hazelcast.spi.impl.AbstractInvocationFuture.get(AbstractInvocationFuture.java:161)
+	at com.hazelcast.internal.partition.impl.MigrationManager$MigrateTask.executeMigrateOperation(MigrationManager.java:1116)
+	at com.hazelcast.internal.partition.impl.MigrationManager$MigrateTask.run(MigrationManager.java:1003)
+	at com.hazelcast.internal.partition.impl.MigrationThread.processTask(MigrationThread.java:122)
+	at com.hazelcast.internal.partition.impl.MigrationThread.doRun(MigrationThread.java:98)
+	at com.hazelcast.internal.partition.impl.MigrationThread.run(MigrationThread.java:67)
+```
+
+
+",https://github.com/hazelcast/hazelcast/issues/15497,1.0,0.0,0.0,196
+380,"grpc-all brings in both protobuf-java and protobuf-lite
+```
+    <dependency>
+      <groupId>io.grpc</groupId>
+      <artifactId>grpc-protobuf</artifactId>
+      <version>1.2.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.grpc</groupId>
+      <artifactId>grpc-protobuf-lite</artifactId>
+      <version>1.2.0</version>
+      <scope>compile</scope>
+    </dependency>
+```
+
+grpc-protobuf depends on protobuf-java and grpc-protobuf-lite depends on protobuf-lite. Although grpc-protobuf depends on grpc-protobuf-lite and excludes the protobuf-lite dependency, that does nothing for grpc-all which depends directly on both.
+
+We should probably remove the explicit dependency of grpc-protobuf-lite from grpc-all, or add in an exclusion for protobuf-lite.",https://github.com/grpc/grpc-java/issues/2985,1.0,2.0,2.0,84
+90,"Empty trash task should use thread pool executor
+`emptyTrashTask` should use the thread pool so it is run parallel.
+",https://github.com/Automattic/simplenote-android/issues/213,1.0,0.0,0.0,49
+77,"Disk leak in journaled (transactional mode) 
+Transactional mode does not mark deleted physical records as free. It will not reuse space after release, but grow file instead.
+",https://github.com/jankotek/mapdb/issues/36,1.0,1.0,1.0,70
+87,"EdgeRouterFactory yields memory leak
+The `GraphConfigurator` creates a new `EdgeRouterFactory` for every layout run:
+```
+algorithmAssembler.setPhase(LayeredPhases.P5_EDGE_ROUTING,
+        EdgeRouterFactory.factoryFor(lgraph.getProperty(LayeredOptions.EDGE_ROUTING)));
+```
+
+The created edge router instance, say `SplineEdgeRouter`, is then cached within the `AlgorithmAssembler`. Since it's a new factory every time, caching is broken in `AlgorithmAssembler#retrieveProcessor`. 
+
+```
+if (enableCaching) {
+            if (cache.containsKey(factory)) {
+[...]
+```",https://github.com/eclipse/elk/issues/252,1.0,1.0,1.0,35
+199,"Multiple ReadLocks are not sharing locks properly after WriteLock releases
+Hello!
+
+﻿I've found something that I believe is a bug in Redisson's [RReadWriteLock](https://static.javadoc.io/org.redisson/redisson/3.4.3/org/redisson/api/RReadWriteLock.html) implementation where multiple ReadLocks seemed to become or at least behaved like WriteLock when it tried to lock on a lockpoint that another WriteLock has already acquired a lock, then released. Because of that, ReadLocks are not sharing the lockpoint like it should and are taking turns in locking the lockpoint. Theoretically, this will have a performance impact on applications that expected Redisson to have quicker locking mechanism based on inclusive locking mechanism but under the hood, it is not inclusive and those applications will spend some time to wait for locks to complete.
+
+I have tested this with Java's [ReentrantReadWriteLock](https://docs.oracle.com/javase/7/docs/api/index.html?java/util/concurrent/locks/ReentrantLock.html) and it has worked exactly what I'd expected it to be.
+
+**Note:** I have only tested this on a single Redis server. I did not test this on clustered Redis servers.
+
+### Expected behavior
+
+1. Writer Thread locks
+2. Reader Thread 1 fails to lock and waits
+3. Reader Thread 2 fails to lock and waits
+4. Reader Thread 3 fails to lock and waits
+5. Writer Thread unlocks
+6. Read Thread 1 locks
+7. Read Thread 2 locks
+8. Read Thread 3 locks
+9. Read Thread 1 unlocks
+10. Read Thread 2 unlocks
+11. Read Thread 3 unlocks
+
+This behavior matches Java's [ReentrantReadWriteLock](https://docs.oracle.com/javase/7/docs/api/index.html?java/util/concurrent/locks/ReentrantLock.html) behavior exactly.
+
+### Actual behavior
+1. Writer Thread locks
+2. Reader Thread 1 fails to lock and waits
+3. Reader Thread 2 fails to lock and waits
+4. Reader Thread 3 fails to lock and waits
+5. Writer Thread unlocks
+6. Read Thread 1 locks
+7. Read Thread 2 fails to lock and waits
+8. Read Thread 3 fails to lock and waits
+9. Read Thread 1 unlocks
+10. Read Thread 2 locks
+11. Read Thread 3 fails to lock and waits
+12. Read Thread 2 unlocks
+13. Read Thread 3 locks
+14. Read Thread 3 unlocks
+
+This behavior does not match Java's [ReentrantReadWriteLock](https://docs.oracle.com/javase/7/docs/api/index.html?java/util/concurrent/locks/ReentrantLock.html) behavior exactly.
+
+### Steps to reproduce or test case
+I have written a test code for you to review, download, and test. 
+
+The link to my code is here:
+https://github.com/orchapod/redisson-lock-test
+
+The test code includes two test suites that runs a control test using Java's [ReentrantReadWriteLock](https://docs.oracle.com/javase/7/docs/api/index.html?java/util/concurrent/locks/ReentrantLock.html) and an experiment test with Redisson's [RReadWriteLock](https://static.javadoc.io/org.redisson/redisson/3.4.3/org/redisson/api/RReadWriteLock.html).
+
+Each test suites has two test cases where one of the test does multiple ReadLocks locks on the lockpoint before WriteLock locks on it, and another one tests multiple ReadLocks locking on the lockpoint after WriteLock has locked on it. The failure on the latter test on Redisson's [RReadWriteLock](https://static.javadoc.io/org.redisson/redisson/3.4.3/org/redisson/api/RReadWriteLock.html) is what has prompted me to open this issue ticket. Java's [ReentrantReadWriteLock](https://docs.oracle.com/javase/7/docs/api/index.html?java/util/concurrent/locks/ReentrantLock.html) passed that test.
+
+Overview:
+* RedissonLockTest
+  * `testReadLockBeforeWriteLock` - PASS
+  * `testReadLockAfterWriteLock` - **FAIL**
+* ReentrantLockTest
+  * `testReadLockBeforeWriteLock` - PASS
+  * `testReadLockAfterWriteLock` - PASS
+
+To run the test, run `mvn test` with Maven to test the code.
+
+### Redis version
+4.0.9
+
+### Redisson version
+3.7.3
+
+### Redisson configuration
+Single server with default configuration created by Redisson's Config class.",https://github.com/redisson/redisson/issues/1542,1.0,0.0,0.0,371
+277,"RunProcess signal handling isn't thread-safe
+If you run an app and then kill it with `CTRL-C` it may report an NPE during shutdown. Here's an example from using `mvn spring-boot:run`:
+
+```
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:1.1.0.BUILD-SNAPSHOT:run (default-cli) on project spring-boot-sample-ws: Could not exec java: NullPointerException -> [Help 1]
+
+org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:1.1.0.BUILD-SNAPSHOT:run (default-cli) on project spring-boot-sample-ws: Could not exec java
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:216)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:153)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:145)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:108)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:76)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build(SingleThreadedBuilder.java:51)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute(LifecycleStarter.java:116)
+    at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:361)
+    at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:155)
+    at org.apache.maven.cli.MavenCli.execute(MavenCli.java:584)
+    at org.apache.maven.cli.MavenCli.doMain(MavenCli.java:213)
+    at org.apache.maven.cli.MavenCli.main(MavenCli.java:157)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:606)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced(Launcher.java:289)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:229)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:415)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main(Launcher.java:356)
+Caused by: org.apache.maven.plugin.MojoExecutionException: Could not exec java
+    at org.springframework.boot.maven.RunMojo.run(RunMojo.java:172)
+    at org.springframework.boot.maven.RunMojo.execute(RunMojo.java:134)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo(DefaultBuildPluginManager.java:133)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:208)
+    ... 19 more
+Caused by: java.lang.NullPointerException
+    at org.springframework.boot.loader.tools.RunProcess.run(RunProcess.java:78)
+    at org.springframework.boot.loader.tools.RunProcess.run(RunProcess.java:52)
+    at org.springframework.boot.maven.RunMojo.run(RunMojo.java:168)
+    ... 22 more
+```
+
+The problem is that there's a race between the signal handler setting `this.process` to `null` on one thread while another thread in `run()` that was blocked on `this.process.waitFor()` then tries to call `this.process.exitValue()`. If the signal handling thread gets in first and manages to null out `this.process` the call to `exitValue()` will NPE.
+
+The fix is to remove the call to `this.process.exitValue()` from `run()` and use the value returned from `this.process.waitFor()` instead.
+",https://github.com/spring-projects/spring-boot/issues/1061,1.0,0.0,0.0,91
+72,"Dependencies missing from shade plugin in spring-boot-starter-parent
+In 1.5.8:
+
+```                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-maven-plugin</artifactId>
+                            <version>1.5.8.RELEASE</version>
+                        </dependency>
+                    </dependencies>
+...
+```
+
+
+in 2.0.0
+
+```                <plugin>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <executions>
+```
+
+
+(no dependencies)",https://github.com/spring-projects/spring-boot/issues/11200,1.0,2.0,2.0,91
+71,"DefaultChannelPool leaks IdleChannels
+`DefaultChannelPool#removeAll` fails to properly remove entry from partition as it tries to remove a `Channel` instead of an `IdleChannel`.",https://github.com/AsyncHttpClient/async-http-client/issues/1461,1.0,1.0,1.0,224
+408,"webtools update site moved
+looks like webtools update site moved from [http://download.eclipse.org/webtools/downloads/drops/R3.8.1/R-3.8.1-20160912100321/repository](http://download.eclipse.org/webtools/downloads/drops/R3.8.1/R-3.8.1-20160912100321/repository)
+to 
+[http://archive.eclipse.org/webtools/downloads/drops/R3.8/R3.8.1/R-3.8.1-20160912100321/repository/](http://archive.eclipse.org/webtools/downloads/drops/R3.8/R3.8.1/R-3.8.1-20160912100321/repository/)",https://github.com/eclipse/n4js/issues/938,1.0,2.0,2.0,154
+207,"Native (java) process memory leak
+An internal memory leak when using GarbageCollectorMXBean#getLastGcInfo in the JVM. Disable using it...
+",https://github.com/elastic/elasticsearch/issues/1118,1.0,1.0,1.0,546
+270,"Resource leaks related to ClusterViewListenerService.clusterListeningEndpoints
+While investigating a Jet OOME, we've realized there can be issues related to `ClusterViewListenerService.clusterListeningEndpoints`.
+
+First of all, there were cca 27000 `TcpIpConnection` instances, but just about 20 of them were alive. The size of `clusterListeningEndpoints` map was about 25000 entries. (@olukas can provide the original heapdump).
+
+We didn't find the reason for this behavior, but we realized there can be a resource leak in `com.hazelcast.client.impl.ClientEndpointImpl.destroy()` E.g. when a `logout` throws a `LoginException` or another problem jumps in before removing endpoint from the map.
+
+https://github.com/hazelcast/hazelcast/blob/fdc6a205b2b6f50e01d21a263c373a0894ad2e67/hazelcast/src/main/java/com/hazelcast/client/impl/ClientEndpointImpl.java#L214-L231",https://github.com/hazelcast/hazelcast/issues/16482,1.0,1.0,1.0,196
+210,"Netty buffer leak during failover and RBatch object exection
+",https://github.com/redisson/redisson/issues/1896,1.0,1.0,1.0,371
+263,"Remove `ElasticsearchInterruptedException` and handle interrupt state  correctly.
+InterruptedExceptions should be handled by either rethrowing or restoring the interrupt state (i.e. calling `Thread.currentThread().interrupt()`). This is important since the caller of the is method or subequent method calls might also be interested in this exception. If we ignore the interrupt state the caller might be left unaware of the exception and blocks again on a subsequent method.
+",https://github.com/elastic/elasticsearch/issues/4712,1.0,0.0,0.0,546
+262,"Remove Duplicate Runtime Environment From Docs
+<!--
+For Security Vulnerabilities, please use https://pivotal.io/security#reporting
+-->
+
+### Summary
+
+The Runtime Environment Section of the documentation is duplicated. We should remove the section in Servlets.",https://github.com/spring-projects/spring-security/issues/7980,1.0,2.0,2.0,63
+258,"RedissonList's Iterator Race Conditions
+RedissonList iterator as it tries to keep ""up to date"" with data has a race condition in which if between the .hasNext() and the .next() call the set is emptied the list will throw NoSuchElementException.
+
+---
+## Unit Test
+
+private static final String LIST_NAME = ""TEST_LIST"";
+private static boolean failed;
+
+```
+@Ignore
+class Delete implements Runnable {
+
+    public void run() {
+        // remove one item
+        RList<Object> list = redisson.getList(LIST_NAME);
+        if (!list.isEmpty()) {
+            Iterator<Object> iter = list.iterator();
+            if (iter.hasNext()) {
+                iter.next();
+                iter.remove();
+            }
+        }
+    }
+}
+
+@Ignore
+class Add implements Runnable {
+    int i = 0;
+
+    public void run() {
+        // add items up to place up to one in list
+        RList<Object> list = redisson.getList(LIST_NAME);
+        if (list.isEmpty()) {
+            list.add(""Entry:"" + (i++));
+
+        }
+    }
+}
+
+@Ignore
+class Loop implements Runnable {
+    public void run() {
+        try {
+            RList<Object> list = redisson.getList(LIST_NAME);
+            if (!list.isEmpty()) {
+                // implicit iterator
+                for (@SuppressWarnings(""unused"")
+                Object o : list) {
+                }
+            }
+        } catch (Exception e) {
+            RedissonListTest.failed = true;
+            e.printStackTrace();
+        }
+    }
+}
+
+class ThousandAndOneThread extends Thread {
+    public ThousandAndOneThread(Runnable r) {
+        this.r = r;
+    }
+
+    boolean dead = false;
+    int nightsLeft = 1001;
+    Runnable r;
+
+    public void run() {
+        // while shahrazad still is alive
+        while (!dead && nightsLeft > 0) {
+            nightsLeft--;
+
+            // do runnable
+            r.run();
+
+            // take a nap
+            try {
+                Thread.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
+
+        dead = true;
+    }
+
+    // Kill shahrazad
+    public void kill() {
+        dead = true;
+    }
+
+    // if i am done
+    public boolean isDone() {
+        return dead;
+    }
+}
+
+@Test
+public void testIteratorAfterDelete() {
+    for (int i = 0; i < 4; i++) {
+        // make runnables
+        Delete d = new Delete();
+        Add a = new Add();
+        Loop l = new Loop();
+
+        // make threads
+        ThousandAndOneThread aT = new ThousandAndOneThread(a);
+        ThousandAndOneThread dT = new ThousandAndOneThread(l);
+        ThousandAndOneThread lT = new ThousandAndOneThread(d);
+
+        // start threads
+        aT.start();
+        dT.start();
+        lT.start();
+
+        // monitor threads
+        while (true) {
+            if (failed) {
+                fail(""Exception occured, in child thread"");
+            }
+            if (lT.isDone() || dT.isDone() || aT.isDone()) {
+                System.out.println(""All done!"" + i);
+                aT.kill();
+                dT.kill();
+                lT.kill();
+                break;
+            }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                aT.kill();
+                dT.kill();
+                lT.kill();
+                fail(""fail on "" + i);
+            }
+        }
+    }
+}
+```
+
+---
+## Additional Information
+
+This also effects RedissonSet, but much less likely to hit the race condition. It causes RedissonSet line 96 to throw a null pointer exception. 
+
+This is akin to issue #104 
+",https://github.com/redisson/redisson/issues/106,1.0,0.0,0.0,371
+257,"Redisson 3.5.7 memory leak with locks
+I'm using RLock and seeing memory leak via org.redisson.client.handler.CommandPubSubDecoder 
+ 
+![image](https://user-images.githubusercontent.com/443442/37062360-0f201f60-214b-11e8-81a2-d2fab78261c4.png)
+
+
+Retained objects delta between heap dumps taken apart
+![image 1](https://user-images.githubusercontent.com/443442/37062341-01519f12-214b-11e8-8d35-4bc50413fd50.png)
+
+Around 10MB leak per day
+![image 2](https://user-images.githubusercontent.com/443442/37062443-5150dfdc-214b-11e8-944f-fb46ec393693.png)
+",https://github.com/redisson/redisson/issues/1326,1.0,1.0,1.0,371
+100,"ExoPlayer set up with Rtmp extension leaks memory when closing the activity with playerView
+### Issue description
+LeakCanary detects a leak when closing activity with PlayerView.
+
+I'm using the ExoPlayer with Rtmp extensions to display the live stream. When the url is invalid (there is no live stream there) the leak occurs. 
+
+This is how the releasePlayer method looks like
+```
+private fun releasePlayer() {
+        player?.release()
+        player = null
+        playerView.player = null
+        mediaSource = null
+        trackSelector = null
+}
+```
+
+![screenshot_20180514-081829](https://user-images.githubusercontent.com/12660801/39981425-d7a85e26-5750-11e8-8459-e509f8e63483.jpg)
+
+### Version of ExoPlayer being used
+2.8.0
+
+
+",https://github.com/google/ExoPlayer/issues/4249,1.0,1.0,1.0,189
+67,"Creating a tenant or device with a generated ID refuses an empty body
+When I want to ceate a tenant or a device using the ID generation feature from the device registry, i would expect it to work even if the request body is empty. A workaround is to provide an empty JsonObject in the request body.",https://github.com/eclipse/hono/issues/1370,1.0,3.0,3.0,42
+65,"Connection leaks if WebSocket handshake fails
+This is a recent regression bisected to dd70407455f09f3eda7288f0bb9610f8943af03e.
+
+It may be the cause for the recent increase in test flakiness.
+
+To reproduce, run this modified test:
+```
+  @Test public void missingConnectionHeader() throws IOException {
+    webServer.enqueue(new MockResponse()
+        .setResponseCode(101)
+        .setHeader(""Upgrade"", ""websocket"")
+        .setHeader(""Sec-WebSocket-Accept"", ""ujmZX4KXZqjwy6vi1aQFH5p4Ygk=""));
+    newWebSocket();
+
+    clientListener.assertFailure(101, null, ProtocolException.class,
+        ""Expected 'Connection' header value 'Upgrade' but was 'null'"");
+
+    client.connectionPool().evictAll();
+    assertEquals(0, client.connectionPool().connectionCount());
+  }
+```
+
+",https://github.com/square/okhttp/issues/4658,1.0,1.0,1.0,77
+251,"Race condition causing NPE when a timeout gets scheduled as the ResponseFuture gets terminated
+```
+java.lang.NullPointerException: null
+    at org.asynchttpclient.netty.NettyResponseFuture.getChannelRemoteAddress(NettyResponseFuture.java:414) ~[async-http-client-2.0.0-alpha27.jar:na]
+    at org.asynchttpclient.netty.timeout.TimeoutTimerTask.<init>(TimeoutTimerTask.java:42) ~[async-http-client-2.0.0-alpha27.jar:na]
+    at org.asynchttpclient.netty.timeout.RequestTimeoutTimerTask.<init>(RequestTimeoutTimerTask.java:31) ~[async-http-client-2.0.0-alpha27.jar:na]
+    at org.asynchttpclient.netty.request.NettyRequestSender.scheduleTimeouts(NettyRequestSender.java:365) [async-http-client-2.0.0-alpha27.jar:na]
+    at org.asynchttpclient.netty.request.NettyRequestSender.writeRequest(NettyRequestSender.java:346) [async-http-client-2.0.0-alpha27.jar:na]
+    at org.asynchttpclient.netty.request.NettyRequestSender.sendRequestWithOpenChannel(NettyRequestSender.java:228) [async-http-client-2.0.0-alpha27.jar:na]
+    at org.asynchttpclient.netty.request.NettyRequestSender.sendRequestWithCertainForceConnect(NettyRequestSender.java:139) [async-http-client-2.0.0-alpha27.jar:na]
+    at org.asynchttpclient.netty.request.NettyRequestSender.sendRequest(NettyRequestSender.java:112) [async-http-client-2.0.0-alpha27.jar:na]
+    at org.asynchttpclient.DefaultAsyncHttpClient.execute(DefaultAsyncHttpClient.java:220) [async-http-client-2.0.0-alpha27.jar:na]
+    at org.asynchttpclient.DefaultAsyncHttpClient.executeRequest(DefaultAsyncHttpClient.java:188) [async-http-client-2.0.0-alpha27.jar:na]
+```
+",https://github.com/AsyncHttpClient/async-http-client/issues/1049,1.0,0.0,0.0,224
+54,"ConcurrentModificationException
+Hi- 
+
+I just got this stack trace from Intellij 16.1.1:
+
+```
+null
+java.util.ConcurrentModificationException
+    at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)
+    at java.util.ArrayList$Itr.next(ArrayList.java:851)
+    at com.intellij.ide.bookmarks.BookmarkManager$2.documentCreated(BookmarkManager.java:100)
+    at com.intellij.psi.impl.PsiDocumentManagerBase.fireDocumentCreated(PsiDocumentManagerBase.java:600)
+    at com.intellij.psi.impl.PsiDocumentManagerImpl$1.fileContentLoaded(PsiDocumentManagerImpl.java:80)
+    at sun.reflect.GeneratedMethodAccessor31.invoke(Unknown Source)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:497)
+    at com.intellij.util.messages.impl.MessageBusConnectionImpl.deliverMessage(MessageBusConnectionImpl.java:117)
+    at com.intellij.util.messages.impl.MessageBusImpl.doPumpMessages(MessageBusImpl.java:372)
+    at com.intellij.util.messages.impl.MessageBusImpl.pumpMessages(MessageBusImpl.java:359)
+    at com.intellij.util.messages.impl.MessageBusImpl.sendMessage(MessageBusImpl.java:338)
+    at com.intellij.util.messages.impl.MessageBusImpl.access$200(MessageBusImpl.java:42)
+    at com.intellij.util.messages.impl.MessageBusImpl$2.invoke(MessageBusImpl.java:226)
+    at com.sun.proxy.$Proxy21.fileContentLoaded(Unknown Source)
+    at sun.reflect.GeneratedMethodAccessor31.invoke(Unknown Source)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:497)
+    at com.intellij.openapi.fileEditor.impl.FileDocumentManagerImpl.a(FileDocumentManagerImpl.java:136)
+    at com.intellij.openapi.fileEditor.impl.FileDocumentManagerImpl.access$000(FileDocumentManagerImpl.java:86)
+    at com.intellij.openapi.fileEditor.impl.FileDocumentManagerImpl$1.invoke(FileDocumentManagerImpl.java:114)
+    at com.sun.proxy.$Proxy21.fileContentLoaded(Unknown Source)
+    at com.intellij.openapi.fileEditor.impl.FileDocumentManagerImpl.getDocument(FileDocumentManagerImpl.java:215)
+    at com.intellij.psi.SingleRootFileViewProvider.getDocument(SingleRootFileViewProvider.java:437)
+    at com.intellij.psi.SingleRootFileViewProvider$VirtualFileContent.getText(SingleRootFileViewProvider.java:594)
+    at com.intellij.psi.SingleRootFileViewProvider.getContents(SingleRootFileViewProvider.java:417)
+    at com.intellij.psi.impl.source.PsiFileImpl.getText(PsiFileImpl.java:398)
+    at mobi.hsz.idea.gitignore.IgnoreManager$5$1.run(IgnoreManager.java:437)
+    at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+    at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+    at java.lang.Thread.run(Thread.java:745)
+```
+
+I'm using .ignore 1.3.3.
+",https://github.com/JetBrains/idea-gitignore/issues/221,1.0,0.0,0.0,49
+248,"RLocalCachedMap memory leak when using EvictionPolicy.WEAK
+﻿### Expected behavior
+Weak references should be cleared.
+
+### Actual behavior
+It seems that even when using static Strings for keys and values and only ```fastPut``` method the OOM error occurs after several thousands of invocations.
+  
+### Steps to reproduce or test case
+I have created a separate repo to easier reproduce the problem:
+https://github.com/pawelgrzes/redisson-mem-leak
+
+### Redis version
+4.0.9
+
+### Redisson version
+3.7.0
+
+### Redisson configuration
+```
+RedissonClient redissonClient = Redisson.create();
+
+LocalCachedMapOptions ops = LocalCachedMapOptions.defaults()
+  .cacheSize(0)
+  .timeToLive(0)
+  .maxIdle(0)
+  .reconnectionStrategy(LocalCachedMapOptions.ReconnectionStrategy.CLEAR)
+  .syncStrategy(LocalCachedMapOptions.SyncStrategy.INVALIDATE)
+  .evictionPolicy(LocalCachedMapOptions.EvictionPolicy.WEAK);
+
+RLocalCachedMap<String, String> map = redissonClient.getLocalCachedMap(""sample-cache"", ops);
+```
+
+",https://github.com/redisson/redisson/issues/1442,1.0,1.0,1.0,371
+55,"ConcurrentModificationException in THashIterator
+I've just caught the following exception:
+```
+null
+java.util.ConcurrentModificationException
+	at gnu.trove.THashIterator.nextIndex(THashIterator.java:83)
+	at gnu.trove.TIterator.moveToNextIndex(TIterator.java:88)
+	at gnu.trove.THashIterator.next(THashIterator.java:67)
+	at com.intellij.util.containers.RefHashMap$EntrySet$1.hasNext(RefHashMap.java:308)
+	at com.intellij.util.containers.RefHashMap$EntrySet.isEmpty(RefHashMap.java:340)
+	at com.intellij.util.containers.RefHashMap.isEmpty(RefHashMap.java:205)
+	at com.intellij.util.containers.WeakHashMap.isEmpty(WeakHashMap.java:36)
+	at mobi.hsz.idea.gitignore.IgnoreManager.isFileTracked(IgnoreManager.java:369)
+	at mobi.hsz.idea.gitignore.projectView.IgnoreViewNodeDecorator.decorate(IgnoreViewNodeDecorator.java:89)
+	at com.intellij.ide.projectView.impl.nodes.AbstractPsiBasedNode.a(AbstractPsiBasedNode.java:169)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runReadAction(ApplicationImpl.java:934)
+	at com.intellij.ide.projectView.impl.nodes.AbstractPsiBasedNode.update(AbstractPsiBasedNode.java:139)
+	at com.intellij.ide.util.treeView.PresentableNodeDescriptor.getUpdatedPresentation(PresentableNodeDescriptor.java:88)
+	at com.intellij.ide.util.treeView.PresentableNodeDescriptor.update(PresentableNodeDescriptor.java:41)
+	at com.intellij.ide.util.treeView.AbstractTreeBuilder.updateNodeDescriptor(AbstractTreeBuilder.java:577)
+	at com.intellij.ide.util.treeView.AbstractTreeUi$22.perform(AbstractTreeUi.java:935)
+	at com.intellij.ide.util.treeView.TreeRunnable.run(TreeRunnable.java:36)
+	at com.intellij.ide.util.treeView.AbstractTreeUi.execute(AbstractTreeUi.java:1856)
+	at com.intellij.ide.util.treeView.AbstractTreeUi.update(AbstractTreeUi.java:931)
+	at com.intellij.ide.util.treeView.AbstractTreeUi.update(AbstractTreeUi.java:883)
+	at com.intellij.ide.util.treeView.AbstractTreeUi.access$1600(AbstractTreeUi.java:64)
+	at com.intellij.ide.util.treeView.AbstractTreeUi$24$1.run(AbstractTreeUi.java:1092)
+	at com.intellij.ide.util.treeView.AbstractTreeUi.execute(AbstractTreeUi.java:1835)
+	at com.intellij.ide.util.treeView.AbstractTreeUi.access$5200(AbstractTreeUi.java:64)
+	at com.intellij.ide.util.treeView.AbstractTreeUi$33.perform(AbstractTreeUi.java:1801)
+	at com.intellij.ide.util.treeView.TreeRunnable.run(TreeRunnable.java:36)
+	at com.intellij.ide.util.treeView.AbstractTreeUi.executeYieldingRequest(AbstractTreeUi.java:2090)
+	at com.intellij.ide.util.treeView.AbstractTreeUi.access$5800(AbstractTreeUi.java:64)
+	at com.intellij.ide.util.treeView.AbstractTreeUi$36$1.perform(AbstractTreeUi.java:2002)
+	at com.intellij.ide.util.treeView.TreeRunnable.run(TreeRunnable.java:36)
+	at com.intellij.ide.util.treeView.AbstractTreeBuilder.runOnYeildingDone(AbstractTreeBuilder.java:433)
+	at com.intellij.ide.util.treeView.AbstractTreeUi.runOnYieldingDone(AbstractTreeUi.java:2185)
+	at com.intellij.ide.util.treeView.AbstractTreeUi$36.perform(AbstractTreeUi.java:1997)
+	at com.intellij.ide.util.treeView.TreeRunnable.run(TreeRunnable.java:36)
+	at com.intellij.ide.util.treeView.AbstractTreeBuilder.lambda$new$0(AbstractTreeBuilder.java:51)
+	at com.intellij.util.containers.TransferToEDTQueue.processNext(TransferToEDTQueue.java:102)
+	at com.intellij.util.containers.TransferToEDTQueue.access$300(TransferToEDTQueue.java:37)
+	at com.intellij.util.containers.TransferToEDTQueue$1.run(TransferToEDTQueue.java:57)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:762)
+	at java.awt.EventQueue.access$500(EventQueue.java:98)
+	at java.awt.EventQueue$3.run(EventQueue.java:715)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:80)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:732)
+	at com.intellij.ide.IdeEventQueue.e(IdeEventQueue.java:821)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:649)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:365)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+```
+
+IntelliJ IDEA 2017.2.1
+Build #IU-172.3544.35, built on July 31, 2017
+
+JRE: 1.8.0_152-release-915-b6 x86_64
+JVM: OpenJDK 64-Bit Server VM by JetBrains s.r.o
+Mac OS X 10.12.6",https://github.com/JetBrains/idea-gitignore/issues/413,1.0,0.0,0.0,49
+244,"Problems with 5.0 snapshots' poms
+### Summary
+
+The poms for the latest 5.0 snapshots have a few problems:
+
+- They do not include any optional dependencies
+- They include test dependencies
+- They import platform-bom in their dependency management
+- `commons-logging` is a required dependency
+
+### Actual Behavior
+
+N/A
+
+### Expected Behavior
+
+The poms for 5.0.0 snapshots are similar to those for 4.2.2 in that they have none of the 4 problems described above.
+
+### Configuration
+
+N/A
+
+### Version
+
+5.0.0.BUILD-SNAPSHOT, specifically 5.0.0.BUILD-20170424.000033-75
+
+### Sample
+
+N/A",https://github.com/spring-projects/spring-security/issues/4308,1.0,2.0,2.0,63
+240,"Possible race-condition during write operation cancellation
+",https://github.com/redisson/redisson/issues/1061,1.0,0.0,0.0,371
+239,"Possible memory leak with `TelemetrySenderImpl`
+While testing Hono I stumbled over the situation that the Hono HTTP adapter runs into memory issues. Peeking at the heap I can see a high number of instances of the `TelemetrySenderImpl`:
+
+~~~
+sh-4.2$ jmap -histo 1  | head -n 30
+
+ num     #instances         #bytes  class name
+----------------------------------------------
+   1:        306888       31552608  [B
+   2:        273952       26299392  org.apache.qpid.proton.engine.impl.DeliveryImpl
+   3:        343058       25441536  [C
+   4:        273952        8766464  org.apache.qpid.proton.engine.impl.TransportDelivery
+   5:        330609        7934616  java.lang.String
+   6:        273952        6574848  io.vertx.proton.impl.ProtonDeliveryImpl
+   7:        273309        6559416  org.eclipse.hono.client.impl.TelemetrySenderImpl$$Lambda$180/1997786804
+   8:        284584        4553344  org.apache.qpid.proton.amqp.UnsignedInteger
+   9:         16953        3474568  [I
+  10:         14247        1534456  [Ljava.lang.Object;
+  11:          7507         834672  java.lang.Class
+  12:         19613         627616  java.util.concurrent.ConcurrentHashMap$Node
+  13:          8313         532032  java.nio.DirectByteBuffer
+  14:         10630         510240  java.nio.HeapByteBuffer
+  15:          5433         378288  [Ljava.util.HashMap$Node;
+  16:         10935         349920  java.util.HashMap$Node
+  17:          7718         308720  java.util.LinkedHashMap$Entry
+  18:         17963         287408  java.lang.Object
+  19:           386         212272  [Ljava.nio.channels.SelectionKey;
+  20:          4170         200160  io.netty.buffer.UnpooledByteBufAllocator$InstrumentedUnpooledUnsafeHeapByteBuf
+  21:          2186         192368  java.lang.reflect.Method
+  22:          3421         191576  java.util.LinkedHashMap
+  23:           133         177968  [Ljava.util.concurrent.ConcurrentHashMap$Node;
+  24:          3654         175392  java.util.HashMap
+  25:          4221         168840  io.netty.handler.codec.DefaultHeaders$HeaderEntry
+  26:           234         153504  io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueue
+  27:          4769         152608  java.lang.ref.WeakReference
+~~~
+
+Looking at the code I spotted the following in `org.eclipse.hono.client.impl.HonoClientImpl.getOrCreateSender(String, Consumer<Handler<AsyncResult<MessageSender>>>, Handler<AsyncResult<MessageSender>>)`:
+
+~~~java
+…
+} else if (!creationLocks.computeIfAbsent(key, k -> Boolean.FALSE)) {
+
+  // register a handler to be notified if the underlying connection to the server fails
+  // so that we can fail the result handler passed in
+  final Handler<Void> connectionFailureHandler = connectionLost -> {
+  // remove lock so that next attempt to open a sender doesn't fail
+  creationLocks.remove(key);
+  resultHandler.handle(Future.failedFuture(
+    new ServerErrorException(HttpURLConnection.HTTP_UNAVAILABLE, ""connection to server lost"")));
+  };
+  creationRequests.add(connectionFailureHandler);
+  creationLocks.put(key, Boolean.TRUE);
+  LOG.debug(""creating new message sender for {}"", key);
+…
+~~~
+
+To me it looks like as if this method gets called un-synchronized from various threads. So between the ""computeIfAbsent"" (which will always return false) and the ""put"", it might be that multiple callers might have triggered a new connection.
+
+Changing it to `creationLocks.putIfAbsent(key, k -> Boolean.TRUE) == null` should fix this issue as only the first caller will pass. After that the result will be non-null until the key is removed by the call to `remove`. Of course that would change the meaning of the value carried by the map. So maybe switching this to `Map<String,Object>` would be more appropriate then.",https://github.com/eclipse/hono/issues/454,1.0,1.0,1.0,42
+64,"Connection leak if SSL connection got reconnected
+",https://github.com/redisson/redisson/issues/2845,1.0,1.0,1.0,371
+236,"Possibility of a memory leak due to a combination of `RealmChangeListener` and `automaticUpdate`
+Reported by @zaki50 
+
+`RealmChangeListener` is added to `Realm` when `automaticUpdate` is true. Then the listener instance was not released until the `Realm` instance is released because the `RealmChangeListener` is never deleted.
+
+Since a listener instance is an anonymous inner class of `RealmBaseAdapter`, it holds a reference to the `RealmBaseAdapter` as an enclosing instance. `RealmBaseAdapter` usually holds a reference to the `Activity` that uses it as `Context`. So these instances will not be released until the `Realm` instance is released.
+
+If you use `Realm` in only one Activity, there is no problem because `Realm#close()` is called when the `Activity`  is destroyed. (Strictly speaking, adapters may be accumulated if re-create a `RealmBaseAdapter` while the Activity is alive.)
+
+On the other hand, if you use two activities, there are main activity and another activity that has `ListView`, each activity uses `Realm`, the `Realm` instance is held in cache until `onDestroy` of main activity is called. For example if you transition between the two Activities as follows, Main -> List-> back -> List -> back -> List... I think the `RealmChangeListener` may be accumulated in the `Realm`.
+
+What do you think? @cmelchior @emanuelez 
+",https://github.com/realm/realm-java/issues/1109,1.0,1.0,1.0,49
+57,"ConcurrentModificationException when flushing projects at shutdown
+User Ryan Elenbaum reported this exception when shutting down the Refine server
+
+java.util.ConcurrentModificationException
+        at java.util.HashMap$HashIterator.nextEntry(HashMap.java:894)
+        at java.util.HashMap$EntryIterator.next(HashMap.java:934)
+        at java.util.HashMap$EntryIterator.next(HashMap.java:932)
+        at com.google.refine.InterProjectModel.flushJoinsInvolvingProject(InterProjectModel.java:109)
+        at com.google.refine.model.Project.dispose(Project.java:109)
+        at com.google.refine.ProjectManager.saveProjects(ProjectManager.java:265) 
+        at com.google.refine.ProjectManager.save(ProjectManager.java:206)
+        at com.google.refine.ProjectManager.dispose(ProjectManager.java:99)
+        at com.google.refine.RefineServlet.destroy(RefineServlet.java:151)
+        at org.mortbay.jetty.servlet.ServletHolder.destroyInstance(ServletHolder.java:318)
+        at org.mortbay.jetty.servlet.ServletHolder.doStop(ServletHolder.java:289)
+        at org.mortbay.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:76)
+",https://github.com/OpenRefine/OpenRefine/issues/652,1.0,0.0,0.0,14
+234,"Pool leaks connections open if customization/initSql fails
+There seems to be slight a possibility to connection leak in the pool between acquiring a connection and adding it to the pool. Connection state reset has similar problem as well.
+
+Steps to fix the issue (HikariPool.addConnection):
+1. Obtaining of a datasource connection should be closed (try/catch) in case of a failure prior it has been added to the pool
+2. initSql block should be followed by resetConnectionState in any case (try/finally)
+",https://github.com/brettwooldridge/HikariCP/issues/44,1.0,1.0,1.0,119
+61,"Configure Eclipse plugin to include JOpt Simple in generated .classpath file
+## Status Quo
+
+Due to the changes introduced in #309, executing `gradle cleanEclipse eclipse` no longer results in a generated `.classpath` file that includes the JOpt Simple dependency. Consequently, it is impossible to build the `junit-platform-console` module within Eclipse when using this mechanism.
+
+## Deliverables
+
+- [x] Modify `junit-platform-console.gradle` so that the JOpt Simple dependency is once again included in the generated `.classpath` file for Eclipse.",https://github.com/junit-team/junit5/issues/556,1.0,2.0,2.0,266
+224,"OutOfMemoryError in test suite when upgrading from JUnit 5.2 to 5.3
+## Overview
+
+I work on a large project which runs Junit 5 under Gradle (currently version 4.8).  One of our test suites which previously ran fine with a 8 GB max heap size now requires an ~11 GB heap to run without OutOfMemoryError (~12 GB to run without OutOfMemoryError AND without GC overhead slowing things down significantly).
+
+Looking at the release notes, I see nothing that should cause such a significant increase in memory usage from Junit 5 itself, so I was surprised to see this new problem while upgrading versions.
+
+I only found one other open issue mentioning OutOfMemoryError and it involves dynamic tests, which my suite isn't using at all.
+
+I suppose it's possible that some small behavior change in Junit 5.3 sensitizes an issue with my test suite that increases memory consumption, but I can't think of what that might be. 
+
+Are there any changes in Junit 5.3 that are known to increase memory consumption, and thus increase risk of OutOfMemoryError while running tests?
+
+My apologies if this issue seems more like a question and not a real bug report... but I figured it was better to raise the issue quickly after Junit 5.3 release just in case others are going to start hitting the same problem soon.
+
+Unfortunately, I can't share my unit tests from this project.  However, I am going to try to pare down the test suite to see if I can narrow down where the memory increase is happening.  I may or may not be able to come back here later and provide more specific information, after doing that work.
+
+## Deliverables
+
+**Team Decision**:
+
+- [x] Implement the _quick fix_ mentioned by @sbrannen.
+- [x] Investigate other possibilities for freeing up unnecessary memory consumption in the `HierarchicalTestEngine` and related infrastructure (specifically in `NodeTestTask`).
+- [x] Backport fix and release notes to a new `5.3.1` branch.",https://github.com/junit-team/junit5/issues/1578,1.0,1.0,1.0,266
+59,"ConcurrentModificationException while making notification
+Hi,
+i'm geting exception when running below code:
+
+<pre><code>public static void makeMutableWorkoutCopy(Realm realm, final long workoutId) {
+        realm.beginTransaction();
+            Workout workout = realm.where(Workout.class).equalTo(""id"", workoutId).findFirst();
+
+            Workout copyWorkout = realm.copyFromRealm(workout);
+            copyWorkout.setId(IdentifierGenerator.getInstance().generateUniqueId(realm, Workout.class));
+            copyWorkout.setName(copyWorkout.getName() + ""*"");
+            copyWorkout.setSections(new RealmList<Section>());
+            copyWorkout.setImmutableWorkout(workout);
+
+            workout.setMutableWorkout(realm.copyToRealmOrUpdate(copyWorkout));
+        realm.commitTransaction();
+    }</code></pre>
+
+Exception:
+
+<pre><code>java.util.ConcurrentModificationException
+at java.util.IdentityHashMap$IdentityHashMapIterator.checkConcurrentMod(IdentityHashMap.java:164)
+at java.util.IdentityHashMap$IdentityHashMapIterator.next(IdentityHashMap.java:169)
+at io.realm.HandlerController.notifyRealmObjectCallbacks(HandlerController.java:254)
+at io.realm.HandlerController.notifyTypeBasedListeners(HandlerController.java:207)
+at io.realm.BaseRealm.commitTransaction(BaseRealm.java:294)
+at io.realm.Realm.commitTransaction(Realm.java:108)
+at com.borg.forza.model.RealmUtils.makeMutableWorkoutCopy(RealmUtils.java:289)
+</code></pre>
+
+
+The model of Workout.class looks like below:
+
+<pre><code>public class Workout extends RealmObject {
+
+    @Index      private long                    id;
+                private long                    backendId;
+                private int                     sync;
+
+    @PrimaryKey private String                  name;
+                private String                  description;
+    @Index      private String                  type;
+                private long                    duration;
+                private RealmList<Section>      sections;
+                private int                     access;
+                private Workout                 mutableWorkout;
+                private Workout                 immutableWorkout;
+    }</code></pre>
+
+I am using 0.87.0-SNAPSHOT.
+Thanks!
+",https://github.com/realm/realm-java/issues/1970,1.0,0.0,0.0,49
+283,"SVG Salamander synchronization
+Fixing #513 I see we have synchronization issues with SVG internal cache handled by Salamander library in case of multiple concurrent maps.
+",https://github.com/mapsforge/mapsforge/issues/618,1.0,0.0,0.0,56
+196,"Misleading code example in reference documentation
+In the Spring official docs, [here](https://docs.spring.io/spring-batch/docs/current-SNAPSHOT/reference/html/spring-batch-integration.html#spring-batch-integration-configuration), in the Java configuration code under **Spring Batch Integration Configuration**, there is a typo that is misleading. The `handle()` should be `transform()` in the `integrationFlow` method. 
+
+Artem Bilan asked me to raise this issue when I asked him about it on a [question](https://stackoverflow.com/questions/61100608/why-do-i-get-the-exception-found-ambiguous-parameter-type-spring-batch-integr) in StackOverflow.",https://github.com/spring-projects/spring-batch/issues/3692,1.0,2.0,2.0,14
+45,"Cleanup build
+Please remove the following lines from the target platform definition:
+https://github.com/eclipse/elk/blob/3c28c0639585ebeab6fffab12d7e86cd581019ef/build/org.eclipse.elk.targetplatform/org.eclipse.elk.targetplatform.target#L30-L33
+
+Besides, please change 
+https://github.com/eclipse/elk/blob/3c28c0639585ebeab6fffab12d7e86cd581019ef/build/org.eclipse.elk.targetplatform/org.eclipse.elk.targetplatform.target#L28
+to http://download.eclipse.org/modeling/emft/mwe/updates/releases/2.10.0/ or .../2.11.1",https://github.com/eclipse/elk/issues/487,1.0,2.0,2.0,35
+288,"SeverityLevelCounter should be thread-safe
+Now the `SeverityLevelCounter` uses `int count` to track the number of errors with the specified `SeverityLevel`. However, this is not thread-safe, because `int` incrementation is not an atomic operation and therefore may lead to unpredictable results.",https://github.com/checkstyle/checkstyle/issues/4927,1.0,0.0,0.0,98
+141,"Incorrect assertion in loading OAuth2AuthorizationRequest
+`HttpSessionOAuth2AuthorizationRequestRepository.loadAuthorizationRequest()` asserts the `state` parameter as required which is incorrect. If the `state` parameter is not available in the `request` than it should simply return `null`.",https://github.com/spring-projects/spring-security/issues/5163,1.0,3.0,3.0,63
+339,"Users guide shows end::how-does-it-work[]
+You should not be able to see the tag in the [doc](http://docs.spring.io/spring-session/docs/1.0.0.RELEASE/reference/html5/guides/users.html#automatic-session-alias-inclusion-with-encodeurl)
+
+```
+end::how-does-it-work[]
+```
+",https://github.com/spring-projects/spring-session/issues/145,1.0,2.0,2.0,280
+145,"Indexed Scripts/Templates: Indexed Scripts used during reduce phase sometimes hang
+Indexed scripts might need to get fetched via a GET call which is very cheap since those shards are local since they expand `[0-all]` but sometimes in the case of a node client holding no data we need to do a get call on the first get. Yet this get call seems to be executed on the transport thread and might deadlock since it needs that thread to process the get response. See stacktrace below... The problem here is that some of the actions in `SearchServiceTransportAction` don't use the `search` threadpool but use `SAME` instead which can cause this issue. We should use `SEARCH` instead for the most of the operations except of free context I guess.
+
+```
+2> ""elasticsearch[node_s2][local_transport][T#1]"" ID=1421 WAITING on org.elasticsearch.common.util.concurrent.BaseFuture$Sync@2b1fdd72
+  2>    at sun.misc.Unsafe.park(Native Method)
+  2>    - waiting on org.elasticsearch.common.util.concurrent.BaseFuture$Sync@2b1fdd72
+  2>    at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+  2>    at java.util.concurrent.locks.AbstractQueuedSynchronizer.parkAndCheckInterrupt(AbstractQueuedSynchronizer.java:836)
+  2>    at java.util.concurrent.locks.AbstractQueuedSynchronizer.doAcquireSharedInterruptibly(AbstractQueuedSynchronizer.java:997)
+  2>    at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireSharedInterruptibly(AbstractQueuedSynchronizer.java:1304)
+  2>    at org.elasticsearch.common.util.concurrent.BaseFuture$Sync.get(BaseFuture.java:274)
+  2>    at org.elasticsearch.common.util.concurrent.BaseFuture.get(BaseFuture.java:113)
+  2>    at org.elasticsearch.action.support.AdapterActionFuture.actionGet(AdapterActionFuture.java:45)
+  2>    at org.elasticsearch.script.ScriptService.getScriptFromIndex(ScriptService.java:377)
+  2>    at org.elasticsearch.script.ScriptService.compile(ScriptService.java:295)
+  2>    at org.elasticsearch.script.ScriptService.executable(ScriptService.java:457)
+  2>    at org.elasticsearch.search.aggregations.metrics.scripted.InternalScriptedMetric.reduce(InternalScriptedMetric.java:99)
+  2>    at org.elasticsearch.search.aggregations.InternalAggregations.reduce(InternalAggregations.java:140)
+  2>    at org.elasticsearch.search.controller.SearchPhaseController.merge(SearchPhaseController.java:374)
+  2>    at org.elasticsearch.action.search.type.TransportSearchDfsQueryThenFetchAction$AsyncAction.innerFinishHim(TransportSearchDfsQueryThenFetchAction.java:209)
+  2>    at org.elasticsearch.action.search.type.TransportSearchDfsQueryThenFetchAction$AsyncAction.finishHim(TransportSearchDfsQueryThenFetchAction.java:196)
+  2>    at org.elasticsearch.action.search.type.TransportSearchDfsQueryThenFetchAction$AsyncAction$2.onResult(TransportSearchDfsQueryThenFetchAction.java:172)
+  2>    at org.elasticsearch.action.search.type.TransportSearchDfsQueryThenFetchAction$AsyncAction$2.onResult(TransportSearchDfsQueryThenFetchAction.java:166)
+  2>    at org.elasticsearch.search.action.SearchServiceTransportAction$18.handleResponse(SearchServiceTransportAction.java:440)
+  2>    at org.elasticsearch.search.action.SearchServiceTransportAction$18.handleResponse(SearchServiceTransportAction.java:431)
+  2>    at org.elasticsearch.transport.local.LocalTransport$3.run(LocalTransport.java:322)
+  2>    at com.google.common.util.concurrent.MoreExecutors$DirectExecutorService.execute(MoreExecutors.java:299)
+  2>    at org.elasticsearch.transport.local.LocalTransport.handleParsedResponse(LocalTransport.java:317)
+  2>    at org.elasticsearch.test.transport.AssertingLocalTransport.handleParsedResponse(AssertingLocalTransport.java:59)
+  2>    at org.elasticsearch.transport.local.LocalTransport.handleResponse(LocalTransport.java:313)
+  2>    at org.elasticsearch.transport.local.LocalTransport.messageReceived(LocalTransport.java:238)
+  2>    at org.elasticsearch.transport.local.LocalTransportChannel$1.run(LocalTransportChannel.java:78)
+  2>    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+  2>    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+  2>    at java.lang.Thread.run(Thread.java:745)
+  2>    Locked synchronizers:
+  2>    - java.util.concurrent.ThreadPoolExecutor$Worker@2339bcc9
+  2> 
+```
+",https://github.com/elastic/elasticsearch/issues/7623,1.0,0.0,0.0,546
+28,"Build system does not support HTTPS calls to Maven
+**Describe the bug**
+When I try to run `./refine build`, I get a 501 error when the build system attempts to contact `http://repo.maven.apache.org/`.  This appears to be related to Maven's HTTPS switchover on 2020-01-15 (https://blog.sonatype.com/central-repository-moving-to-https), which causes `http://` calls to be rejected.
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Clone the master repository
+2. `./refine build`
+
+**Current Results**
+```[INFO] ------------------------------------------------------------------------
+[INFO] Building OpenRefine 3.3-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/mojo/build-helper-maven-plugin/1.8/build-helper-maven-plugin-1.8.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO]
+[INFO] OpenRefine ......................................... FAILURE [  3.014 s]
+[INFO] OpenRefine - main .................................. SKIPPED
+[INFO] OpenRefine - server ................................ SKIPPED
+[INFO] OpenRefine - extensions ............................ SKIPPED
+[INFO] OpenRefine - Jython extension ...................... SKIPPED
+[INFO] OpenRefine - Wikidata extension .................... SKIPPED
+[INFO] OpenRefine - Database extension .................... SKIPPED
+[INFO] OpenRefine - Gdata extension ....................... SKIPPED
+[INFO] OpenRefine - PC-axis extension ..................... SKIPPED
+[INFO] OpenRefine - Phonetic clustering extension ......... SKIPPED
+[INFO] OpenRefine - packaging ............................. SKIPPED
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 3.927 s
+[INFO] Finished at: 2020-01-15T12:02:00-05:00
+[INFO] Final Memory: 7M/37M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Plugin org.codehaus.mojo:build-helper-maven-plugin:1.8 or one of its dependencies could not be resolved: Failed to read artifact descriptor for org.codehaus.mojo:build-helper-maven-plugin:jar:1.8: Could not transfer artifact org.codehaus.mojo:build-helper-maven-plugin:pom:1.8 from/to central (http://repo.maven.apache.org/maven2): Failed to transfer file: http://repo.maven.apache.org/maven2/org/codehaus/mojo/build-helper-maven-plugin/1.8/build-helper-maven-plugin-1.8.pom. Return code is: 501 , ReasonPhrase:HTTPS Required. -> [Help 1]
+```
+
+**Expected behavior**
+The build system is able to successfully contact the Maven repository and download necessary files.
+
+**Desktop (please complete the following information):**
+ - OS: macOS 10.14.6
+ - Browser Version: n/a
+ - JRE or JDK Version: openjdk 12.0.1 2019-04-16
+
+**OpenRefine (please complete the following information):**
+ - Version: 3.3-SNAPSHOT
+",https://github.com/OpenRefine/OpenRefine/issues/2286,1.0,2.0,2.0,14
+147,"Installing from the P2 site is broken
+Jay Jay,
+
+You gave me incomplete instructions...
+
+Cannot complete the install because one or more required items could not be found.
+  Software being installed: ICE Infrastructure Feature 2.1.8.201604122238 (org.eclipse.ice.feature.group 2.1.8.201604122238)
+  Missing requirement: EAVP Datastructures 2.1.8.201604082008 (org.eclipse.eavp.viz.datastructures 2.1.8.201604082008) requires 'bundle org.eclipse.nebula.visualization.widgets 1.0.0' but it could not be found
+  Cannot satisfy dependency:
+    From: BatteryML 2.1.8.201604122238 (org.eclipse.ice.caebat.batml 2.1.8.201604122238)
+    To: bundle org.eclipse.ice.datastructures 0.0.0
+  Cannot satisfy dependency:
+    From: ICEDataStructures 2.1.8.201604122238 (org.eclipse.ice.datastructures 2.1.8.201604122238)
+    To: package org.eclipse.eavp.viz.datastructures.VizObject 0.0.0
+  Cannot satisfy dependency:
+    From: ICE Infrastructure Feature 2.1.8.201604122238 (org.eclipse.ice.feature.group 2.1.8.201604122238)
+    To: org.eclipse.ice.caebat.batml [2.1.8.201604122238]
+
+First I had to install the Nebula project from http://download.eclipse.org/technology/nebula/snapshot
+This let me install EAVP, but not ICE from the repository you provided:
+
+Cannot complete the install because one or more required items could not be found.
+  Software being installed: ICE Infrastructure Feature 2.1.8.201604122238 (org.eclipse.ice.feature.group 2.1.8.201604122238)
+  Missing requirement: Client 2.1.8.201604122238 (org.eclipse.ice.client 2.1.8.201604122238) requires 'bundle com.sun.jersey 1.17.0' but it could not be found
+  Cannot satisfy dependency:
+    From: ICE Infrastructure Feature 2.1.8.201604122238 (org.eclipse.ice.feature.group 2.1.8.201604122238)
+    To: org.eclipse.ice.client [2.1.8.201604122238]
+
+Although I found and downloaded http://repo1.maven.org/maven2/com/sun/jersey/jersey-archive/1.19.1/jersey-archive-1.19.1.zip and http://repo1.maven.org/maven2/com/sun/jersey/jersey-archive/1.17/jersey-archive-1.17.zip, I don't know how to make this available under Eclipse. 
+Can you give me instructions?
+What else is required for installing ICE?
+I have installed Eclipse through the PTP environment which has C++ and Fortran but not Java. Should I install the Java environment for this?
+
+Thanks
+Norbert
+",https://github.com/eclipse/ice/issues/190,1.0,2.0,2.0,35
+334,"Update to spring-build-conventions:0.0.13.RELEASE
+### Summary
+Update to spring-build-conventions:0.0.13.RELEASE",https://github.com/spring-projects/spring-security/issues/5030,1.0,2.0,2.0,63
+333,"Update guides for Spring Boot based samples
+Our guides for Spring Boot based samples use some deprecated application properties.
+
+See #1024.",https://github.com/spring-projects/spring-session/issues/1025,1.0,2.0,2.0,280
+158,"JarResourceManager leaks an InputStream when asked for a Resource for the root of a jar
+Due to how Undertow's `URLResource` and the JDK's `JarURLConnection` work, if `JarResourceManager` is asked for an entry for the root of a jar (a path of `""""` or `""/""`), it will open an `InputStream` and never close it. To avoid this, we need to avoid asking the `URLResource` for its content length for such resources.",https://github.com/spring-projects/spring-boot/issues/17121,1.0,1.0,1.0,91
+328,"UniqueId.parse fails for methods with array type parameters
+## Bug description
+```
+String idString = uniqueIdFromMethodDescriptorWithArrayParameter.toString();
+UniqueId id = UniqueId.parse(idString);
+```
+will fail with `PreconditionViolation` since array types are described with an `[` in front but `[` chars are currently forbidden as segment values.
+
+## Suggested Solution
+
+Change representation of array types in `ReflectionUtils.findMethod(clazz, methodName, parameterTypeNames)` and `StringUtils.nullSafeToString(classes)`. 
+
+Alternative: Don't use `[` as separator char in unique IDs. But some 3rd party tools might already have committed to the current format.
+
+## Deliverables
+
+- [ ] Encode `segmentType` and `value` in constructor and decode in `parse`.",https://github.com/junit-team/junit5/issues/810,1.0,3.0,3.0,266
+82,"Documentation incorrect - reference/2.0/modules-scripting.html
+https://www.elastic.co/guide/en/elasticsearch/reference/2.0/modules-scripting.html
+
+Documentation example below causes ""script_score query does not support [file]"" error
+
+```
+     ""script_score"": {
+        ""lang"": ""groovy"",
+        ""file"": ""calculate-score"",
+        ""params"": {
+          ""my_modifier"": 8
+        }
+      }
+```
+
+Should be 
+
+""script_file"": ""calculate-score""
+",https://github.com/elastic/elasticsearch/issues/15096,1.0,2.0,2.0,546
+326,"Unexpected IllegalArgumentException in housekeeping task.
+#### Environment
+```
+HikariCP version: 2.6.1
+JDK version     : 1.8.0_71-b15
+Database        : PostgreSQL 9.6.1 on x86_64-pc-linux-gnu, compiled by gcc, 64-bit
+Driver version  : 9.4-1201-jdbc41
+```
+-----------------------------------------------------------------------------------------
+#### HikariCP Config
+```
+config.setAutoCommit(false);
+config.setMinimumIdle(10);
+config.setMaximumPoolSize(100);
+Other options are default.
+```
+-----------------------------------------------------------------------------------------
+#### Trace
+```
+Unexpected exception in housekeeping task
+java.lang.IllegalArgumentException: Comparison method violates its general contract!
+	at java.util.TimSort.mergeLo(TimSort.java:777) ~[?:1.8.0_71]
+	at java.util.TimSort.mergeAt(TimSort.java:514) ~[?:1.8.0_71]
+	at java.util.TimSort.mergeForceCollapse(TimSort.java:457) ~[?:1.8.0_71]
+	at java.util.TimSort.sort(TimSort.java:254) ~[?:1.8.0_71]
+	at java.util.Arrays.sort(Arrays.java:1512) ~[?:1.8.0_71]
+	at java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:348) ~[?:1.8.0_71]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:482) ~[?:1.8.0_71]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471) ~[?:1.8.0_71]
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151) ~[?:1.8.0_71]
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174) ~[?:1.8.0_71]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:1.8.0_71]
+	at java.util.stream.ReferencePipeline.forEachOrdered(ReferencePipeline.java:423) ~[?:1.8.0_71]
+	at com.zaxxer.hikari.pool.HikariPool$HouseKeeper.run(HikariPool.java:704) [NavServ.jar:?]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511) [?:1.8.0_71]
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308) [?:1.8.0_71]
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180) [?:1.8.0_71]
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294) [?:1.8.0_71]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [?:1.8.0_71]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [?:1.8.0_71]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_71]
+```
+-----------------------------------------------------------------------------------------
+
+I got this exception only 3 times: 2017-04-30 07:26:53.399, 2017-04-30 15:42:25.314, 2017-04-30 15:42:55.675 after about 4 days application non-stop working. 
+
+Really don't know what's wrong, because in the stack trace there is no my code.",https://github.com/brettwooldridge/HikariCP/issues/880,1.0,0.0,0.0,119
+29,"Building Titan mutates Gremlin.sh/bat and deletes README.txt
+```
+~/software/aurelius/titan$ git pull
+Already up-to-date.
+~/software/aurelius/titan$ git status
+# On branch master
+nothing to commit, working directory clean
+~/software/aurelius/titan$ mvn clean install -Dmaven.test.skip=true
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] Titan: Distributed Graph Database
+[INFO] Titan-Core: Core Library for Titan
+[INFO] Titan-Test: Test Suite for Titan
+[INFO] Titan-ElasticSearch: Distributed Indexing Support
+[INFO] Titan-BerkeleyJE: Distributed Graph Database
+...
+...
+...
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 15.525s
+[INFO] Finished at: Mon Oct 14 08:23:33 MDT 2013
+[INFO] Final Memory: 50M/370M
+[INFO] ------------------------------------------------------------------------
+~/software/aurelius/titan$ git status
+# On branch master
+# Changes not staged for commit:
+#   (use ""git add/rm <file>..."" to update what will be committed)
+#   (use ""git checkout -- <file>..."" to discard changes in working directory)
+#
+#   deleted:    bin/README.txt
+#   modified:   bin/gremlin.bat
+#   modified:   bin/gremlin.sh
+#
+no changes added to commit (use ""git add"" and/or ""git commit -a"")
+~/software/aurelius/titan$
+```
+",https://github.com/thinkaurelius/titan/issues/422,1.0,2.0,2.0,7
+78,"Distributions no longer deployed
+Usually I can find a full dist of the spring releases at:
+https://maven.springframework.org/release/org/springframework/spring/
+5.2.4 does not seem to have been posted despite most of the modules now being available on Maven central.",https://github.com/spring-projects/spring-framework/issues/24605,1.0,2.0,2.0,105
+33,"Cannot access `package-list` in published Javadoc
+## Bug Report for JUnit 4
+
+`javadoc -link http://junit.org/junit4/javadoc/latest` (i.e. referring JUnit 4's Javadoc pages from 3rd-party Javadoc pages) no longer works because http://junit.org/junit4/javadoc/latest/package-list disappeared.
+
+### Deliverables
+
+- [x] See https://github.com/junit-team/junit5/issues/1289#issuecomment-364247470
+
+## Bug Report for JUnit 5
+
+An upgrade in the JDK used to generate Javadoc for JUnit 5 caused the `package-list` file to stop being published beginning with JUnit 5.2.
+
+In the following list, the first number is the HTTP response code.
+
+- *200*: https://junit.org/junit5/docs/5.1.0/api/package-list
+- *404*: https://junit.org/junit5/docs/5.2.0/api/package-list
+- *404*: https://junit.org/junit5/docs/current/api/package-list
+
+### Deliverables
+
+- [x] Manually copy `element-list` to `package-list` for previously released versions of JUnit 5.
+- [x] Automate copying of `element-list` to `package-list` in the Gradle build for future versions of JUnit 5.
+",https://github.com/junit-team/junit5/issues/1289,1.0,2.0,2.0,266
+343,"War deployment in standalone Tomcat causes webclassloader memory leak
+During startup Spring Boot invokes `SLF4JBridgeHandler.install()` to add a logging handler to container's LogManager, but during application shutdown (undeploy) adequate `SLF4JBridgeHandler.uninstall()` or `SLF4JBridgeHandler.removeHandlersForRootLogger()` is not called. I think it should be.
+
+The bug manifests itself in taking metaspace memory space and following message is displayed after invoking Tomcat's find leaks method:
+Message:    
+
+```
+The following web applications were stopped (reloaded, undeployed), but their
+classes from previous runs are still loaded in memory, thus causing a memory
+leak (use a profiler to confirm):
+/spring-boot-logging-issue
+```
+
+Below is my workaround that solves the issue. It removes the logging handler during ContextClosedEvent.
+
+```
+@Bean
+public ApplicationListener<ContextClosedEvent> uninstallSLF4JBridgeHandlerWorkaround() {
+    return new ApplicationListener<ContextClosedEvent>() {
+        @Override
+        public void onApplicationEvent(ContextClosedEvent event) {
+            try {
+                SLF4JBridgeHandler.removeHandlersForRootLogger();
+            } catch (NoSuchMethodError ex) {
+                SLF4JBridgeHandler.uninstall();
+            }
+        }
+    };
+}
+```
+
+Tested with Tomcat 8.0.15 and OpenJDK 1.8.0_25 on Linux 3.17.6
+",https://github.com/spring-projects/spring-boot/issues/2324,1.0,1.0,1.0,91
+319,"Trying to catch a dead lock
+Hi there,
+
+I'm trying to locate a dead-lock which is happening somewhere inside Realm.
+By logging I found that I get an infinite ANR in `onCreate()` of the MainActivity on the line `Realm.getDefaultInstance()`. Another place where it hangs is a worker thread on the line `Realm.close()`.
+
+Here is how the worker thread body looks like (without the domain details):
+
+``` java
+Realm realm = null;
+try {
+    realm = Realm.getDefaultInstance();
+    RealmResults<A> results = realm.where(A.class).findAll();
+    realm.beginTransaction();
+    for (int i = results.size() - 1; i >= 0; i--) {
+        final A item = results.get(i);
+        String value = item.getSomeStringValue();
+        callSomeMethod(value); // this method throws an exception not related to realm when i == 1
+    }
+    realm.commitTransaction();
+} finally {
+    if (realm != null) {
+        realm.close(); // hangs on this line based on the logs
+    }
+}
+```
+
+I was able to narrow down where exactly Realm.close() hangs. It is the line `synchronized (BaseRealm.class)`:
+
+``` java
+protected void lastLocalInstanceClosed() {
+        // validatedRealmFiles must not modified while other thread is executing createAndValidate()
+        synchronized (BaseRealm.class) {
+            validatedRealmFiles.remove(configuration.getPath());
+        }
+        realmsCache.get().remove(configuration);
+    }
+}
+```
+
+Here is the sequence of actions accordingly to logs:
+1. Application.onCreate() called and starts the worker thread
+2. Worker thread is going through the items
+3. MainActivity.onCreate() called and it hangs on Realm.getDefaultInstance()
+4. Exception thrown in the worker thread, and it hangs on realm.close()
+5. Infinite ANR in MainActivity
+
+It's very hard to locate the problem because it's not 100% reproducible and time-dependent. If I remove transaction, or there is no exception then the dead-lock doesn't happen (could be just due to timing). Also, I have another running worker thread in background which uses realm. But it successfully finishes and doesn't hang on `realm.close()`. 
+
+I tried to reproduce it in a small project, but it didn't work out.
+
+I hope this description could lead you to some ideas what could go wrong, or what I can check to locate the exact problem.
+",https://github.com/realm/realm-java/issues/1728,1.0,0.0,0.0,49
+169,"Link to Port Index Broken In Reference Documentation
+The links to Port Index at: https://www.eclipse.org/elk/reference/options.html both point to https://www.eclipse.org/elk/reference/options/org-eclipse-elk-port-",https://github.com/eclipse/elk/issues/268,1.0,2.0,2.0,35
+308,"Target is unresolvable
+The Oxygen target cannot be resolved. In the site http://download.eclipse.org/releases/oxygen/, there are three errors:
+
+Unable to locate installable unit org.eclipse.ecf.remoteservice.rest.synd.feature.feature.group 0.0.0
+Unable to locate installable unit org.eclipse.ecf.remoteservice.sdk.source.feature.feature.group 0.0.0
+Unable to locate installable unit org.eclipse.ecf.remoteservice.soap.feature.feature.group 0.0.0
+
+On the mailing list, nobody could justify why these features are in the target and removing them seems to get the target and build working again, so I assume that whatever was in them has been moved to other features in Oxygen and suggest their removal.",https://github.com/eclipse/ice/issues/373,1.0,2.0,2.0,35
+181,"Maven site phase execution fails
+`mvn clean site -Psite` fails:
+
+`Caused by: java.lang.ClassNotFoundException: net.sourceforge.cobertura.coveragedata.TouchCollector`
+
+Full log available [here](http://www.rultor.com/t/5303-144853990).
+",https://github.com/yegor256/takes/issues/403,1.0,2.0,2.0,14
+304,"Synchronized blocks in MethodOverrides are hurting concurrency
+<!--
+!!! For Security Vulnerabilities, please go to https://pivotal.io/security !!!
+-->
+**Affects:** 5.1.x, 4.3.x
+
+---
+The fix for issue #18905 introduced `synchronized` blocks into the `MethodOverrides` class to fix a race condition. While this fixed the original bug, the introduction of the `synchronized` blocks is really hurting the concurrency of our application. We make use of method injection in a hot spot in our application, which has very high request concurrency. All of those requests go through `MethodOverrides`, and through these `synchronized` blocks. While the individual operations are fairly quick, it's still significant enough to cause serious concurrency degradation.
+
+Can this class be reworked to avoid synchronized blocks? ",https://github.com/spring-projects/spring-framework/issues/23448,1.0,0.0,0.0,105
+303,"Subscription connection leak in PubSubConnectionEntry::removeListener
+We have a production system using Redisson to handle notification. However, recently we constantly run into subscription connection exhausted issue. After investigation, I found Redisson doesn't release the subscription connection after the last listener is removed. 
+
+Eventually, this issue is caused by the following line. It seems ConcurrentLinedQueue doesn't fully implement equals method to compare 2 linked list. Therefore, an empty linked list will never equals to another empty linked list, which eventually leaks all subscription connections.
+
+```
+public void removeListener(String channelName, RedisPubSubListener listener) {
+
+  channelListeners.remove(channelName, new ConcurrentLinkedQueue<RedisPubSubListener>());
+
+}
+```
+
+This is a very urgent issue to us. Any help or workaround will be greatly appreciated.
+",https://github.com/redisson/redisson/issues/237,1.0,1.0,1.0,371
+302,"StringDecoder buffer leak related to maxInMemorySize limit
+This was discovered while working on implementing the same type of limit for `ServerSentEventsMessageReader` which depends on `StringDecoder` to split the stream into lines (see #24312). 
+
+When a single input buffer contains multiple lines in which case slices for each line are retained, and if one of the earlier lines exceeds the limit, then subsequent lines are not released. This is due to a suspected issue with  `concatMapIterable` not respecting `doOnDiscard`. I've added a https://github.com/reactor/reactor-core/issues/1925#issuecomment-573630082 related to that. 
+
+The goal for this issue is to add a workaround.",https://github.com/spring-projects/spring-framework/issues/24339,1.0,1.0,1.0,105
+301,"StringDecoder buffer leak related to maxInMemorySize limit
+Backport of gh-24339",https://github.com/spring-projects/spring-framework/issues/24346,1.0,1.0,1.0,105
+39,"Cannot use dependency due to new release management
+Introduced in #1286
+
+We now get:
+
+```
+Failed to collect dependencies at com.graphhopper:graphhopper-reader-osm:jar:0.10-SNAPSHOT: Failed to read artifact descriptor for com.graphhopper:graphhopper-reader-osm:jar:0.10-SNAPSHOT: Failure to find com.graphhopper:graphhopper-parent:pom:${revision} in https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced -> [Help 1]
+```
+
+for all projects trying to use the dependencies at e.g. maven central. Which is ugly and could be fixed with a 'flat' pom: https://maven.apache.org/maven-ci-friendly.html
+
+Related: http://blog.kiwitype.com/2017/maven-versioning-in-a-continuous-delivery-pipeline/",https://github.com/graphhopper/graphhopper/issues/1288,1.0,2.0,2.0,56
+73,"Dependency management for Cassandra Driver's query builder module uses the wrong artifact ID
+We're currently managing `java-drive-query-builder`. It should be `java-driver-query-builder`",https://github.com/spring-projects/spring-boot/issues/20441,1.0,2.0,2.0,91
+184,"Memory Leak when I try to create client
+<!--
+Please consider to take commercial 24x7 support included in PRO version https://redisson.pro
+-->
+
+### Expected behavior
+It should't have memory leak.
+### Actual behavior
+```
+[main] ERROR io.netty.util.ResourceLeakDetector  - LEAK: HashedWheelTimer.release() was not called before it's garbage-collected. See http://netty.io/wiki/reference-counted-objects.html for more information.
+Recent access records: 
+Created at:
+	io.netty.util.HashedWheelTimer.<init>(HashedWheelTimer.java:272)
+	io.netty.util.HashedWheelTimer.<init>(HashedWheelTimer.java:216)
+	io.netty.util.HashedWheelTimer.<init>(HashedWheelTimer.java:195)
+	org.redisson.connection.MasterSlaveConnectionManager.initTimer(MasterSlaveConnectionManager.java:318)
+	org.redisson.connection.MasterSlaveConnectionManager.<init>(MasterSlaveConnectionManager.java:161)
+	org.redisson.connection.SingleConnectionManager.<init>(SingleConnectionManager.java:34)
+	org.redisson.config.ConfigSupport.createConnectionManager(ConfigSupport.java:192)
+	org.redisson.Redisson.<init>(Redisson.java:122)
+	org.redisson.Redisson.create(Redisson.java:159)
+	test.main(test.java:32)
+```
+
+### Steps to reproduce or test case
+```java=
+        Codec stringCodec = new StringCodec();
+
+        for (int i = 0; i < 10; i++) {
+            RedissonClient client;
+            Config config = new Config();
+            config.useSingleServer().setAddress(RedisConfig.Address);
+            config.useSingleServer().setPassword(RedisConfig.Password);
+            config.setCodec(stringCodec);
+            client = Redisson.create(config);
+
+            BatchOptions options = BatchOptions.defaults();
+            RBatch pipe = client.createBatch(options);
+
+            pipe.getBucket(""test"", stringCodec).getAsync();
+            BatchResult res = pipe.execute();
+
+            System.out.println(res.getResponses().get(0));
+
+            client.shutdown();
+
+            System.gc();
+        }
+
+```
+
+### Redis version
+4.0.10
+### Redisson version
+3.7.5
+### Redisson configuration
+```
+Config config = new Config();
+config.useSingleServer().setAddress(RedisConfig.Address);
+config.useSingleServer().setPassword(RedisConfig.Password);
+config.setCodec(stringCodec);
+client = Redisson.create(config);
+```
+",https://github.com/redisson/redisson/issues/1584,1.0,1.0,1.0,371
+185,"Memory leak
+A lot of following exceptions we get in JetBrains:
+
+```
+Editor of class com.intellij.openapi.editor.impl.EditorImpl hasn't been released:
+
+com.intellij.openapi.util.TraceableDisposable.ObjectNotDisposedException: See stack trace responsible for creation of unreleased object below 
+	at com.intellij.openapi.editor.impl.EditorImpl.<init>(EditorImpl.java:156)
+	at com.intellij.openapi.editor.impl.EditorFactoryImpl.createEditor(EditorFactoryImpl.java:220)
+	at com.intellij.openapi.editor.impl.EditorFactoryImpl.createEditor(EditorFactoryImpl.java:195)
+	at mobi.hsz.idea.gitignore.util.Utils.createPreviewEditor(Utils.java:369)
+	at mobi.hsz.idea.gitignore.ui.untrackFiles.UntrackFilesDialog.createCenterPanel(UntrackFilesDialog.java:197)
+	at com.intellij.openapi.ui.DialogWrapper.init(DialogWrapper.java:1308)
+	at mobi.hsz.idea.gitignore.ui.untrackFiles.UntrackFilesDialog.<init>(UntrackFilesDialog.java:139)
+	at mobi.hsz.idea.gitignore.TrackedIgnoredFilesComponent$1.hyperlinkUpdate(TrackedIgnoredFilesComponent.java:125)
+	at com.intellij.notification.impl.ui.NotificationsUtil$1.hyperlinkUpdate(NotificationsUtil.java:155)
+	at javax.swing.JEditorPane.fireHyperlinkUpdate(JEditorPane.java:342)
+	at javax.swing.text.html.HTMLEditorKit$LinkController.activateLink(HTMLEditorKit.java:875)
+	at javax.swing.text.html.HTMLEditorKit$LinkController.mouseClicked(HTMLEditorKit.java:674)
+	at java.awt.AWTEventMulticaster.mouseClicked(AWTEventMulticaster.java:270)
+	at java.awt.Component.processMouseEvent(Component.java:6544)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3324)
+	at java.awt.Component.processEvent(Component.java:6306)
+	at java.awt.Container.processEvent(Container.java:2237)
+	at java.awt.Component.dispatchEventImpl(Component.java:4897)
+	at java.awt.Container.dispatchEventImpl(Container.java:2295)
+	at java.awt.Component.dispatchEvent(Component.java:4719)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4889)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4535)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4467)
+	at java.awt.Container.dispatchEventImpl(Container.java:2281)
+	at java.awt.Window.dispatchEventImpl(Window.java:2746)
+	at java.awt.Component.dispatchEvent(Component.java:4719)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:764)
+	at java.awt.EventQueue.access$500(EventQueue.java:98)
+	at java.awt.EventQueue$3.run(EventQueue.java:715)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:80)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:90)
+	at java.awt.EventQueue$4.run(EventQueue.java:737)
+	at java.awt.EventQueue$4.run(EventQueue.java:735)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:80)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:734)
+	at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.java:821)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:645)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:365)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+
+```",https://github.com/JetBrains/idea-gitignore/issues/373,1.0,1.0,1.0,49
+188,"Memory leak in MimeTypeUtils LRUCache
+In then current LRUCache implementation, the queue tracking recently used cached values is thread safe, at least each call to offer/add values to it is.
+
+But in the case of highly concurrent calls for the same cached value, the current implementation can add multiple instances of the same value to the queue. Since the queue is unbounded, this can lead to memory leak issues or large queues which increases the time spent when going over the queue to find values to remove.
+
+We'll also use this issue to improve queue lookup for recently used values by starting from the end and using a different queue implementation.",https://github.com/spring-projects/spring-framework/issues/24886,1.0,1.0,1.0,105
+190,"Memory leak when using closeOnJvmShutdown (eg. any tmp map)
+You have each engine register a shutdown hook with an anonymous class creation. Each of those threads has a reference to the engine being made (not that leaking threads themselves is great). These are kept in a special jdk store and will prevent garbage collection. You can unregister shutdown hooks if you keep a reference to them or you could lazily register a single static hook equipped with something similar to a listenable future and add/remove things to/from it.
+
+Definitely not what you want to happen if you naively try to do something like create a temporary map for disk backed sorts.
+",https://github.com/jankotek/mapdb/issues/272,1.0,1.0,1.0,70
+191,"Memory leaking when using ALPN
+We're experiencing a slow memory leak with 0.7.1 when using ALPN and TLS. The server is built and started with this code : 
+
+```
+NettyServerBuilder builder = NettyServerBuilder.forPort(port);
+definitions.forEach(builder::addService);
+SslContext context = SslContextBuilder.forServer(keyCertPathprivateKeyPath).build();
+builder.sslContext(context);
+ServerImpl server = builder.build();
+server.start();
+```
+
+This is the alpn version that we're using.
+-Xbootclasspath/p:/usr/lib/java/alpn-boot-8.1.3.v20150130.jar""
+
+Running a heap dump, we're seeing a huge amount of SSLEngineImpl objects stored in a concurrent hash map : 
+
+![image](https://cloud.githubusercontent.com/assets/9012046/8503526/2c2acda0-21c9-11e5-9dfe-ba599b324c12.png)
+
+The server is running behind a Amazon ELB. This might be related since the Amazon load balancer would open connections every once in a while to the server and to ping and make sure the server is live. Unfortunately it takes a long time to replicate, the server would run out of memory after 36 hours or so, but it doesn't seem like the number of requests 
+",https://github.com/grpc/grpc-java/issues/598,1.0,1.0,1.0,84
+317,"Tomcat sometimes warns about threads that have not been stopped when app is shut down using the shutdown endpoint
+```
+2016-07-08 13:51:15.363  WARN 22433 --- [ost-startStop-2] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [Thread-8] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.FutureTask.awaitDone(FutureTask.java:429)
+ java.util.concurrent.FutureTask.get(FutureTask.java:191)
+ org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:972)
+ org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:224)
+ org.apache.catalina.core.StandardService.stopInternal(StandardService.java:502)
+ org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:224)
+ org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:808)
+ org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:224)
+ org.apache.catalina.startup.Tomcat.stop(Tomcat.java:356)
+ org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer.stop(TomcatEmbeddedServletContainer.java:236)
+ org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.stopAndReleaseEmbeddedServletContainer(EmbeddedWebApplicationContext.java:302)
+ org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.onClose(EmbeddedWebApplicationContext.java:151)
+ org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:988)
+ org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:934)
+ org.springframework.boot.actuate.endpoint.ShutdownEndpoint$1.run(ShutdownEndpoint.java:70)
+ java.lang.Thread.run(Thread.java:745)
+2016-07-08 13:51:15.363  WARN 22433 --- [ost-startStop-2] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [Tomcat-startStop-2] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.FutureTask.awaitDone(FutureTask.java:429)
+ java.util.concurrent.FutureTask.get(FutureTask.java:191)
+ org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:972)
+ org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:224)
+ org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1424)
+ org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1413)
+ java.util.concurrent.FutureTask.run(FutureTask.java:266)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+ java.lang.Thread.run(Thread.java:745)
+```
+",https://github.com/spring-projects/spring-boot/issues/6361,1.0,0.0,0.0,91
+255,"ReadableBuffers.BufferInputStream does not release buffer on close()
+**gRPC Version used: 1.7.0
+Netty Version used: 4.1.16.Final
+Java version: 1.8.0_161**
+
+Context:
+Observed Netty leak detector complaining of bytebuf leaks on the gRPC server configured with Netty Epoll. This occurs more often, a few minutes after the service restarts on a prod machine. Here is the full trace of all 25 access for the bytebuf:
+ [netty_buf_leak_trace.txt](https://github.com/grpc/grpc-java/files/1795622/netty_buf_leak_trace.txt)
+
+The most recent access to the leaked bytebuf occurs at `io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:273)` but the bytebuf is actually released here.  Not sure what is causing the leak.
+
+```
+ ERROR [2018-03-09 02:25:49,034] io.netty.util.ResourceLeakDetector: LEAK: ByteBuf.release() was not called before it's garbage-collected. See http://netty.io/wiki/reference-counted-objects.html for more information.
+ Recent access records: 25
+ #25:
+ 	io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:273)
+ 	io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+ 	io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+ 	io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
+ 	io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1359)
+ 	io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+ 	io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+ 	io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:935)
+ 	io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.epollInReady(AbstractEpollStreamChannel.java:797)
+ 	io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:404)
+ 	io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:304)
+ 	io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)
+ 	io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:138)
+ 	java.lang.Thread.run(Thread.java:748)
+```
+
+
+
+
+
+",https://github.com/grpc/grpc-java/issues/4198,1.0,1.0,1.0,84

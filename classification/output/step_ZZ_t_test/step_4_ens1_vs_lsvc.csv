@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9779332280158997,0.09162984043359756,Ensemble1 is normal distributed
+1,dagostino_stat,4.940790678658529,0.08455142588928864,Ensemble1 is normal distributed
+0,shapiro_stat,0.9854776859283447,0.3436058461666107,LSVC w Artifact removal is normal distributed
+1,dagostino_stat,1.731222295310547,0.42079430657385164,LSVC w Artifact removal is normal distributed
+0,t_test_one_sided,9.864587471582029,3.249315552929306e-19,Ensemble1 is not greater than LSVC w Artifact removal

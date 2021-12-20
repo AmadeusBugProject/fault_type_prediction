@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9902458786964417,0.6844799518585205,xEnsemble5 is normal distributed
+1,dagostino_stat,0.6768725548797742,0.7128842047481527,xEnsemble5 is normal distributed
+0,shapiro_stat,0.997530460357666,0.9997902512550354,xEnsemble1 is normal distributed
+1,dagostino_stat,0.1788668762195209,0.914449130561281,xEnsemble1 is normal distributed
+0,t_test_two_sided,3.012996793346783,0.0029300033404103874,xEnsemble5 is not different xEnsemble1

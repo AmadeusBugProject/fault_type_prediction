@@ -1,0 +1,631 @@
+url,RootCause,RootCauseDetail,Confidence
+https://github.com/eclipse/hono/issues/547,Semantic,Incorrect value
+https://github.com/pmd/pmd/issues/206,Semantic,Incorrect value
+https://github.com/DiUS/pact-jvm/issues/221,Semantic,Dependency
+https://github.com/eclipse/eclipse.jdt.ls/issues/501,Semantic,Dependency
+https://github.com/google/ExoPlayer/issues/4078,Semantic,Dependency
+https://github.com/JetBrains/idea-gitignore/issues/395,Semantic,Dependency
+https://github.com/jhipster/generator-jhipster/issues/4563,Semantic,Dependency
+https://github.com/jhipster/generator-jhipster/issues/471,Semantic,Dependency
+https://github.com/OpenRefine/OpenRefine/issues/1583,Semantic,Dependency
+https://github.com/spring-projects/spring-security/issues/8525,Semantic,Dependency
+https://github.com/spring-projects/spring-security/issues/8608,Semantic,Dependency
+https://github.com/spring-projects/spring-session/issues/460,Semantic,Dependency
+https://github.com/antlr/antlr4/issues/1213,Scripting,Scripting
+https://github.com/antlr/antlr4/issues/1280,Scripting,Scripting
+https://github.com/antlr/antlr4/issues/796,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/10356,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/1122,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/1456,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/1827,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/2250,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/2262,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/2384,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/245,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/2591,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/2708,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/2829,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/2912,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/3202,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/3278,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/3280,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/3284,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/331,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/3326,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/3447,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/3459,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/3704,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/4063,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/419,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/436,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/440,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/4537,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/488,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/7191,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/752,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/7607,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/8336,Scripting,Scripting
+https://github.com/bazelbuild/bazel/issues/8384,Scripting,Scripting
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/505,Scripting,Scripting
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/535,Scripting,Scripting
+https://github.com/eclipse/che/issues/15613,Scripting,Scripting
+https://github.com/eclipse/che/issues/2680,Scripting,Scripting
+https://github.com/eclipse/che/issues/3913,Scripting,Scripting
+https://github.com/eclipse/che/issues/6627,Scripting,Scripting
+https://github.com/eclipse/che/issues/7282,Scripting,Scripting
+https://github.com/eclipse/eclipse.jdt.ls/issues/397,Scripting,Scripting
+https://github.com/eclipse/hono/issues/1535,Scripting,Scripting
+https://github.com/eclipse/n4js/issues/1113,Scripting,Scripting
+https://github.com/eclipse/n4js/issues/1739,Scripting,Scripting
+https://github.com/eclipse/vorto/issues/1036,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/12504,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/13616,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/1474,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/15349,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/16717,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/17724,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/3685,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/3691,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/3712,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/3739,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/3928,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/4392,Scripting,Scripting
+https://github.com/elastic/elasticsearch/issues/6730,Scripting,Scripting
+https://github.com/eXist-db/exist/issues/1671,Scripting,Scripting
+https://github.com/facebook/buck/issues/138,Scripting,Scripting
+https://github.com/facebook/buck/issues/38,Scripting,Scripting
+https://github.com/google/caja/issues/1967,Scripting,Scripting
+https://github.com/google/closure-compiler/issues/751,Scripting,Scripting
+https://github.com/GoogleCloudPlatform/google-cloud-eclipse/issues/203,Scripting,Scripting
+https://github.com/graphhopper/graphhopper/issues/953,Scripting,Scripting
+https://github.com/grpc/grpc-java/issues/3650,Scripting,Scripting
+https://github.com/hazelcast/hazelcast-simulator/issues/1104,Scripting,Scripting
+https://github.com/hazelcast/hazelcast-simulator/issues/1359,Scripting,Scripting
+https://github.com/hazelcast/hazelcast-simulator/issues/1384,Scripting,Scripting
+https://github.com/hazelcast/hazelcast-simulator/issues/1531,Scripting,Scripting
+https://github.com/hazelcast/hazelcast/issues/1524,Scripting,Scripting
+https://github.com/jhipster/generator-jhipster/issues/3617,Scripting,Scripting
+https://github.com/jhipster/generator-jhipster/issues/3665,Scripting,Scripting
+https://github.com/jhipster/generator-jhipster/issues/5577,Scripting,Scripting
+https://github.com/jhipster/generator-jhipster/issues/6063,Scripting,Scripting
+https://github.com/jhipster/generator-jhipster/issues/788,Scripting,Scripting
+https://github.com/naver/pinpoint/issues/3726,Scripting,Scripting
+https://github.com/naver/pinpoint/issues/3777,Scripting,Scripting
+https://github.com/naver/pinpoint/issues/5502,Scripting,Scripting
+https://github.com/neo4j/neo4j/issues/159,Scripting,Scripting
+https://github.com/OpenRefine/OpenRefine/issues/463,Scripting,Scripting
+https://github.com/OpenRefine/OpenRefine/issues/632,Scripting,Scripting
+https://github.com/orientechnologies/orientdb/issues/4857,Scripting,Scripting
+https://github.com/orientechnologies/orientdb/issues/6309,Scripting,Scripting
+https://github.com/orientechnologies/orientdb/issues/7056,Scripting,Scripting
+https://github.com/orientechnologies/orientdb/issues/7169,Scripting,Scripting
+https://github.com/pmd/pmd/issues/1873,Scripting,Scripting
+https://github.com/realm/realm-java/issues/2356,Scripting,Scripting
+https://github.com/restlet/restlet-framework-java/issues/1238,Scripting,Scripting
+https://github.com/restlet/restlet-framework-java/issues/1262,Scripting,Scripting
+https://github.com/spring-projects/spring-boot/issues/3199,Scripting,Scripting
+https://github.com/spring-projects/spring-boot/issues/4281,Scripting,Scripting
+https://github.com/spring-projects/spring-boot/issues/4524,Scripting,Scripting
+https://github.com/spring-projects/spring-boot/issues/4923,Scripting,Scripting
+https://github.com/spring-projects/spring-boot/issues/4925,Scripting,Scripting
+https://github.com/spring-projects/spring-boot/issues/5986,Scripting,Scripting
+https://github.com/spring-projects/spring-session/issues/766,Scripting,Scripting
+https://github.com/thinkaurelius/titan/issues/534,Scripting,Scripting
+https://github.com/codenameone/CodenameOne/issues/1160,Other,Ui resources
+https://github.com/eclipse/n4js/issues/1437,Other,Ui resources
+https://github.com/nextcloud/android/issues/577,Other,Ui resources
+https://github.com/checkstyle/checkstyle/issues/2728,Other,Translation
+https://github.com/hazelcast/hazelcast/issues/16801,Other,Other
+https://github.com/oracle/graal/issues/2450,Other,Other
+https://github.com/apache/pulsar/issues/6100,Other,Documentation
+https://github.com/apache/pulsar/issues/6110,Other,Documentation
+https://github.com/apache/pulsar/issues/6900,Other,Documentation
+https://github.com/bazelbuild/bazel/issues/3335,Other,Documentation
+https://github.com/bazelbuild/bazel/issues/4262,Other,Documentation
+https://github.com/bazelbuild/bazel/issues/5469,Other,Documentation
+https://github.com/brettwooldridge/HikariCP/issues/68,Other,Documentation
+https://github.com/checkstyle/checkstyle/issues/3013,Other,Documentation
+https://github.com/checkstyle/checkstyle/issues/6865,Other,Documentation
+https://github.com/eclipse/elk/issues/268,Other,Documentation
+https://github.com/eclipse/kapua/issues/976,Other,Documentation
+https://github.com/eclipse/vorto/issues/148,Other,Documentation
+https://github.com/elastic/elasticsearch/issues/12969,Other,Documentation
+https://github.com/elastic/elasticsearch/issues/13872,Other,Documentation
+https://github.com/elastic/elasticsearch/issues/15096,Other,Documentation
+https://github.com/elastic/elasticsearch/issues/16887,Other,Documentation
+https://github.com/elastic/elasticsearch/issues/18164,Other,Documentation
+https://github.com/elastic/elasticsearch/issues/21226,Other,Documentation
+https://github.com/elastic/elasticsearch/issues/21703,Other,Documentation
+https://github.com/elastic/elasticsearch/issues/34307,Other,Documentation
+https://github.com/hazelcast/hazelcast/issues/15996,Other,Documentation
+https://github.com/hazelcast/hazelcast/issues/2137,Other,Documentation
+https://github.com/jhipster/generator-jhipster/issues/436,Other,Documentation
+https://github.com/JodaOrg/joda-time/issues/261,Other,Documentation
+https://github.com/JodaOrg/joda-time/issues/309,Other,Documentation
+https://github.com/JodaOrg/joda-time/issues/31,Other,Documentation
+https://github.com/JodaOrg/joda-time/issues/78,Other,Documentation
+https://github.com/junit-team/junit5/issues/1289,Other,Documentation
+https://github.com/MenoData/Time4J/issues/267,Other,Documentation
+https://github.com/MenoData/Time4J/issues/558,Other,Documentation
+https://github.com/MenoData/Time4J/issues/637,Other,Documentation
+https://github.com/netty/netty/issues/1247,Other,Documentation
+https://github.com/netty/netty/issues/1508,Other,Documentation
+https://github.com/netty/netty/issues/2130,Other,Documentation
+https://github.com/netty/netty/issues/3184,Other,Documentation
+https://github.com/netty/netty/issues/403,Other,Documentation
+https://github.com/netty/netty/issues/588,Other,Documentation
+https://github.com/pmd/pmd/issues/1695,Other,Documentation
+https://github.com/reactor/reactor-core/issues/229,Other,Documentation
+https://github.com/reactor/reactor-core/issues/930,Other,Documentation
+https://github.com/speedment/speedment/issues/626,Other,Documentation
+https://github.com/spring-projects/spring-batch/issues/3692,Other,Documentation
+https://github.com/spring-projects/spring-boot/issues/2893,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/3229,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/3365,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/3766,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/4769,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/4976,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/5317,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/6521,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/6809,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/7980,Other,Documentation
+https://github.com/spring-projects/spring-security/issues/8069,Other,Documentation
+https://github.com/spring-projects/spring-session/issues/1025,Other,Documentation
+https://github.com/spring-projects/spring-session/issues/1275,Other,Documentation
+https://github.com/spring-projects/spring-session/issues/1276,Other,Documentation
+https://github.com/spring-projects/spring-session/issues/145,Other,Documentation
+https://github.com/spring-projects/spring-session/issues/1603,Other,Documentation
+https://github.com/spring-projects/spring-session/issues/389,Other,Documentation
+https://github.com/square/okhttp/issues/4569,Other,Documentation
+https://github.com/square/okhttp/issues/5593,Other,Documentation
+https://github.com/apache/incubator-dolphinscheduler/issues/1420,Other,Configuration
+https://github.com/apache/pulsar/issues/4957,Other,Configuration
+https://github.com/bazelbuild/bazel/issues/3340,Other,Configuration
+https://github.com/eclipse/che/issues/11287,Other,Configuration
+https://github.com/eclipse/che/issues/13431,Scripting,Scripting
+https://github.com/eclipse/che/issues/3276,Other,Configuration
+https://github.com/eclipse/eclipse.jdt.ls/issues/661,Other,Configuration
+https://github.com/eclipse/hono/issues/1609,Other,Configuration
+https://github.com/eclipse/ice/issues/373,Other,Configuration
+https://github.com/eclipse/jetty.project/issues/1615,Other,Configuration
+https://github.com/eclipse/n4js/issues/14,Other,Configuration
+https://github.com/eclipse/n4js/issues/1422,Other,Configuration
+https://github.com/eclipse/n4js/issues/910,Other,Configuration
+https://github.com/eclipse/n4js/issues/938,Other,Configuration
+https://github.com/eclipse/reddeer/issues/715,Other,Configuration
+https://github.com/facebook/fresco/issues/2039,Other,Configuration
+https://github.com/jhipster/generator-jhipster/issues/1812,Other,Configuration
+https://github.com/jhipster/generator-jhipster/issues/1900,Other,Configuration
+https://github.com/jhipster/generator-jhipster/issues/269,Other,Configuration
+https://github.com/jhipster/generator-jhipster/issues/3579,Other,Configuration
+https://github.com/naver/pinpoint/issues/1679,Other,Configuration
+https://github.com/naver/pinpoint/issues/2362,Other,Configuration
+https://github.com/requery/requery/issues/136,Other,Configuration
+https://github.com/spring-projects/spring-boot/issues/433,Other,Configuration
+https://github.com/bazelbuild/bazel/issues/10425,Other,Build system
+https://github.com/bazelbuild/bazel/issues/1159,Other,Build system
+https://github.com/bazelbuild/bazel/issues/3147,Other,Build system
+https://github.com/bazelbuild/bazel/issues/881,Scripting,Scripting
+https://github.com/DiUS/pact-jvm/issues/196,Other,Build system
+https://github.com/eclipse/elk/issues/487,Other,Build system
+https://github.com/eclipse/hono/issues/1105,Other,Build system
+https://github.com/eclipse/ice/issues/190,Other,Build system
+https://github.com/eclipse/kapua/issues/1,Other,Build system
+https://github.com/eclipse/n4js/issues/84,Other,Build system
+https://github.com/elastic/elasticsearch/issues/3820,Other,Build system
+https://github.com/eXist-db/exist/issues/1834,Other,Build system
+https://github.com/google/ExoPlayer/issues/4234,Other,Build system
+https://github.com/google/ExoPlayer/issues/5477,Other,Build system
+https://github.com/google/ExoPlayer/issues/5922,Other,Build system
+https://github.com/graphhopper/graphhopper/issues/1288,Other,Build system
+https://github.com/grpc/grpc-java/issues/2985,Other,Build system
+https://github.com/jhipster/generator-jhipster/issues/11615,Other,Build system
+https://github.com/jhipster/generator-jhipster/issues/686,Other,Build system
+https://github.com/junit-team/junit5/issues/1000,Other,Build system
+https://github.com/junit-team/junit5/issues/1546,Other,Build system
+https://github.com/junit-team/junit5/issues/1547,Other,Build system
+https://github.com/junit-team/junit5/issues/1690,Other,Build system
+https://github.com/junit-team/junit5/issues/308,Other,Build system
+https://github.com/junit-team/junit5/issues/398,Other,Build system
+https://github.com/junit-team/junit5/issues/556,Other,Build system
+https://github.com/junit-team/junit5/issues/894,Other,Build system
+https://github.com/mockito/mockito/issues/88,Other,Build system
+https://github.com/nextcloud/android/issues/6135,Other,Build system
+https://github.com/OpenRefine/OpenRefine/issues/2286,Other,Build system
+https://github.com/requery/requery/issues/75,Other,Build system
+https://github.com/spring-projects/spring-boot/issues/11200,Other,Build system
+https://github.com/spring-projects/spring-boot/issues/11245,Other,Build system
+https://github.com/spring-projects/spring-boot/issues/1199,Other,Build system
+https://github.com/spring-projects/spring-boot/issues/14464,Other,Build system
+https://github.com/spring-projects/spring-boot/issues/16807,Other,Build system
+https://github.com/spring-projects/spring-boot/issues/20441,Other,Build system
+https://github.com/spring-projects/spring-boot/issues/4627,Other,Build system
+https://github.com/spring-projects/spring-framework/issues/24605,Other,Build system
+https://github.com/spring-projects/spring-security/issues/3578,Other,Build system
+https://github.com/spring-projects/spring-security/issues/3852,Other,Build system
+https://github.com/spring-projects/spring-security/issues/4308,Other,Build system
+https://github.com/spring-projects/spring-security/issues/4878,Other,Build system
+https://github.com/spring-projects/spring-security/issues/5030,Other,Build system
+https://github.com/spring-projects/spring-security/issues/5724,Other,Build system
+https://github.com/spring-projects/spring-session/issues/268,Other,Build system
+https://github.com/spring-projects/spring-session/issues/279,Other,Build system
+https://github.com/spring-projects/spring-session/issues/952,Other,Build system
+https://github.com/thinkaurelius/titan/issues/422,Other,Build system
+https://github.com/yegor256/takes/issues/403,Other,Build system
+https://github.com/apache/pulsar/issues/5634,not java,
+https://github.com/bazelbuild/bazel/issues/1113,not java,
+https://github.com/bazelbuild/bazel/issues/1671,not java,
+https://github.com/bazelbuild/bazel/issues/1719,not java,
+https://github.com/bazelbuild/bazel/issues/2201,not java,
+https://github.com/bazelbuild/bazel/issues/2405,not java,
+https://github.com/bazelbuild/bazel/issues/2506,not java,
+https://github.com/bazelbuild/bazel/issues/26,not java,
+https://github.com/bazelbuild/bazel/issues/2695,not java,
+https://github.com/bazelbuild/bazel/issues/3440,not java,
+https://github.com/bazelbuild/bazel/issues/4378,not java,
+https://github.com/bazelbuild/bazel/issues/6899,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1016,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1137,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1176,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/267,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/305,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/336,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/339,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/529,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/706,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/825,not java,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/891,not java,
+https://github.com/codenameone/CodenameOne/issues/1745,not java,
+https://github.com/DiUS/pact-jvm/issues/1008,not java,
+https://github.com/DiUS/pact-jvm/issues/101,not java,
+https://github.com/DiUS/pact-jvm/issues/1031,not java,
+https://github.com/DiUS/pact-jvm/issues/153,not java,
+https://github.com/DiUS/pact-jvm/issues/160,not java,
+https://github.com/DiUS/pact-jvm/issues/167,not java,
+https://github.com/DiUS/pact-jvm/issues/262,not java,
+https://github.com/DiUS/pact-jvm/issues/290,not java,
+https://github.com/DiUS/pact-jvm/issues/34,not java,
+https://github.com/DiUS/pact-jvm/issues/361,not java,
+https://github.com/DiUS/pact-jvm/issues/411,not java,
+https://github.com/DiUS/pact-jvm/issues/523,not java,
+https://github.com/DiUS/pact-jvm/issues/533,not java,
+https://github.com/DiUS/pact-jvm/issues/555,not java,
+https://github.com/DiUS/pact-jvm/issues/698,not java,
+https://github.com/DiUS/pact-jvm/issues/706,not java,
+https://github.com/DiUS/pact-jvm/issues/71,not java,
+https://github.com/DiUS/pact-jvm/issues/768,not java,
+https://github.com/DiUS/pact-jvm/issues/77,not java,
+https://github.com/DiUS/pact-jvm/issues/786,not java,
+https://github.com/DiUS/pact-jvm/issues/798,not java,
+https://github.com/DiUS/pact-jvm/issues/879,not java,
+https://github.com/DiUS/pact-jvm/issues/882,not java,
+https://github.com/DiUS/pact-jvm/issues/894,not java,
+https://github.com/DiUS/pact-jvm/issues/909,not java,
+https://github.com/DiUS/pact-jvm/issues/930,not java,
+https://github.com/DiUS/pact-jvm/issues/935,not java,
+https://github.com/DiUS/pact-jvm/issues/957,not java,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1273,not java,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1359,not java,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1365,not java,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1644,not java,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1859,not java,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1863,not java,
+https://github.com/eclipse/che/issues/13547,not java,
+https://github.com/eclipse/che/issues/14121,not java,
+https://github.com/eclipse/deeplearning4j/issues/765,not java,
+https://github.com/eclipse/elk/issues/133,not java,
+https://github.com/eclipse/elk/issues/205,not java,
+https://github.com/eclipse/elk/issues/559,not java,
+https://github.com/eclipse/elk/issues/567,not java,
+https://github.com/eclipse/elk/issues/604,not java,
+https://github.com/eclipse/n4js/issues/1027,not java,
+https://github.com/eclipse/n4js/issues/1107,not java,
+https://github.com/eclipse/n4js/issues/1317,not java,
+https://github.com/eclipse/n4js/issues/1635,not java,
+https://github.com/eclipse/n4js/issues/1642,not java,
+https://github.com/eclipse/n4js/issues/1696,not java,
+https://github.com/eclipse/n4js/issues/1712,not java,
+https://github.com/eclipse/n4js/issues/1780,not java,
+https://github.com/eclipse/n4js/issues/346,not java,
+https://github.com/eclipse/n4js/issues/395,not java,
+https://github.com/eclipse/n4js/issues/518,not java,
+https://github.com/eclipse/n4js/issues/537,not java,
+https://github.com/eclipse/n4js/issues/578,not java,
+https://github.com/eclipse/n4js/issues/585,not java,
+https://github.com/eclipse/n4js/issues/642,not java,
+https://github.com/eclipse/n4js/issues/644,not java,
+https://github.com/eclipse/n4js/issues/659,not java,
+https://github.com/eclipse/n4js/issues/745,not java,
+https://github.com/eclipse/n4js/issues/991,not java,
+https://github.com/eclipse/vorto/issues/1051,not java,
+https://github.com/eclipse/vorto/issues/1052,not java,
+https://github.com/eclipse/vorto/issues/303,not java,
+https://github.com/eclipse/vorto/issues/306,not java,
+https://github.com/elastic/elasticsearch/issues/27126,not java,
+https://github.com/facebook/fresco/issues/2073,not java,
+https://github.com/google/caja/issues/1878,not java,
+https://github.com/google/closure-compiler/issues/514,not java,
+https://github.com/graphhopper/graphhopper/issues/578,not java,
+https://github.com/graphhopper/graphhopper/issues/609,not java,
+https://github.com/hazelcast/hazelcast-simulator/issues/1112,not java,
+https://github.com/jankotek/mapdb/issues/746,not java,
+https://github.com/jankotek/mapdb/issues/760,not java,
+https://github.com/jankotek/mapdb/issues/816,not java,
+https://github.com/jankotek/mapdb/issues/819,not java,
+https://github.com/jankotek/mapdb/issues/964,not java,
+https://github.com/JetBrains/idea-gitignore/issues/166,not java,
+https://github.com/jhipster/generator-jhipster/issues/1896,not java,
+https://github.com/jhipster/generator-jhipster/issues/2000,not java,
+https://github.com/jhipster/generator-jhipster/issues/314,not java,
+https://github.com/jhipster/generator-jhipster/issues/3421,not java,
+https://github.com/jhipster/generator-jhipster/issues/3539,not java,
+https://github.com/jhipster/generator-jhipster/issues/3549,not java,
+https://github.com/jhipster/generator-jhipster/issues/3551,not java,
+https://github.com/jhipster/generator-jhipster/issues/5277,not java,
+https://github.com/jhipster/generator-jhipster/issues/579,not java,
+https://github.com/jhipster/generator-jhipster/issues/5803,not java,
+https://github.com/jhipster/generator-jhipster/issues/592,not java,
+https://github.com/jhipster/generator-jhipster/issues/673,not java,
+https://github.com/jhipster/generator-jhipster/issues/876,not java,
+https://github.com/junit-team/junit5/issues/1234,not java,
+https://github.com/junit-team/junit5/issues/1432,not java,
+https://github.com/junit-team/junit5/issues/1699,not java,
+https://github.com/junit-team/junit5/issues/284,not java,
+https://github.com/naver/pinpoint/issues/3667,not java,
+https://github.com/naver/pinpoint/issues/3799,not java,
+https://github.com/naver/pinpoint/issues/3828,not java,
+https://github.com/naver/pinpoint/issues/3898,not java,
+https://github.com/naver/pinpoint/issues/4324,not java,
+https://github.com/naver/pinpoint/issues/5623,not java,
+https://github.com/naver/pinpoint/issues/5658,not java,
+https://github.com/naver/pinpoint/issues/6130,not java,
+https://github.com/neo4j/neo4j/issues/10100,not java,
+https://github.com/neo4j/neo4j/issues/10831,not java,
+https://github.com/neo4j/neo4j/issues/10978,not java,
+https://github.com/neo4j/neo4j/issues/12059,not java,
+https://github.com/neo4j/neo4j/issues/12195,not java,
+https://github.com/neo4j/neo4j/issues/5598,not java,
+https://github.com/neo4j/neo4j/issues/5745,not java,
+https://github.com/neo4j/neo4j/issues/578,not java,
+https://github.com/neo4j/neo4j/issues/5921,not java,
+https://github.com/neo4j/neo4j/issues/6716,not java,
+https://github.com/neo4j/neo4j/issues/6979,not java,
+https://github.com/neo4j/neo4j/issues/7055,not java,
+https://github.com/neo4j/neo4j/issues/7059,not java,
+https://github.com/neo4j/neo4j/issues/7085,not java,
+https://github.com/neo4j/neo4j/issues/7546,not java,
+https://github.com/neo4j/neo4j/issues/7903,not java,
+https://github.com/neo4j/neo4j/issues/9329,not java,
+https://github.com/neo4j/neo4j/issues/9571,not java,
+https://github.com/neo4j/neo4j/issues/9847,not java,
+https://github.com/netty/netty/issues/2361,not java,
+https://github.com/netty/netty/issues/2558,not java,
+https://github.com/netty/netty/issues/2867,not java,
+https://github.com/netty/netty/issues/7021,not java,
+https://github.com/nextcloud/android/issues/4333,not java,
+https://github.com/nextcloud/android/issues/6041,not java,
+https://github.com/OpenRefine/OpenRefine/issues/1381,not java,
+https://github.com/OpenRefine/OpenRefine/issues/1777,not java,
+https://github.com/OpenRefine/OpenRefine/issues/2097,not java,
+https://github.com/OpenRefine/OpenRefine/issues/802,not java,
+https://github.com/pmd/pmd/issues/1878,not java,
+https://github.com/realm/realm-java/issues/2478,not java,
+https://github.com/realm/realm-java/issues/2484,not java,
+https://github.com/realm/realm-java/issues/5195,not java,
+https://github.com/requery/requery/issues/255,not java,
+https://github.com/requery/requery/issues/502,not java,
+https://github.com/requery/requery/issues/592,not java,
+https://github.com/requery/requery/issues/693,not java,
+https://github.com/speedment/speedment/issues/268,not java,
+https://github.com/spring-projects/spring-boot/issues/1988,not java,
+https://github.com/spring-projects/spring-boot/issues/3841,not java,
+https://github.com/square/leakcanary/issues/1592,not java,
+https://github.com/square/moshi/issues/1046,not java,
+https://github.com/square/moshi/issues/563,not java,
+https://github.com/square/okhttp/issues/5161,not java,
+https://github.com/square/okhttp/issues/5177,not java,
+https://github.com/square/okhttp/issues/5199,not java,
+https://github.com/square/okhttp/issues/5413,not java,
+https://github.com/square/okhttp/issues/5519,not java,
+https://github.com/square/okhttp/issues/5547,not java,
+https://github.com/square/okhttp/issues/5770,not java,
+https://github.com/square/okhttp/issues/5819,not java,
+https://github.com/apache/shardingsphere/issues/90,not english,
+https://github.com/apache/skywalking/issues/42,NOT ENGLISH,
+https://github.com/naver/pinpoint/issues/2205,not english,
+https://github.com/antlr/antlr4/issues/176,excluded,
+https://github.com/antlr/antlr4/issues/2172,excluded,
+https://github.com/bazelbuild/bazel/issues/1603,excluded,
+https://github.com/bazelbuild/bazel/issues/3672,excluded,
+https://github.com/bazelbuild/bazel/issues/6122,excluded,
+https://github.com/bazelbuild/bazel/issues/7615,excluded,
+https://github.com/checkstyle/checkstyle/issues/2601,excluded,
+https://github.com/codenameone/CodenameOne/issues/1482,excluded,
+https://github.com/DiUS/pact-jvm/issues/78,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1167,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1179,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1223,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1270,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1294,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1304,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1312,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1322,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1379,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1385,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1390,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1425,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1432,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1440,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1441,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1565,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1662,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1757,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1790,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1811,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1828,excluded,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1832,excluded,
+https://github.com/eclipse/che/issues/15906,excluded,
+https://github.com/eclipse/eclipse.jdt.ls/issues/244,excluded,
+https://github.com/eclipse/eclipse.jdt.ls/issues/268,excluded,
+https://github.com/eclipse/eclipse.jdt.ls/issues/388,excluded,
+https://github.com/eclipse/ice/issues/221,excluded,
+https://github.com/eclipse/ice/issues/310,excluded,
+https://github.com/eclipse/n4js/issues/1047,excluded,
+https://github.com/eclipse/n4js/issues/1055,excluded,
+https://github.com/eclipse/n4js/issues/1341,excluded,
+https://github.com/eclipse/n4js/issues/173,excluded,
+https://github.com/eclipse/n4js/issues/678,excluded,
+https://github.com/eclipse/n4js/issues/998,excluded,
+https://github.com/elastic/elasticsearch/issues/11594,excluded,
+https://github.com/elastic/elasticsearch/issues/2071,excluded,
+https://github.com/elastic/elasticsearch/issues/329,excluded,
+https://github.com/facebook/buck/issues/1537,excluded,
+https://github.com/GoogleCloudPlatform/google-cloud-eclipse/issues/481,excluded,
+https://github.com/graphhopper/graphhopper/issues/568,excluded,
+https://github.com/jankotek/mapdb/issues/418,excluded,
+https://github.com/JetBrains/idea-gitignore/issues/397,excluded,
+https://github.com/jhipster/generator-jhipster/issues/11636,excluded,
+https://github.com/jhipster/generator-jhipster/issues/1819,excluded,
+https://github.com/jhipster/generator-jhipster/issues/192,excluded,
+https://github.com/JodaOrg/joda-time/issues/20,excluded,
+https://github.com/JodaOrg/joda-time/issues/83,excluded,
+https://github.com/junit-team/junit4/issues/1073,excluded,
+https://github.com/junit-team/junit5/issues/1600,excluded,
+https://github.com/junit-team/junit5/issues/384,excluded,
+https://github.com/junit-team/junit5/issues/743,excluded,
+https://github.com/junit-team/junit5/issues/833,excluded,
+https://github.com/mapsforge/mapsforge/issues/748,excluded,
+https://github.com/nextcloud/android/issues/4107,excluded,
+https://github.com/orientechnologies/orientdb/issues/4557,excluded,
+https://github.com/reactor/reactor-core/issues/881,excluded,
+https://github.com/realm/realm-java/issues/4140,excluded,
+https://github.com/redisson/redisson/issues/606,excluded,
+https://github.com/restlet/restlet-framework-java/issues/964,excluded,
+https://github.com/speedment/speedment/issues/141,excluded,
+https://github.com/spring-projects/spring-boot/issues/11686,excluded,
+https://github.com/spring-projects/spring-boot/issues/19823,excluded,
+https://github.com/spring-projects/spring-boot/issues/6609,excluded,
+https://github.com/spring-projects/spring-boot/issues/6874,excluded,
+https://github.com/spring-projects/spring-session/issues/33,excluded,
+https://github.com/Automattic/simplenote-android/issues/60,,
+https://github.com/bazelbuild/bazel/issues/1002,,
+https://github.com/bazelbuild/bazel/issues/1004,,
+https://github.com/bazelbuild/bazel/issues/1101,,
+https://github.com/bazelbuild/bazel/issues/1182,,
+https://github.com/bazelbuild/bazel/issues/1219,,
+https://github.com/bazelbuild/bazel/issues/1614,,
+https://github.com/bazelbuild/bazel/issues/1714,,
+https://github.com/bazelbuild/bazel/issues/1830,,
+https://github.com/bazelbuild/bazel/issues/1864,,
+https://github.com/bazelbuild/bazel/issues/2086,,
+https://github.com/bazelbuild/bazel/issues/2125,,
+https://github.com/bazelbuild/bazel/issues/2159,,
+https://github.com/bazelbuild/bazel/issues/2248,,
+https://github.com/bazelbuild/bazel/issues/2260,,
+https://github.com/bazelbuild/bazel/issues/2272,,
+https://github.com/bazelbuild/bazel/issues/2275,,
+https://github.com/bazelbuild/bazel/issues/2309,,
+https://github.com/bazelbuild/bazel/issues/2354,,
+https://github.com/bazelbuild/bazel/issues/2418,,
+https://github.com/bazelbuild/bazel/issues/25,,
+https://github.com/bazelbuild/bazel/issues/2502,,
+https://github.com/bazelbuild/bazel/issues/262,,
+https://github.com/bazelbuild/bazel/issues/2634,,
+https://github.com/bazelbuild/bazel/issues/2662,,
+https://github.com/bazelbuild/bazel/issues/2672,,
+https://github.com/bazelbuild/bazel/issues/2684,,
+https://github.com/bazelbuild/bazel/issues/2714,,
+https://github.com/bazelbuild/bazel/issues/2753,,
+https://github.com/bazelbuild/bazel/issues/2774,,
+https://github.com/bazelbuild/bazel/issues/2817,,
+https://github.com/bazelbuild/bazel/issues/3077,,
+https://github.com/bazelbuild/bazel/issues/3237,,
+https://github.com/bazelbuild/bazel/issues/3472,,
+https://github.com/bazelbuild/bazel/issues/3529,,
+https://github.com/bazelbuild/bazel/issues/3703,,
+https://github.com/bazelbuild/bazel/issues/3723,,
+https://github.com/bazelbuild/bazel/issues/3808,,
+https://github.com/bazelbuild/bazel/issues/3955,,
+https://github.com/bazelbuild/bazel/issues/3977,,
+https://github.com/bazelbuild/bazel/issues/4588,,
+https://github.com/bazelbuild/bazel/issues/4883,,
+https://github.com/bazelbuild/bazel/issues/5038,,
+https://github.com/bazelbuild/bazel/issues/572,,
+https://github.com/bazelbuild/bazel/issues/609,,
+https://github.com/bazelbuild/bazel/issues/6283,,
+https://github.com/bazelbuild/bazel/issues/6376,,
+https://github.com/bazelbuild/bazel/issues/6685,,
+https://github.com/bazelbuild/bazel/issues/7392,,
+https://github.com/bazelbuild/bazel/issues/760,,
+https://github.com/bazelbuild/bazel/issues/7705,,
+https://github.com/bazelbuild/bazel/issues/7819,,
+https://github.com/bazelbuild/bazel/issues/7947,,
+https://github.com/bazelbuild/bazel/issues/796,,
+https://github.com/bazelbuild/bazel/issues/895,,
+https://github.com/bazelbuild/bazel/issues/938,,
+https://github.com/bazelbuild/bazel/issues/976,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1045,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1156,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1251,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1335,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/397,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/404,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/531,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/554,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/736,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/776,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/919,,
+https://github.com/DiUS/pact-jvm/issues/1011,,
+https://github.com/DiUS/pact-jvm/issues/135,,
+https://github.com/DiUS/pact-jvm/issues/156,,
+https://github.com/DiUS/pact-jvm/issues/743,,
+https://github.com/DiUS/pact-jvm/issues/877,,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1392,,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1525,,
+https://github.com/eclipse/deeplearning4j/issues/818,,
+https://github.com/eclipse/elk/issues/481,,
+https://github.com/eclipse/hono/issues/1235,,
+https://github.com/eclipse/hono/issues/1388,,
+https://github.com/eclipse/hono/issues/1658,,
+https://github.com/eclipse/hono/issues/1780,,
+https://github.com/eclipse/n4js/issues/1225,,
+https://github.com/elastic/elasticsearch/issues/30054,,
+https://github.com/elastic/elasticsearch/issues/3452,,
+https://github.com/elastic/elasticsearch/issues/7713,,
+https://github.com/eXist-db/exist/issues/1067,,
+https://github.com/graphhopper/graphhopper/issues/1103,,
+https://github.com/grpc/grpc-java/issues/3413,,
+https://github.com/hazelcast/hazelcast/issues/322,,
+https://github.com/JetBrains/idea-gitignore/issues/339,,
+https://github.com/JetBrains/idea-gitignore/issues/394,,
+https://github.com/jhipster/generator-jhipster/issues/1682,,
+https://github.com/jhipster/generator-jhipster/issues/2031,,
+https://github.com/jhipster/generator-jhipster/issues/2202,,
+https://github.com/jhipster/generator-jhipster/issues/302,,
+https://github.com/jhipster/generator-jhipster/issues/3052,,
+https://github.com/jhipster/generator-jhipster/issues/350,,
+https://github.com/jhipster/generator-jhipster/issues/3839,,
+https://github.com/jhipster/generator-jhipster/issues/4158,,
+https://github.com/jhipster/generator-jhipster/issues/4208,,
+https://github.com/jhipster/generator-jhipster/issues/467,,
+https://github.com/jhipster/generator-jhipster/issues/7865,,
+https://github.com/jhipster/generator-jhipster/issues/8403,,
+https://github.com/JodaOrg/joda-time/issues/503,,
+https://github.com/neo4j/neo4j/issues/10712,,
+https://github.com/neo4j/neo4j/issues/387,,
+https://github.com/netty/netty/issues/2623,,
+https://github.com/netty/netty/issues/4694,,
+https://github.com/OpenRefine/OpenRefine/issues/773,,
+https://github.com/realm/realm-java/issues/2348,,
+https://github.com/spring-projects/spring-boot/issues/1845,,
+https://github.com/spring-projects/spring-boot/issues/21451,,
+https://github.com/spring-projects/spring-boot/issues/21939,,
+https://github.com/spring-projects/spring-boot/issues/7063,,
+https://github.com/spring-projects/spring-boot/issues/9935,,
+https://github.com/spring-projects/spring-boot/issues/997,,
+https://github.com/spring-projects/spring-framework/issues/23660,,
+https://github.com/spring-projects/spring-security/issues/3751,,
+https://github.com/spring-projects/spring-security/issues/7737,,
+https://github.com/spring-projects/spring-security/issues/8506,,
+https://github.com/square/okhttp/issues/5791,,
+https://github.com/square/okhttp/issues/5859,,

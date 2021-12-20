@@ -1,0 +1,247 @@
+url,RootCause,RootCauseDetail
+https://github.com/spring-projects/spring-security/issues/4794,Semantic,Wrong evaluation
+https://github.com/bazelbuild/bazel/issues/6806,Semantic,Wrong method used
+https://github.com/bazelbuild/bazel/issues/2239,Semantic,Incorrect value
+https://github.com/bazelbuild/bazel/issues/3553,Semantic,Re-implementation
+https://github.com/netty/netty/issues/4205,Memory,Resource leak
+https://github.com/spring-projects/spring-boot/issues/14898,Memory,Other
+https://github.com/netty/netty/issues/2814,Semantic,Wrong class used
+https://github.com/netty/netty/issues/1023,Semantic,Wrong datatype
+https://github.com/jhy/jsoup/issues/704,Semantic,If condition missing
+https://github.com/haraldk/TwelveMonkeys/issues/399,Semantic,Design change (Big)
+https://github.com/brettwooldridge/HikariCP/issues/125,Semantic,If (branch) missing
+https://github.com/netty/netty/issues/7337,Memory,Memory leak
+https://github.com/netty/netty/issues/2363,Memory,Memory leak
+https://github.com/netty/netty/issues/6282,Semantic,Missing case initialization
+https://github.com/netty/netty/issues/1898,Semantic,Exception should not be thrown
+https://github.com/netty/netty/issues/7362,Memory,Other
+https://github.com/square/leakcanary/issues/285,Memory,Memory leak
+https://github.com/eclipse/hono/issues/457,Memory,Resource leak
+https://github.com/intuit/karate/issues/686,Semantic,Missing case complex
+https://github.com/spring-projects/spring-batch/issues/766,Semantic,Wrong exception
+https://github.com/hazelcast/hazelcast/issues/14358,Semantic,Missing case complex
+https://github.com/elastic/elasticsearch/issues/3313,Semantic,If (branch) missing
+https://github.com/netty/netty/issues/3837,Memory,Memory leak
+https://github.com/redisson/redisson/issues/789,Semantic,Data missing / not propagated
+https://github.com/JetBrains/idea-gitignore/issues/415,Semantic,Design change (Big)
+https://github.com/redisson/redisson/issues/237,Memory,Memory leak
+https://github.com/skylot/jadx/issues/743,Concurrency,Deadlock
+https://github.com/redisson/redisson/issues/104,Semantic,Null check
+https://github.com/spring-projects/spring-boot/issues/10496,Semantic,If (branch) missing
+https://github.com/eclipse/n4js/issues/435,Semantic,If (branch) missing
+https://github.com/google/guava/issues/2254,Semantic,Data missing / not propagated
+https://github.com/netty/netty/issues/2014,Semantic,If (branch) missing
+https://github.com/reactor/reactor-core/issues/257,Semantic,Exception should be thrown
+https://github.com/elastic/elasticsearch/issues/13249,Other,Misconfiguration
+https://github.com/checkstyle/checkstyle/issues/4945,Concurrency,ConcurrentModificationException
+https://github.com/brettwooldridge/HikariCP/issues/206,Memory,Resource leak
+https://github.com/elastic/elasticsearch/issues/15148,Semantic,Exception processing
+https://github.com/bazelbuild/bazel/issues/5830,Semantic,Incorrect value
+https://github.com/Automattic/simplenote-android/issues/109,Semantic,Wrong method used
+https://github.com/bytedeco/javacv/issues/116,Semantic,Wrong method used
+https://github.com/redisson/redisson/issues/1158,Memory,Memory leak
+https://github.com/bazelbuild/bazel/issues/1166,Other,Misconfiguration
+https://github.com/spring-projects/spring-boot/issues/12965,Semantic,Complex change
+https://github.com/checkstyle/checkstyle/issues/4563,Semantic,Native overflow
+https://github.com/spring-projects/spring-boot/issues/20900,Memory,Resource leak
+https://github.com/netty/netty/issues/1535,Semantic,Wrong method used
+https://github.com/mybatis/mybatis-3/issues/61,Semantic,Exception should be thrown
+https://github.com/hazelcast/hazelcast/issues/575,Semantic,Catching too much
+https://github.com/spring-projects/spring-boot/issues/10317,Semantic,Wrong method used
+https://github.com/elastic/elasticsearch/issues/3769,Semantic,Missing evaluation
+https://github.com/square/leakcanary/issues/968,Semantic,Complex change
+https://github.com/elastic/elasticsearch/issues/5779,Semantic,Complex change
+https://github.com/spring-projects/spring-session/issues/154,Semantic,If condition missing
+https://github.com/netty/netty/issues/2252,Semantic,Call missing
+https://github.com/spring-projects/spring-framework/issues/23571,Memory,Memory leak
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1522,Semantic,Scope wrong
+https://github.com/netty/netty/issues/1975,Memory,Memory leak
+https://github.com/bazelbuild/bazel/issues/9995,Concurrency,Atomic violation
+https://github.com/jankotek/mapdb/issues/381,Memory,Memory leak
+https://github.com/spring-projects/spring-boot/issues/4124,Memory,Resource leak
+https://github.com/bazelbuild/bazel/issues/5799,Semantic,Call missing
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1711,Semantic,Null Check
+https://github.com/redisson/redisson/issues/1442,Memory,Memory leak
+https://github.com/google/ExoPlayer/issues/268,Other,Misconfiguration
+https://github.com/netty/netty/issues/5833,Memory,Memory leak
+https://github.com/speedment/speedment/issues/234,Concurrency,Race Condition
+https://github.com/spring-projects/spring-session/issues/665,Semantic,Wrong class used
+https://github.com/elastic/elasticsearch/issues/5958,Semantic,Deadlock
+https://github.com/AsyncHttpClient/async-http-client/issues/1357,Semantic,Native overflow
+https://github.com/haraldk/TwelveMonkeys/issues/492,Semantic,Wrong method used
+https://github.com/brettwooldridge/HikariCP/issues/236,Semantic,Wrong method used
+https://github.com/netty/netty/issues/4265,Semantic,Exception should be thrown
+https://github.com/hazelcast/hazelcast/issues/12470,Memory,Memory leak
+https://github.com/bazelbuild/bazel/issues/4398,Semantic,Other
+https://github.com/spring-projects/spring-boot/issues/17798,Semantic,Incorrect value
+https://github.com/jhy/jsoup/issues/740,Concurrency,Race Condition
+https://github.com/MenoData/Time4J/issues/809,Semantic,Wrong evaluation
+https://github.com/square/okhttp/issues/3521,Memory,Resource leak
+https://github.com/bazelbuild/bazel/issues/3416,Semantic,If condition missing
+https://github.com/eclipse/elk/issues/67,Memory,Memory leak
+https://github.com/netty/netty/issues/309,Semantic,Method override missing
+https://github.com/Automattic/simplenote-android/issues/338,Semantic,Incorrect flow
+https://github.com/google/ExoPlayer/issues/6146,Concurrency,Race Condition
+https://github.com/brettwooldridge/HikariCP/issues/115,Semantic,If condition missing
+https://github.com/google/ExoPlayer/issues/2319,Memory,Memory leak
+https://github.com/netty/netty/issues/4829,Memory,Race Condition
+https://github.com/google/ExoPlayer/issues/2891,Semantic,Incorrect flow
+https://github.com/elastic/elasticsearch/issues/1321,Semantic,Wrong evaluation
+https://github.com/netty/netty/issues/1524,Memory,Resource leak
+https://github.com/yegor256/takes/issues/331,Semantic,Missing Evaluation
+https://github.com/bazelbuild/bazel/issues/8030,Semantic,Scope Wrong
+https://github.com/brettwooldridge/HikariCP/issues/696,Semantic,Native Overflow
+https://github.com/netty/netty/issues/7383,Semantic,Wrong method used
+https://github.com/spring-projects/spring-session/issues/76,Memory,Memory leak
+https://github.com/naver/pinpoint/issues/3712,Concurrency,Deadlock
+https://github.com/netty/netty/issues/1390,Semantic,If condition missing
+https://github.com/google/ExoPlayer/issues/2311,Semantic,Native Overflow
+https://github.com/mapsforge/mapsforge/issues/920,Memory,Memory leak
+https://github.com/bytedeco/javacv/issues/1179,Semantic,Wrong method used
+https://github.com/redisson/redisson/issues/1294,Semantic,data missing / not propagated
+https://github.com/nextcloud/android/issues/3728,Semantic,Call missing
+https://github.com/google/ExoPlayer/issues/4406,Semantic,Complex change
+https://github.com/elastic/elasticsearch/issues/43840,Concurrency,Missing synchronization
+https://github.com/jhy/jsoup/issues/977,Semantic,Scope wrong
+https://github.com/elastic/elasticsearch/issues/1147,Semantic,Wrong Class used
+https://github.com/apache/pulsar/issues/4790,Concurrency,Race Condition
+https://github.com/google/ExoPlayer/issues/3525,Semantic,If condition missing
+https://github.com/graphhopper/graphhopper/issues/1223,Semantic,If condition missing
+https://github.com/checkstyle/checkstyle/issues/7756,Semantic,Complex Change
+https://github.com/elastic/elasticsearch/issues/9107,Memory,Memory Leak
+https://github.com/speedment/speedment/issues/200,Semantic,Nullcheck
+https://github.com/spring-projects/spring-boot/issues/2218,Semantic,Exception Handling
+https://github.com/checkstyle/checkstyle/issues/3839,Semantic,Wrong method used
+https://github.com/redisson/redisson/issues/1896,Memory,Resource Leak
+https://github.com/bazelbuild/bazel/issues/2474,Semantic,If condition missing
+https://github.com/spring-projects/spring-boot/issues/17927,Semantic,Wrong method used
+https://github.com/AsyncHttpClient/async-http-client/issues/1325,Semantic,Native Overflow
+https://github.com/elastic/elasticsearch/issues/15689,Semantic,If condition missing
+https://github.com/square/okhttp/issues/4658,Memory,Resource Leak
+https://github.com/JetBrains/idea-gitignore/issues/480,Semantic,Wrong datatype
+https://github.com/elastic/elasticsearch/issues/1081,Semantic,Wrong method used
+https://github.com/redisson/redisson/issues/338,Memory,Memory Leak
+https://github.com/realm/realm-java/issues/1970,Semantic,Catching too much
+https://github.com/brettwooldridge/HikariCP/issues/44,Memory,Resource Leak
+https://github.com/junit-team/junit5/issues/417,Concurrency,Race Condition
+https://github.com/haraldk/TwelveMonkeys/issues/172,Semantic,Native Overflow
+https://github.com/elastic/elasticsearch/issues/868,Semantic,Call missing
+https://github.com/spring-projects/spring-framework/issues/22896,Concurrency,Race Condition
+https://github.com/spring-projects/spring-boot/issues/9141,Semantic,Call missing
+https://github.com/elastic/elasticsearch/issues/1154,Semantic,If condition missing
+https://github.com/apache/pulsar/issues/4957,Other,Misconfiguration
+https://github.com/elastic/elasticsearch/issues/1324,Semantic,Native Overflow
+https://github.com/google/ExoPlayer/issues/2292,Semantic,Incorrect Flow
+https://github.com/spring-projects/spring-framework/issues/24346,Memory,Memory Leak
+https://github.com/spring-projects/spring-boot/issues/6360,Semantic,Call missing
+https://github.com/intuit/karate/issues/198,Semantic,Complex Change
+https://github.com/facebook/fresco/issues/1664,Concurrency,Race Condition
+https://github.com/hazelcast/hazelcast/issues/2137,Other,Documentation
+https://github.com/square/okhttp/issues/644,Semantic,Incorrect Flow
+https://github.com/elastic/elasticsearch/issues/3531,Semantic,Wrong Method used
+https://github.com/elastic/elasticsearch/issues/8046,Semantic,Exception Handling
+https://github.com/junit-team/junit5/issues/1578,Memory,Memory Leak
+https://github.com/redisson/redisson/issues/2670,Semantic,Call missing
+https://github.com/checkstyle/checkstyle/issues/3962,Memory,Resource Leak
+https://github.com/spring-projects/spring-boot/issues/11338,Semantic,Incorrect Value
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/992,Concurrency,Other
+https://github.com/spring-projects/spring-session/issues/1276,Other,Documentation
+https://github.com/grpc/grpc-java/issues/5729,Concurrency,Race Condition
+https://github.com/junit-team/junit5/issues/1697,Semantic,Exeption should not be thrown
+https://github.com/redisson/redisson/issues/1966,Concurrency,Deadlock
+https://github.com/elastic/elasticsearch/issues/8268,Semantic,Wrong Value
+https://github.com/eclipse/n4js/issues/1756,Semantic,Method override missing
+https://github.com/netty/netty/issues/2544,Semantic,Complex Change
+https://github.com/AsyncHttpClient/async-http-client/issues/1314,Semantic,Complex Change
+https://github.com/elastic/elasticsearch/issues/3486,Semantic,Native Overflow
+https://github.com/netty/netty/issues/5507,Concurrency,Deadlock
+https://github.com/spring-projects/spring-boot/issues/4593,Concurrency,Race Condition
+https://github.com/brettwooldridge/HikariCP/issues/68,Other,Documentation
+https://github.com/redisson/redisson/issues/776,Memory,Memory Leak
+https://github.com/jankotek/mapdb/issues/403,Memory,Memory Leak
+https://github.com/nextcloud/android/issues/577,Other,UI resources
+https://github.com/spring-projects/spring-security/issues/6809,Other,Documentation
+https://github.com/netty/netty/issues/5190,Semantic,Wrong Method used
+https://github.com/redisson/redisson/issues/1459,Semantic,Wrong Class used
+https://github.com/spring-projects/spring-boot/issues/2220,Semantic,Complex Change
+https://github.com/netty/netty/issues/7290,Memory,Resource Leak
+https://github.com/elastic/elasticsearch/issues/1229,Semantic,Complex Change
+https://github.com/spring-projects/spring-boot/issues/10569,Semantic,Incorrect Evaluation
+https://github.com/spring-projects/spring-boot/issues/433,Other,Misconfiguration
+https://github.com/spring-projects/spring-boot/issues/17017,Concurrency,Race Condition
+https://github.com/eclipse/jetty.project/issues/355,Semantic,Exception Handling
+https://github.com/spring-projects/spring-boot/issues/3343,Semantic,Wrong method used
+https://github.com/bazelbuild/bazel/issues/5512,Memory,Resource Leak
+https://github.com/MenoData/Time4J/issues/807,Semantic,Missing Case Complex
+https://github.com/netty/netty/issues/287,Concurrency,Race Candition
+https://github.com/elastic/elasticsearch/issues/6279,Semantic,Exception Should not be thrown
+https://github.com/spring-projects/spring-boot/issues/6361,Semantic,Wrong method used
+https://github.com/eclipse/reddeer/issues/715,Other,Misconfiguration
+https://github.com/hazelcast/hazelcast/issues/14215,Concurrency,Other
+https://github.com/netty/netty/issues/3249,Concurrency,Order Violation
+https://github.com/grpc/grpc-java/issues/6601,Concurrency,Deadlock
+https://github.com/elastic/elasticsearch/issues/886,Semantic,Wrong class used
+https://github.com/eclipse/che/issues/13431,Other,Build System
+https://github.com/spring-projects/spring-boot/issues/5922,Semantic,Wrong method used
+https://github.com/spring-projects/spring-session/issues/1153,Semantic,Missing Case Complex
+https://github.com/elastic/elasticsearch/issues/5703,Memory,Resource Leak
+https://github.com/netty/netty/issues/8220,Memory,Double Free
+https://github.com/spring-projects/spring-framework/issues/24861,Semantic,Complex Change
+https://github.com/JodaOrg/joda-time/issues/18,Memory,Null pointer dereference
+https://github.com/netty/netty/issues/306,Semantic,Complex Change
+https://github.com/eclipse/n4js/issues/1734,Semantic,Call Missing
+https://github.com/oracle/graal/issues/2450,Other,Build System
+https://github.com/square/okhttp/issues/4875,Semantic,Missing Case Complex
+https://github.com/codenameone/CodenameOne/issues/1160,Other,Ui resources
+https://github.com/netty/netty/issues/654,Concurrency,Race Condition
+https://github.com/eclipse/hono/issues/1105,Other,Build System
+https://github.com/netty/netty/issues/1507,Memory,Resource Leak
+https://github.com/elastic/elasticsearch/issues/11019,Semantic,Missing Case Complex
+https://github.com/spring-projects/spring-boot/issues/3315,Other,Documentation
+https://github.com/spring-projects/spring-boot/issues/17121,Semantic,If condition missing
+https://github.com/elastic/elasticsearch/issues/1497,Semantic,Method override missing
+https://github.com/redisson/redisson/issues/2037,Semantic,If condition missing
+https://github.com/bazelbuild/bazel/issues/6890,Concurrency,Race Condition
+https://github.com/google/ExoPlayer/issues/4234,Other,Build System
+https://github.com/junit-team/junit5/issues/308,Semantic,Complex Change
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/705,Semantic,If Condition Missing
+https://github.com/netty/netty/issues/1602,Semantic,Native Overflow
+https://github.com/netty/netty/issues/6574,Semantic,Exception should not be thrown
+https://github.com/hazelcast/hazelcast/issues/15950,Concurrency,Race Condition
+https://github.com/elastic/elasticsearch/issues/14798,Semantic,Wrong Exception
+https://github.com/elastic/elasticsearch/issues/6260,Semantic,Exception should not be thrown
+https://github.com/junit-team/junit5/issues/398,Other,Build System
+https://github.com/netty/netty/issues/1797,Semantic,Exeption Not Thrown
+https://github.com/netty/netty/issues/1426,Semantic,Wrong Method used
+https://github.com/checkstyle/checkstyle/issues/4932,Concurrency,Race Condition
+https://github.com/spring-projects/spring-boot/issues/9869,Semantic,If Condition Missing
+https://github.com/netty/netty/issues/5720,Concurrency,Deadlock
+https://github.com/elastic/elasticsearch/issues/4712,Semantic,Exception should not be thrown
+https://github.com/spring-projects/spring-security/issues/3189,Concurrency,Race Condition
+https://github.com/netty/netty/issues/1175,Concurrency,Deadlock
+https://github.com/redisson/redisson/issues/1593,Semantic,Missing case complex
+https://github.com/netty/netty/issues/4211,Memory,Memory Leak
+https://github.com/codenameone/CodenameOne/issues/1408,Semantic,Wrong method used
+https://github.com/elastic/elasticsearch/issues/2693,Semantic,If Condition missing
+https://github.com/realm/realm-java/issues/5036,Semantic,Missing case complex
+https://github.com/spring-projects/spring-boot/issues/5517,Semantic,Call missing
+https://github.com/netty/netty/issues/4771,Semantic,Infinite Loop
+https://github.com/AsyncHttpClient/async-http-client/issues/301,Semantic,Missing case complex
+https://github.com/spring-projects/spring-boot/issues/12171,Concurrency,Missing Synchronization
+https://github.com/netty/netty/issues/608,Concurrency,Race Condition
+https://github.com/intuit/karate/issues/655,Concurrency,Race Condition
+https://github.com/haraldk/TwelveMonkeys/issues/514,Semantic,Native Overflow
+https://github.com/junit-team/junit5/issues/894,Other,Build Fail
+https://github.com/elastic/elasticsearch/issues/3381,Semantic,Call missing
+https://github.com/netty/netty/issues/129,Memory,Memory Leak
+https://github.com/realm/realm-java/issues/1109,Memory,Memory Leak
+https://github.com/spring-projects/spring-boot/issues/388,Memory,Resource Leak
+https://github.com/spring-projects/spring-security/issues/4976,Other,Typo
+https://github.com/square/okhttp/issues/1560,Concurrency,Race Condition
+https://github.com/eclipse/kapua/issues/1,Other,Build Fail
+https://github.com/netty/netty/issues/5678,Memory,Resource Leak
+https://github.com/google/ExoPlayer/issues/5477,Semantic,Incorrect Value
+https://github.com/bazelbuild/bazel/issues/1159,Semantic,Complex Change
+https://github.com/netty/netty/issues/1298,Memory,Resource Leak
+https://github.com/spring-projects/spring-boot/issues/9454,Concurrency,Race Condition
+https://github.com/spring-projects/spring-boot/issues/18211,Concurrency,Race Condition

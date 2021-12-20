@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9907464981079102,0.7247948050498962,Ensemble2 is normal distributed
+1,dagostino_stat,1.2466803451711534,0.5361506078499017,Ensemble2 is normal distributed
+0,shapiro_stat,0.9779332280158997,0.09162984043359756,Ensemble1 is normal distributed
+1,dagostino_stat,4.940790678658529,0.08455142588928864,Ensemble1 is normal distributed
+0,t_test_two_sided,1.5668933559585807,0.11874188702611023,Ensemble2 is not different Ensemble1

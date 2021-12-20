@@ -1,0 +1,32 @@
+char length of doc
+            count         mean          std   min    25%     50%     75%      max description
+doc_length  141.0  1930.758865  4144.280716  31.0  413.0   790.0  2062.0  35996.0     correct
+doc_length   33.0  2669.545455  3912.346579  90.0  388.0  1202.0  2967.0  20296.0   incorrect
+char lenght of doc with artifacts removed
+                              count        mean         std   min    25%    50%    75%     max description
+artifacts_removed_doc_length  141.0  500.347518  401.216507  30.0  205.0  420.0  661.0  2081.0     correct
+artifacts_removed_doc_length   33.0  716.909091  855.748918  69.0  303.0  423.0  669.0  4447.0   incorrect
+char length of removed artifacts
+                             count         mean          std  min  25%    50%     75%      max description
+amount_of_removed_artifacts  141.0  1430.411348  4077.420529  0.0  4.0  188.0  1028.0  34482.0     correct
+amount_of_removed_artifacts   33.0  1952.636364  3723.820961  1.0  9.0  543.0  2112.0  19993.0   incorrect
+lines of doc
+                        count       mean        std  min  25%   50%   75%    max description
+amount_of_lines_in_doc  141.0  31.780142  61.342725  2.0  6.0  15.0  37.0  546.0     correct
+amount_of_lines_in_doc   33.0  43.727273  65.662619  3.0  7.0  24.0  42.0  316.0   incorrect
+lines of doc with artifacts removed
+                                          count      mean       std  min  25%  50%  75%   max description
+artifacts_removed_amount_of_lines_in_doc  141.0  5.843972  4.490122  1.0  3.0  5.0  7.0  22.0     correct
+artifacts_removed_amount_of_lines_in_doc   33.0  7.090909  6.501748  1.0  3.0  5.0  9.0  36.0   incorrect
+lines removed as artifacts
+                                      count       mean        std  min  25%   50%   75%    max description
+amount_of_removed_lines_as_artifacts  141.0  25.936170  59.867617  0.0  2.0  10.0  28.0  530.0     correct
+amount_of_removed_lines_as_artifacts   33.0  36.636364  62.801681  1.0  4.0  16.0  33.0  311.0   incorrect
+if doc contains exception names (mean ends up as percentage)
+                         count      mean       std  min  25%  50%  75%  max description
+contains_exception_name  141.0  0.234043  0.424908  0.0  0.0  0.0  0.0  1.0     correct
+contains_exception_name   33.0  0.363636  0.488504  0.0  0.0  0.0  1.0  1.0   incorrect
+number of exception names contained in doc
+                      count      mean       std  min  25%  50%  75%  max description
+count_exception_name  141.0  0.418440  0.934697  0.0  0.0  0.0  0.0  5.0     correct
+count_exception_name   33.0  0.666667  1.080123  0.0  0.0  0.0  1.0  4.0   incorrect

@@ -1,0 +1,32 @@
+char length of doc
+              count         mean          std   min    25%    50%      75%      max description
+doc_length  15214.0  1719.224793  3377.721320  31.0  329.0  747.0  1718.25  35996.0     correct
+doc_length   7072.0  1826.568439  3102.752474  32.0  357.0  856.0  1868.00  29023.0   incorrect
+char lenght of doc with artifacts removed
+                                count        mean         std   min    25%    50%    75%     max description
+artifacts_removed_doc_length  15214.0  523.030104  461.757099  30.0  223.0  407.0  664.0  3750.0     correct
+artifacts_removed_doc_length   7072.0  587.182410  576.856956  31.0  253.0  422.0  761.0  4447.0   incorrect
+char length of removed artifacts
+                               count         mean          std  min  25%    50%     75%      max description
+amount_of_removed_artifacts  15214.0  1196.194689  3250.358656  0.0  3.0  191.0   968.0  34482.0     correct
+amount_of_removed_artifacts   7072.0  1239.386029  2911.240653  0.0  8.0  240.0  1259.0  27687.0   incorrect
+lines of doc
+                          count       mean        std  min  25%   50%   75%    max description
+amount_of_lines_in_doc  15214.0  30.241028  52.733095  2.0  5.0  15.0  36.0  546.0     correct
+amount_of_lines_in_doc   7072.0  30.816742  48.351624  2.0  5.0  16.0  38.0  376.0   incorrect
+lines of doc with artifacts removed
+                                            count      mean       std  min  25%  50%  75%   max description
+artifacts_removed_amount_of_lines_in_doc  15214.0  6.304982  5.389861  1.0  3.0  5.0  8.0  40.0     correct
+artifacts_removed_amount_of_lines_in_doc   7072.0  6.852658  6.070142  1.0  3.0  4.0  9.0  40.0   incorrect
+lines removed as artifacts
+                                        count       mean        std  min  25%  50%   75%    max description
+amount_of_removed_lines_as_artifacts  15214.0  23.936046  50.285100  0.0  2.0  9.0  26.0  530.0     correct
+amount_of_removed_lines_as_artifacts   7072.0  23.964084  45.421953  0.0  2.0  9.0  30.0  336.0   incorrect
+if doc contains exception names (mean ends up as percentage)
+                           count      mean       std  min  25%  50%  75%  max description
+contains_exception_name  15214.0  0.271986  0.444998  0.0  0.0  0.0  1.0  1.0     correct
+contains_exception_name   7072.0  0.336821  0.472657  0.0  0.0  0.0  1.0  1.0   incorrect
+number of exception names contained in doc
+                        count      mean       std  min  25%  50%  75%   max description
+count_exception_name  15214.0  0.632641  1.935695  0.0  0.0  0.0  1.0  35.0     correct
+count_exception_name   7072.0  0.800764  1.969728  0.0  0.0  0.0  1.0  35.0   incorrect

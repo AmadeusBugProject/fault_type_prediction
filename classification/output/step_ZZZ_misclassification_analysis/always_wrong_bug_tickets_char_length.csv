@@ -1,0 +1,2 @@
+,count,mean,std,min,25%,50%,75%,max,description
+doc_length,33.0,2669.5454545454545,3912.3465791877147,90.0,388.0,1202.0,2967.0,20296.0,always_wrong_bug_tickets

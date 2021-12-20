@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9868887662887573,0.430191308259964,RFC is normal distributed
+1,dagostino_stat,0.6231452924225562,0.7322944101585528,RFC is normal distributed
+0,shapiro_stat,0.977449357509613,0.08396288007497787,LRC is normal distributed
+1,dagostino_stat,10.037921839116414,0.0066113929104956535,LRC is normal distributed
+0,t_test_two_sided,-3.0118954069715844,0.00294729106629112,RFC is not different LRC

@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9854776859283447,0.3436058461666107,LSVC is normal distributed
+1,dagostino_stat,1.731222295310547,0.42079430657385164,LSVC is normal distributed
+0,shapiro_stat,0.9868887662887573,0.430191308259964,RFC is normal distributed
+1,dagostino_stat,0.6231452924225562,0.7322944101585528,RFC is normal distributed
+0,t_test_two_sided,0.31592035155927056,0.752405784219252,LSVC is not different RFC

@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9854167699813843,0.34019556641578674,RFC memory is normal distributed
+1,dagostino_stat,1.107900860066031,0.5746751065094935,RFC memory is normal distributed
+0,shapiro_stat,0.976577877998352,0.07173151522874832,LSVC memory is normal distributed
+1,dagostino_stat,6.1449017965757475,0.04630752063830909,LSVC memory is normal distributed
+0,t_test_one_sided,6.589049541733114,1.98293207551926e-10,RFC memory is not greater than LSVC memory

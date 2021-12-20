@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.997530460357666,0.9997902512550354,xEnsemble1 is normal distributed
+1,dagostino_stat,0.1788668762195209,0.914449130561281,xEnsemble1 is normal distributed
+0,shapiro_stat,0.9901638031005859,0.6778385043144226,xLRC is normal distributed
+1,dagostino_stat,0.06287623039915519,0.9690509241212154,xLRC is normal distributed
+0,t_test_one_sided,4.876057360339988,1.111010866425562e-06,xEnsemble1 is not greater than xLRC

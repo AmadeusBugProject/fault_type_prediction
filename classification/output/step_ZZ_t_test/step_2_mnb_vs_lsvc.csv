@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9784950017929077,0.10140683501958847,MNB is normal distributed
+1,dagostino_stat,7.93793375979518,0.018892941733952513,MNB is normal distributed
+0,shapiro_stat,0.9854776859283447,0.3436058461666107,LSVC is normal distributed
+1,dagostino_stat,1.731222295310547,0.42079430657385164,LSVC is normal distributed
+0,t_test_two_sided,-2.055608092327973,0.04115708880619633,MNB is not different LSVC

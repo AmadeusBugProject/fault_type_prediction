@@ -1,0 +1,1779 @@
+[
+    {
+        "num_items": 94,
+        "projects": [
+            "ExoPlayer",
+            "checkstyle",
+            "hazelcast",
+            "jadx",
+            "mybatis-3",
+            "redisson",
+            "spring-security"
+        ],
+        "targets": [
+            23,
+            24,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 100,
+        "projects": [
+            "checkstyle",
+            "elasticsearch",
+            "ice",
+            "pact-jvm",
+            "pmd",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            25,
+            25,
+            25,
+            25
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "CodenameOne",
+            "ExoPlayer",
+            "async-http-client",
+            "elasticsearch",
+            "junit5",
+            "karate",
+            "mapsforge",
+            "pmd",
+            "restlet-framework-java"
+        ],
+        "targets": [
+            24,
+            23,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "async-http-client",
+            "elasticsearch",
+            "hazelcast",
+            "junit5",
+            "okhttp"
+        ],
+        "targets": [
+            22,
+            22,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "elasticsearch",
+            "graphhopper",
+            "karate",
+            "realm-java",
+            "redisson",
+            "spring-security"
+        ],
+        "targets": [
+            24,
+            25,
+            25,
+            24
+        ]
+    },
+    {
+        "num_items": 96,
+        "projects": [
+            "TwelveMonkeys",
+            "elasticsearch",
+            "junit5",
+            "n4js",
+            "realm-java",
+            "redisson"
+        ],
+        "targets": [
+            24,
+            24,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 100,
+        "projects": [
+            "elasticsearch",
+            "grpc-java",
+            "junit5",
+            "n4js",
+            "redisson",
+            "restlet-framework-java",
+            "simplenote-android"
+        ],
+        "targets": [
+            25,
+            25,
+            25,
+            25
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "HikariCP",
+            "elasticsearch",
+            "grpc-java",
+            "guava",
+            "idea-gitignore",
+            "n4js",
+            "pulsar",
+            "spring-framework"
+        ],
+        "targets": [
+            23,
+            22,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "Time4J",
+            "cyclops",
+            "elasticsearch",
+            "grpc-java",
+            "junit5",
+            "pinpoint",
+            "redisson"
+        ],
+        "targets": [
+            25,
+            25,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "MapDB",
+            "TwelveMonkeys",
+            "buck",
+            "elasticsearch",
+            "hazelcast",
+            "jsoup",
+            "kapua",
+            "mapsforge",
+            "spring-session"
+        ],
+        "targets": [
+            22,
+            22,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "checkstyle",
+            "eclipse.jdt.ls",
+            "elasticsearch",
+            "incubator-dolphinscheduler",
+            "junit5",
+            "redisson"
+        ],
+        "targets": [
+            24,
+            24,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "HikariCP",
+            "checkstyle",
+            "elasticsearch",
+            "junit5",
+            "karate",
+            "orientdb"
+        ],
+        "targets": [
+            24,
+            24,
+            25,
+            25
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "checkstyle",
+            "hazelcast",
+            "karate",
+            "n4js",
+            "redisson",
+            "requery",
+            "spring-session"
+        ],
+        "targets": [
+            22,
+            23,
+            23,
+            22
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "MapDB",
+            "joda-time",
+            "n4js",
+            "pinpoint",
+            "pulsar",
+            "realm-java",
+            "redisson",
+            "spring-boot"
+        ],
+        "targets": [
+            24,
+            25,
+            25,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "elasticsearch",
+            "jadx",
+            "realm-java",
+            "redisson",
+            "spring-security"
+        ],
+        "targets": [
+            23,
+            23,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 100,
+        "projects": [
+            "elasticsearch",
+            "jetty.project",
+            "n4js",
+            "redisson",
+            "simplenote-android",
+            "spring-session"
+        ],
+        "targets": [
+            25,
+            25,
+            25,
+            25
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "MapDB",
+            "azure-tools-for-java",
+            "druid",
+            "elasticsearch",
+            "hazelcast",
+            "jadx",
+            "jsoup",
+            "okhttp",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            23,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "Time4J",
+            "cyclops",
+            "elasticsearch",
+            "junit5",
+            "reactor-core",
+            "redisson",
+            "takes"
+        ],
+        "targets": [
+            23,
+            24,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "HikariCP",
+            "elasticsearch",
+            "hazelcast",
+            "javacv",
+            "simplenote-android",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            25,
+            25,
+            24
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "exist",
+            "pinpoint",
+            "redisson",
+            "spring-boot",
+            "spring-session"
+        ],
+        "targets": [
+            25,
+            25,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 92,
+        "projects": [
+            "ExoPlayer",
+            "OpenRefine",
+            "async-http-client",
+            "elasticsearch",
+            "junit5",
+            "spring-framework"
+        ],
+        "targets": [
+            23,
+            23,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "ExoPlayer",
+            "HikariCP",
+            "ceylon-ide-eclipse",
+            "elasticsearch",
+            "jetty.project",
+            "kapua",
+            "orientdb",
+            "pulsar",
+            "reactor-core"
+        ],
+        "targets": [
+            22,
+            23,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "hono",
+            "junit5",
+            "pinpoint",
+            "redisson",
+            "spring-boot"
+        ],
+        "targets": [
+            24,
+            25,
+            25,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "Time4J",
+            "elasticsearch",
+            "hono",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            24,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "elasticsearch",
+            "mapsforge",
+            "orientdb",
+            "redisson",
+            "spring-security"
+        ],
+        "targets": [
+            24,
+            23,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "HikariCP",
+            "async-http-client",
+            "checkstyle",
+            "grpc-java",
+            "jetty.project",
+            "junit5",
+            "karate",
+            "n4js",
+            "pinpoint",
+            "spring-framework"
+        ],
+        "targets": [
+            23,
+            24,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "async-http-client",
+            "elasticsearch",
+            "grpc-java",
+            "junit5",
+            "reactor-core",
+            "spring-batch",
+            "spring-framework"
+        ],
+        "targets": [
+            23,
+            24,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 92,
+        "projects": [
+            "ExoPlayer",
+            "async-http-client",
+            "elasticsearch",
+            "fresco",
+            "junit5",
+            "spring-framework"
+        ],
+        "targets": [
+            23,
+            23,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "elasticsearch",
+            "joda-time",
+            "kapua",
+            "n4js",
+            "redisson"
+        ],
+        "targets": [
+            25,
+            25,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "ExoPlayer",
+            "async-http-client",
+            "elasticsearch",
+            "graphhopper",
+            "grpc-java",
+            "junit5",
+            "karate"
+        ],
+        "targets": [
+            24,
+            24,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "CodenameOne",
+            "TwelveMonkeys",
+            "elasticsearch",
+            "junit5",
+            "n4js",
+            "redisson",
+            "spring-security-oauth"
+        ],
+        "targets": [
+            24,
+            25,
+            25,
+            24
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "HikariCP",
+            "async-http-client",
+            "checkstyle",
+            "elasticsearch",
+            "junit5"
+        ],
+        "targets": [
+            23,
+            22,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "druid",
+            "junit5",
+            "pact-jvm",
+            "pinpoint",
+            "redisson",
+            "speedment",
+            "spring-boot"
+        ],
+        "targets": [
+            24,
+            24,
+            25,
+            25
+        ]
+    },
+    {
+        "num_items": 92,
+        "projects": [
+            "async-http-client",
+            "elasticsearch",
+            "elk",
+            "hazelcast",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            23,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "checkstyle",
+            "elasticsearch",
+            "ice",
+            "junit5",
+            "redisson"
+        ],
+        "targets": [
+            24,
+            24,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "ExoPlayer",
+            "MapDB",
+            "elasticsearch",
+            "hazelcast",
+            "n4js",
+            "pinpoint"
+        ],
+        "targets": [
+            24,
+            23,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "BroadleafCommerce",
+            "Time4J",
+            "elasticsearch",
+            "hono",
+            "junit5",
+            "redisson"
+        ],
+        "targets": [
+            24,
+            23,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "che",
+            "checkstyle",
+            "elasticsearch",
+            "junit5",
+            "redisson"
+        ],
+        "targets": [
+            24,
+            24,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "async-http-client",
+            "elasticsearch",
+            "hazelcast",
+            "jetty.project",
+            "junit5",
+            "simplenote-android"
+        ],
+        "targets": [
+            23,
+            22,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "android",
+            "async-http-client",
+            "deeplearning4j",
+            "elasticsearch",
+            "hazelcast",
+            "jetty.project",
+            "joda-time",
+            "pulsar"
+        ],
+        "targets": [
+            22,
+            23,
+            23,
+            22
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "ceylon-ide-eclipse",
+            "elasticsearch",
+            "joda-time",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            22,
+            23,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "android",
+            "async-http-client",
+            "elasticsearch",
+            "hazelcast",
+            "spring-session"
+        ],
+        "targets": [
+            22,
+            22,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "ExoPlayer",
+            "MapDB",
+            "async-http-client",
+            "elasticsearch",
+            "n4js",
+            "pulsar"
+        ],
+        "targets": [
+            23,
+            23,
+            22,
+            22
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "ceylon-ide-eclipse",
+            "checkstyle",
+            "closure-compiler",
+            "hazelcast",
+            "idea-gitignore",
+            "reactor-core",
+            "redisson",
+            "spring-security"
+        ],
+        "targets": [
+            22,
+            23,
+            23,
+            22
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "cyclops",
+            "elasticsearch",
+            "n4js",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            23,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "MapDB",
+            "checkstyle",
+            "elasticsearch",
+            "hazelcast",
+            "jsoup",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            23,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "CodenameOne",
+            "ExoPlayer",
+            "elasticsearch",
+            "elk",
+            "hazelcast",
+            "okhttp",
+            "pulsar",
+            "simplenote-android"
+        ],
+        "targets": [
+            23,
+            24,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "async-http-client",
+            "che",
+            "grpc-java",
+            "jadx",
+            "n4js",
+            "redisson",
+            "simplenote-android",
+            "spring-framework",
+            "spring-security"
+        ],
+        "targets": [
+            24,
+            25,
+            25,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "azure-iot-sdk-java",
+            "elasticsearch",
+            "orientdb",
+            "redisson",
+            "spring-security"
+        ],
+        "targets": [
+            23,
+            23,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "elasticsearch",
+            "karate",
+            "n4js",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            25,
+            24,
+            25
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "ceylon-ide-eclipse",
+            "elasticsearch",
+            "pulsar",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            22,
+            23,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "android",
+            "eclipse.jdt.ls",
+            "guava",
+            "junit5",
+            "reactor-core",
+            "redisson",
+            "simplenote-android",
+            "spring-boot"
+        ],
+        "targets": [
+            22,
+            23,
+            23,
+            22
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "async-http-client",
+            "elasticsearch",
+            "hazelcast",
+            "jetty.project",
+            "spring-session"
+        ],
+        "targets": [
+            22,
+            23,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "async-http-client",
+            "elasticsearch",
+            "hazelcast",
+            "spring-session"
+        ],
+        "targets": [
+            25,
+            25,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "ExoPlayer",
+            "async-http-client",
+            "elasticsearch",
+            "spring-framework",
+            "spring-session",
+            "vorto"
+        ],
+        "targets": [
+            23,
+            24,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "async-http-client",
+            "elasticsearch",
+            "fresco",
+            "hazelcast",
+            "junit5",
+            "karate"
+        ],
+        "targets": [
+            23,
+            22,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "BroadleafCommerce",
+            "ExoPlayer",
+            "async-http-client",
+            "elasticsearch",
+            "elk",
+            "okhttp",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            24,
+            25,
+            25
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "Time4J",
+            "elasticsearch",
+            "junit5",
+            "mapsforge",
+            "okhttp",
+            "redisson"
+        ],
+        "targets": [
+            23,
+            24,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "MapDB",
+            "Time4J",
+            "async-http-client",
+            "elasticsearch",
+            "hono",
+            "karate",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            24,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "graphhopper",
+            "pinpoint",
+            "redisson",
+            "spring-boot",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            25,
+            24,
+            25
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "elasticsearch",
+            "idea-gitignore",
+            "junit5",
+            "lemminx",
+            "n4js",
+            "redisson"
+        ],
+        "targets": [
+            24,
+            23,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "MapDB",
+            "async-http-client",
+            "elasticsearch",
+            "junit5",
+            "pinpoint",
+            "pmd",
+            "spring-framework",
+            "vorto"
+        ],
+        "targets": [
+            24,
+            24,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "Time4J",
+            "elasticsearch",
+            "junit5",
+            "mapsforge",
+            "redisson",
+            "requery"
+        ],
+        "targets": [
+            22,
+            22,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "TwelveMonkeys",
+            "buck",
+            "elasticsearch",
+            "junit5",
+            "n4js",
+            "redisson"
+        ],
+        "targets": [
+            23,
+            23,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "closure-compiler",
+            "elasticsearch",
+            "ice",
+            "jadx",
+            "pulsar",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            23,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "BroadleafCommerce",
+            "ExoPlayer",
+            "ceylon-ide-eclipse",
+            "joda-time",
+            "mapsforge",
+            "n4js",
+            "redisson",
+            "spring-framework",
+            "spring-session"
+        ],
+        "targets": [
+            22,
+            22,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "ceylon-ide-eclipse",
+            "elasticsearch",
+            "hono",
+            "junit5",
+            "pulsar",
+            "redisson"
+        ],
+        "targets": [
+            24,
+            23,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "elk",
+            "exist",
+            "pinpoint",
+            "pmd",
+            "redisson",
+            "spring-boot",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            23,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "Time4J",
+            "elasticsearch",
+            "exist",
+            "kapua",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            23,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "ExoPlayer",
+            "HikariCP",
+            "checkstyle",
+            "guava",
+            "hazelcast",
+            "orientdb",
+            "spring-batch",
+            "spring-framework",
+            "spring-session",
+            "takes"
+        ],
+        "targets": [
+            23,
+            23,
+            22,
+            22
+        ]
+    },
+    {
+        "num_items": 92,
+        "projects": [
+            "Time4J",
+            "elasticsearch",
+            "jsoup",
+            "redisson",
+            "requery",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            23,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 100,
+        "projects": [
+            "HikariCP",
+            "deeplearning4j",
+            "elasticsearch",
+            "grpc-java",
+            "hazelcast",
+            "jadx",
+            "pinpoint",
+            "spring-session"
+        ],
+        "targets": [
+            25,
+            25,
+            25,
+            25
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "deeplearning4j",
+            "elasticsearch",
+            "n4js",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            24,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "HikariCP",
+            "async-http-client",
+            "elasticsearch",
+            "grpc-java",
+            "n4js",
+            "okhttp",
+            "pulsar"
+        ],
+        "targets": [
+            23,
+            24,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "BroadleafCommerce",
+            "elk",
+            "pinpoint",
+            "reactor-core",
+            "redisson",
+            "spring-boot",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            25,
+            24,
+            25
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "ceylon-ide-eclipse",
+            "checkstyle",
+            "graphhopper",
+            "hazelcast",
+            "idea-gitignore",
+            "okhttp",
+            "redisson",
+            "spring-security",
+            "spring-security-oauth"
+        ],
+        "targets": [
+            23,
+            23,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "HikariCP",
+            "MapDB",
+            "checkstyle",
+            "elasticsearch",
+            "lemminx",
+            "realm-java",
+            "speedment",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            24,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "TwelveMonkeys",
+            "async-http-client",
+            "elasticsearch",
+            "hazelcast",
+            "junit5"
+        ],
+        "targets": [
+            24,
+            25,
+            24,
+            25
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "CodenameOne",
+            "async-http-client",
+            "elasticsearch",
+            "okhttp",
+            "spring-framework",
+            "spring-session",
+            "titan"
+        ],
+        "targets": [
+            23,
+            24,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "BroadleafCommerce",
+            "HikariCP",
+            "elasticsearch",
+            "guava",
+            "hazelcast",
+            "ice",
+            "karate",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            23,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "HikariCP",
+            "buck",
+            "elasticsearch",
+            "hazelcast",
+            "idea-gitignore",
+            "javacv",
+            "okhttp",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            24,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "graphhopper",
+            "junit5",
+            "pinpoint",
+            "reactor-core",
+            "redisson",
+            "spring-boot"
+        ],
+        "targets": [
+            23,
+            22,
+            23,
+            22
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "Time4J",
+            "hazelcast",
+            "junit5",
+            "n4js",
+            "realm-java",
+            "redisson",
+            "speedment",
+            "spring-framework"
+        ],
+        "targets": [
+            22,
+            23,
+            23,
+            22
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "HikariCP",
+            "TwelveMonkeys",
+            "async-http-client",
+            "elasticsearch",
+            "guava",
+            "junit5",
+            "pulsar",
+            "spring-framework"
+        ],
+        "targets": [
+            25,
+            25,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "ExoPlayer",
+            "async-http-client",
+            "azure-iot-sdk-java",
+            "elasticsearch",
+            "hazelcast",
+            "junit5"
+        ],
+        "targets": [
+            25,
+            24,
+            24,
+            25
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "HikariCP",
+            "Time4J",
+            "elasticsearch",
+            "hazelcast",
+            "joda-time",
+            "mapsforge",
+            "okhttp",
+            "reactor-core"
+        ],
+        "targets": [
+            23,
+            23,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "pinpoint",
+            "reactor-core",
+            "redisson",
+            "speedment",
+            "spring-boot",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            23,
+            23,
+            24
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "HikariCP",
+            "elasticsearch",
+            "graphhopper",
+            "hazelcast",
+            "orientdb",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            22,
+            23,
+            22
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "BroadleafCommerce",
+            "ExoPlayer",
+            "MapDB",
+            "elasticsearch",
+            "graphhopper",
+            "hono",
+            "idea-gitignore",
+            "jetty.project",
+            "joda-time",
+            "kapua",
+            "reddeer"
+        ],
+        "targets": [
+            23,
+            22,
+            23,
+            22
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "ExoPlayer",
+            "HikariCP",
+            "async-http-client",
+            "elasticsearch",
+            "n4js",
+            "pact-jvm",
+            "pulsar"
+        ],
+        "targets": [
+            24,
+            23,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "async-http-client",
+            "elasticsearch",
+            "grpc-java",
+            "hazelcast",
+            "ice",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            24,
+            24,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "android",
+            "exist",
+            "guava",
+            "idea-gitignore",
+            "javacv",
+            "junit5",
+            "reddeer",
+            "redisson",
+            "spring-boot"
+        ],
+        "targets": [
+            23,
+            22,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "ExoPlayer",
+            "async-http-client",
+            "elasticsearch",
+            "grpc-java",
+            "javacv",
+            "spring-session"
+        ],
+        "targets": [
+            23,
+            23,
+            22,
+            22
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "async-http-client",
+            "junit5",
+            "pinpoint",
+            "pulsar",
+            "redisson",
+            "spring-boot"
+        ],
+        "targets": [
+            25,
+            25,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 90,
+        "projects": [
+            "ExoPlayer",
+            "async-http-client",
+            "elasticsearch",
+            "junit5",
+            "spring-framework"
+        ],
+        "targets": [
+            22,
+            23,
+            22,
+            23
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "OpenRefine",
+            "buck",
+            "che",
+            "junit5",
+            "pinpoint",
+            "realm-java",
+            "redisson",
+            "spring-boot",
+            "spring-framework"
+        ],
+        "targets": [
+            24,
+            25,
+            24,
+            25
+        ]
+    },
+    {
+        "num_items": 98,
+        "projects": [
+            "elasticsearch",
+            "graphhopper",
+            "kapua",
+            "okhttp",
+            "pmd",
+            "redisson",
+            "spring-security-oauth",
+            "spring-session"
+        ],
+        "targets": [
+            25,
+            25,
+            24,
+            24
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "HikariCP",
+            "async-http-client",
+            "elasticsearch",
+            "grpc-java",
+            "joda-time",
+            "kapua",
+            "karate",
+            "pact-jvm",
+            "pulsar",
+            "speedment"
+        ],
+        "targets": [
+            24,
+            24,
+            23,
+            23
+        ]
+    },
+    {
+        "num_items": 100,
+        "projects": [
+            "elasticsearch",
+            "javacv",
+            "jetty.project",
+            "mapsforge",
+            "orientdb",
+            "redisson",
+            "spring-security"
+        ],
+        "targets": [
+            25,
+            25,
+            25,
+            25
+        ]
+    },
+    {
+        "num_items": 94,
+        "projects": [
+            "azure-tools-for-java",
+            "elasticsearch",
+            "n4js",
+            "redisson",
+            "spring-session"
+        ],
+        "targets": [
+            24,
+            23,
+            24,
+            23
+        ]
+    }
+]

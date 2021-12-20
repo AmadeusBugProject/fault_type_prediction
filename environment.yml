@@ -1,0 +1,9 @@
+name: fault_type_prediction
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - nltk

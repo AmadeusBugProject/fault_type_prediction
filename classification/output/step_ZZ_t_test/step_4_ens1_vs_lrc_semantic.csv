@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9880198240280151,0.5096704959869385,Ensemble1 semantic is normal distributed
+1,dagostino_stat,2.4722366101057216,0.29050970217565264,Ensemble1 semantic is normal distributed
+0,shapiro_stat,0.9940884113311768,0.9442126154899597,LRC semantic is normal distributed
+1,dagostino_stat,0.2433813825273458,0.8854221949722272,LRC semantic is normal distributed
+0,t_test_one_sided,6.681017546441644,1.1843244882777323e-10,Ensemble1 semantic is not greater than LRC semantic

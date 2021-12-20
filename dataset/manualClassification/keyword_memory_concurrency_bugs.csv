@@ -1,0 +1,757 @@
+url,RootCause,RootCauseDetail,Confidence
+https://github.com/checkstyle/checkstyle/issues/4927,Concurrency,Not atomic,10
+https://github.com/eXist-db/exist/issues/1856,Concurrency,Not atomic,10
+https://github.com/naver/pinpoint/issues/3369,Concurrency,Not atomic,9
+https://github.com/netty/netty/issues/4110,Concurrency,Unintentional value sharing,9
+https://github.com/elastic/elasticsearch/issues/3381,Semantic,Call missing,9
+https://github.com/elastic/elasticsearch/issues/3560,Semantic,Call missing,9
+https://github.com/netty/netty/issues/6621,Semantic,Call missing,9
+https://github.com/netty/netty/issues/1095,Semantic,Call missing,9
+https://github.com/spring-projects/spring-session/issues/183,Semantic,Call missing,8
+https://github.com/bazelbuild/bazel/issues/5799,Semantic,Call missing,9
+https://github.com/elastic/elasticsearch/issues/3769,Semantic,Call missing,8
+https://github.com/google/ExoPlayer/issues/2396,Semantic,Call missing,8
+https://github.com/mybatis/mybatis-3/issues/748,Semantic,Call missing,7
+https://github.com/netty/netty/issues/6282,Semantic,Call order incorrect,9
+https://github.com/reactor/reactor-core/issues/257,Semantic,Catching too much,10
+https://github.com/Azure/azure-iot-sdk-java/issues/217,Semantic,Catching too much,8
+https://github.com/elastic/elasticsearch/issues/2984,Semantic,Complex change,9
+https://github.com/bazelbuild/bazel/issues/1525,Semantic,Complex change,9
+https://github.com/elastic/elasticsearch/issues/3610,Semantic,Complex change,8
+https://github.com/google/ExoPlayer/issues/268,Semantic,Complex change,9
+https://github.com/google/ExoPlayer/issues/2891,Semantic,Complex change,9
+https://github.com/netty/netty/issues/1094,Semantic,Complex change,9
+https://github.com/netty/netty/issues/8400,Semantic,Complex change,9
+https://github.com/netty/netty/issues/8692,Semantic,Complex change,8
+https://github.com/spring-projects/spring-boot/issues/9801,Semantic,Complex change,8
+https://github.com/bazelbuild/bazel/issues/2239,Semantic,Complex change,8
+https://github.com/brettwooldridge/HikariCP/issues/39,Semantic,Complex change,8
+https://github.com/google/guava/issues/3598,Semantic,Complex change,8
+https://github.com/redisson/redisson/issues/1522,Semantic,Complex change,8
+https://github.com/elastic/elasticsearch/issues/8046,Semantic,Complex change,8
+https://github.com/square/okhttp/issues/1560,Semantic,Complex change,8
+https://github.com/google/ExoPlayer/issues/6314,Semantic,Complex change,8
+https://github.com/square/okhttp/issues/3422,Semantic,Complex change,8
+https://github.com/netty/netty/issues/6225,Semantic,Complex change,8
+https://github.com/jankotek/mapdb/issues/561,Semantic,Complex change,8
+https://github.com/bazelbuild/bazel/issues/4987,Semantic,Complex change,8
+https://github.com/elastic/elasticsearch/issues/13249,Semantic,Complex change,8
+https://github.com/netty/netty/issues/1602,Semantic,Complex change,8
+https://github.com/reactor/reactor-core/issues/301,Semantic,Complex change,8
+https://github.com/netty/netty/issues/5082,Semantic,Complex change,8
+https://github.com/eclipse/n4js/issues/647,Semantic,Complex change,8
+https://github.com/redisson/redisson/issues/1245,Semantic,Complex change,8
+https://github.com/bazelbuild/bazel/issues/8030,Semantic,Complex change,8
+https://github.com/elastic/elasticsearch/issues/5779,Semantic,Complex change,8
+https://github.com/JetBrains/idea-gitignore/issues/415,Semantic,Complex change,9
+https://github.com/square/okhttp/issues/1592,Semantic,complex change,8
+https://github.com/checkstyle/checkstyle/issues/4945,Concurrency,ConcurrentModificationException,10
+https://github.com/facebook/fresco/issues/1664,Concurrency,ConcurrentModificationException,9
+https://github.com/JetBrains/idea-gitignore/issues/413,Concurrency,ConcurrentModificationException,9
+https://github.com/JetBrains/idea-gitignore/issues/84,Concurrency,ConcurrentModificationException,9
+https://github.com/microsoft/azure-tools-for-java/issues/4422,Concurrency,ConcurrentModificationException,9
+https://github.com/JetBrains/idea-gitignore/issues/221,Concurrency,ConcurrentModificationException,8
+https://github.com/redisson/redisson/issues/1433,Concurrency,ConcurrentModificationException,8
+https://github.com/orientechnologies/orientdb/issues/5279,Concurrency,ConcurrentModificationException,9
+https://github.com/realm/realm-java/issues/1970,Concurrency,ConcurrentModificationException,9
+https://github.com/elastic/elasticsearch/issues/1032,Semantic,Complex change,9
+https://github.com/spring-projects/spring-security/issues/6843,Semantic,Data missing / not propagated,9
+https://github.com/netty/netty/issues/6607,Semantic,Data missing / not propagated,9
+https://github.com/eclipse/jetty.project/issues/2346,Semantic,Data missing / not propagated,9
+https://github.com/elastic/elasticsearch/issues/15689,Semantic,Data missing / not propagated,9
+https://github.com/jhy/jsoup/issues/977,Semantic,Data missing / not propagated,9
+https://github.com/Automattic/simplenote-android/issues/188,Semantic,Data missing / not propagated,9
+https://github.com/google/ExoPlayer/issues/7188,Semantic,Data missing / not propagated,3
+https://github.com/spring-projects/spring-framework/issues/24206,Semantic,Data missing / not propagated,8
+https://github.com/restlet/restlet-framework-java/issues/1183,Semantic,Data missing/ not propagated,8
+https://github.com/bazelbuild/bazel/issues/5402,Concurrency,Deadlock,10
+https://github.com/elastic/elasticsearch/issues/4334,Concurrency,Deadlock,10
+https://github.com/netty/netty/issues/1181,Concurrency,Deadlock,10
+https://github.com/netty/netty/issues/1310,Concurrency,Deadlock,10
+https://github.com/orientechnologies/orientdb/issues/6380,Concurrency,Deadlock,10
+https://github.com/realm/realm-java/issues/1328,Concurrency,Deadlock,9
+https://github.com/apache/druid/issues/6201,Concurrency,Deadlock,9
+https://github.com/Azure/azure-iot-sdk-java/issues/167,Concurrency,Deadlock,9
+https://github.com/brettwooldridge/HikariCP/issues/275,Concurrency,Deadlock,9
+https://github.com/elastic/elasticsearch/issues/7623,Concurrency,Deadlock,9
+https://github.com/google/guava/issues/1977,Concurrency,Deadlock,9
+https://github.com/google/guava/issues/2072,Concurrency,Deadlock,9
+https://github.com/grpc/grpc-java/issues/6601,Concurrency,Deadlock,9
+https://github.com/netty/netty/issues/1701,Concurrency,Deadlock,9
+https://github.com/netty/netty/issues/1817,Concurrency,Deadlock,9
+https://github.com/netty/netty/issues/2093,Concurrency,Deadlock,9
+https://github.com/restlet/restlet-framework-java/issues/1243,Concurrency,Deadlock,9
+https://github.com/skylot/jadx/issues/726,Concurrency,Deadlock,9
+https://github.com/skylot/jadx/issues/743,Concurrency,Deadlock,9
+https://github.com/redisson/redisson/issues/1170,Concurrency,Deadlock,9
+https://github.com/redisson/redisson/issues/1268,Concurrency,Deadlock,8
+https://github.com/bazelbuild/bazel/issues/1560,Concurrency,Deadlock,8
+https://github.com/eclipse/hono/issues/1750,Concurrency,Deadlock,8
+https://github.com/elastic/elasticsearch/issues/1147,Concurrency,Deadlock,8
+https://github.com/hazelcast/hazelcast/issues/887,Concurrency,Deadlock,8
+https://github.com/JetBrains/idea-gitignore/issues/480,Concurrency,Deadlock,8
+https://github.com/netty/netty/issues/1175,Concurrency,Deadlock,8
+https://github.com/spring-projects/spring-boot/issues/10496,Concurrency,Deadlock,8
+https://github.com/netty/netty/issues/2098,Concurrency,Deadlock,8
+https://github.com/hazelcast/hazelcast/issues/14215,Concurrency,Deadlock,9
+https://github.com/redisson/redisson/issues/2306,Concurrency,Deadlock,9
+https://github.com/netty/netty/issues/5507,Concurrency,Deadlock,10
+https://github.com/redisson/redisson/issues/2304,Concurrency,Deadlock,9
+https://github.com/google/guava/issues/2743,Concurrency,Deadlock,9
+https://github.com/AsyncHttpClient/async-http-client/issues/1380,Semantic,Dependency,9
+https://github.com/netty/netty/issues/2814,Semantic,Complex change,9
+https://github.com/redisson/redisson/issues/863,Semantic,Design change,8
+https://github.com/jankotek/mapdb/issues/232,Semantic,Design change,8
+https://github.com/elastic/elasticsearch/issues/2065,Semantic,Design change,8
+https://github.com/eclipse/jetty.project/issues/1516,Semantic,Design change,8
+https://github.com/eclipse/n4js/issues/198,Semantic,Design change,8
+https://github.com/elastic/elasticsearch/issues/4661,Semantic,Design change (big),8
+https://github.com/jankotek/mapdb/issues/479,Memory,Disk leak,9
+https://github.com/jankotek/mapdb/issues/403,Memory,Disk leak,9
+https://github.com/jankotek/mapdb/issues/36,Memory,Disk leak,9
+https://github.com/google/ExoPlayer/issues/4439,Other,Documentation,9
+https://github.com/elastic/elasticsearch/issues/14798,Semantic,Exception processing,8
+https://github.com/elastic/elasticsearch/issues/2530,Semantic,Exception processing,8
+https://github.com/elastic/elasticsearch/issues/1457,Semantic,Exception processing,8
+https://github.com/netty/netty/issues/2412,Semantic,Exception processing,8
+https://github.com/netty/netty/issues/8220,Semantic,Exception should be thrown,9
+https://github.com/elastic/elasticsearch/issues/2693,Semantic,Exception should be thrown,9
+https://github.com/elastic/elasticsearch/issues/3313,Semantic,Exception should be thrown,9
+https://github.com/netty/netty/issues/1134,Semantic,Exception should be thrown,9
+https://github.com/Azure/azure-iot-sdk-java/issues/141,Semantic,Exception should be thrown,8
+https://github.com/elastic/elasticsearch/issues/4502,Semantic,If (branch) missing,8
+https://github.com/elastic/elasticsearch/issues/850,Semantic,If (branch) missing,8
+https://github.com/junit-team/junit5/issues/2157,Semantic,If branch missing,10
+https://github.com/bazelbuild/bazel/issues/2660,Semantic,If branch missing,9
+https://github.com/brettwooldridge/HikariCP/issues/115,Semantic,If branch missing,9
+https://github.com/brettwooldridge/HikariCP/issues/125,Semantic,If branch missing,9
+https://github.com/JetBrains/idea-gitignore/issues/419,Semantic,If branch missing,8
+https://github.com/netty/netty/issues/1064,Semantic,If branch missing,8
+https://github.com/spring-projects/spring-boot/issues/2916,Semantic,If condition incorrect,9
+https://github.com/Automattic/simplenote-android/issues/338,Semantic,If condition incorrect,9
+https://github.com/google/ExoPlayer/issues/3525,Semantic,If condition incorrect,9
+https://github.com/bazelbuild/bazel/issues/2474,Semantic,If condition missing,9
+https://github.com/netty/netty/issues/5629,Semantic,If condition missing,9
+https://github.com/netty/netty/issues/7293,Semantic,If condition missing,9
+https://github.com/elastic/elasticsearch/issues/1238,Semantic,If condition missing,9
+https://github.com/netty/netty/issues/4771,Semantic,If condition missing,9
+https://github.com/bazelbuild/bazel/issues/3416,Semantic,If condition missing,9
+https://github.com/jhy/jsoup/issues/704,Semantic,If condition missing,8
+https://github.com/elastic/elasticsearch/issues/5958,Semantic,If condition missing ,8
+https://github.com/naver/pinpoint/issues/3261,Semantic,Incorrect flow,9
+https://github.com/netty/netty/issues/4266,Semantic,Incorrect flow,9
+https://github.com/bazelbuild/bazel/issues/5830,Semantic,Incorrect value,9
+https://github.com/redisson/redisson/issues/1294,Semantic,Incorrect value,8
+https://github.com/reactor/reactor-core/issues/1529,Semantic,Incorrect value,8
+https://github.com/reactor/reactor-core/issues/905,Semantic,Incorrect value,8
+https://github.com/netty/netty/issues/218,Semantic,Infinite loop,9
+https://github.com/netty/netty/issues/1120,Semantic,Infinite loop,8
+https://github.com/netty/netty/issues/7877,Semantic,Infinite loop,10
+https://github.com/eclipse/hono/issues/231,Concurrency,Lock not released,8
+https://github.com/eclipse/elk/issues/252,Memory,Memory leak,10
+https://github.com/eclipse/hono/issues/454,Memory,Memory leak,10
+https://github.com/google/ExoPlayer/issues/2319,Memory,Memory leak,10
+https://github.com/grpc/grpc-java/issues/4198,Memory,Memory leak,10
+https://github.com/hazelcast/hazelcast/issues/14087,Memory,Memory leak,10
+https://github.com/hazelcast/hazelcast/issues/16429,Memory,Memory leak,10
+https://github.com/JetBrains/idea-gitignore/issues/373,Memory,Memory leak,10
+https://github.com/netty/netty/issues/1507,Memory,Memory leak,10
+https://github.com/netty/netty/issues/1524,Memory,Memory leak,10
+https://github.com/netty/netty/issues/1579,Memory,Memory leak,10
+https://github.com/netty/netty/issues/1624,Memory,Memory leak,10
+https://github.com/netty/netty/issues/1874,Memory,Memory leak,10
+https://github.com/netty/netty/issues/2644,Memory,Memory leak,10
+https://github.com/reactor/reactor-core/issues/578,Memory,Memory leak,10
+https://github.com/realm/realm-java/issues/1109,Memory,Memory leak,10
+https://github.com/redisson/redisson/issues/1326,Memory,Memory leak,10
+https://github.com/redisson/redisson/issues/1442,Memory,Memory leak,10
+https://github.com/redisson/redisson/issues/1584,Memory,Memory leak,10
+https://github.com/redisson/redisson/issues/1896,Memory,Memory leak,10
+https://github.com/redisson/redisson/issues/1927,Memory,Memory leak,10
+https://github.com/google/ExoPlayer/issues/4249,Memory,Memory leak,10
+https://github.com/elastic/elasticsearch/issues/24108,Memory,Memory leak,10
+https://github.com/spring-projects/spring-framework/issues/23571,Memory,Memory leak,10
+https://github.com/hazelcast/hazelcast/issues/12470,Memory,Memory leak,10
+https://github.com/eclipse/elk/issues/67,Memory,Memory leak,10
+https://github.com/netty/netty/issues/1516,Memory,Memory leak,10
+https://github.com/brettwooldridge/HikariCP/issues/148,Memory,Memory leak,9
+https://github.com/codenameone/CodenameOne/issues/1505,Memory,Memory leak,9
+https://github.com/elastic/elasticsearch/issues/1118,Memory,Memory leak,9
+https://github.com/google/ExoPlayer/issues/4114,Memory,Memory leak,9
+https://github.com/grpc/grpc-java/issues/598,Memory,Memory leak,9
+https://github.com/hazelcast/hazelcast/issues/12679,Memory,Memory leak,9
+https://github.com/hazelcast/hazelcast/issues/16482,Memory,Memory leak,9
+https://github.com/netty/netty/issues/1878,Memory,Memory leak,9
+https://github.com/netty/netty/issues/1975,Memory,Memory leak,9
+https://github.com/netty/netty/issues/3837,Memory,Memory leak,9
+https://github.com/netty/netty/issues/4211,Memory,Memory leak,9
+https://github.com/netty/netty/issues/5190,Memory,Memory leak,9
+https://github.com/netty/netty/issues/5372,Memory,Memory leak,9
+https://github.com/netty/netty/issues/539,Memory,Memory leak,9
+https://github.com/netty/netty/issues/5678,Memory,Memory leak,9
+https://github.com/netty/netty/issues/5833,Memory,Memory leak,9
+https://github.com/netty/netty/issues/7103,Memory,Memory leak,9
+https://github.com/netty/netty/issues/7290,Memory,Memory leak,9
+https://github.com/netty/netty/issues/7337,Memory,Memory leak,9
+https://github.com/netty/netty/issues/7418,Memory,Memory leak,9
+https://github.com/netty/netty/issues/7607,Memory,Memory leak,9
+https://github.com/redisson/redisson/issues/776,Memory,Memory leak,9
+https://github.com/spring-projects/spring-boot/issues/2324,Memory,Memory leak,9
+https://github.com/spring-projects/spring-security/issues/7293,Memory,Memory leak,9
+https://github.com/AsyncHttpClient/async-http-client/issues/1067,Memory,Memory leak,9
+https://github.com/checkstyle/checkstyle/issues/7458,Memory,Memory leak,9
+https://github.com/netty/netty/issues/2363,Memory,Memory leak,9
+https://github.com/spring-projects/spring-session/issues/81,Memory,Memory leak,9
+https://github.com/netty/netty/issues/1535,Memory,Memory leak,9
+https://github.com/orientechnologies/orientdb/issues/4807,Memory,Memory leak,9
+https://github.com/nextcloud/android/issues/305,Memory,Memory leak,9
+https://github.com/spring-projects/spring-session/issues/76,Memory,Memory leak,9
+https://github.com/spring-projects/spring-framework/issues/24339,Memory,Memory leak,9
+https://github.com/jankotek/mapdb/issues/272,Memory,Memory leak,9
+https://github.com/spring-projects/spring-framework/issues/24346,Memory,Memory leak,9
+https://github.com/codenameone/CodenameOne/issues/1595,Memory,Memory leak,9
+https://github.com/elastic/elasticsearch/issues/15789,Memory,Memory leak,9
+https://github.com/intuit/karate/issues/779,Memory,Memory leak,8
+https://github.com/spring-projects/spring-boot/issues/20900,Memory,Memory leak,8
+https://github.com/spring-projects/spring-framework/issues/24886,Memory,Memory leak,8
+https://github.com/junit-team/junit5/issues/1578,Memory,Memory leak,8
+https://github.com/elastic/elasticsearch/issues/5703,Memory,Memory leak,8
+https://github.com/netty/netty/issues/1298,Memory,Memory leak,10
+https://github.com/netty/netty/issues/4760,Memory,Memory leak,8
+https://github.com/bytedeco/javacv/issues/116,Semantic,Method override missing,9
+https://github.com/redisson/redisson/issues/2803,Semantic,Method override missing,9
+https://github.com/nextcloud/android/issues/3728,Semantic,Call missing,9
+https://github.com/hazelcast/hazelcast/issues/14701,Semantic,Missing case initialization,10
+https://github.com/netty/netty/issues/1426,Semantic,Missing case complex,9
+https://github.com/naver/pinpoint/issues/2299,Semantic,Missing case complex,9
+https://github.com/bazelbuild/bazel/issues/8775,Semantic,Missing case complex,9
+https://github.com/elastic/elasticsearch/issues/17460,Semantic,Missing case complex,9
+https://github.com/Automattic/simplenote-android/issues/281,Semantic,Missing case complex,8
+https://github.com/elastic/elasticsearch/issues/11019,Semantic,Missing case complex,8
+https://github.com/intuit/karate/issues/686,Semantic,Missing case complex,8
+https://github.com/elastic/elasticsearch/issues/15338,Semantic,Missing case complex,8
+https://github.com/netty/netty/issues/2426,Semantic,Missing case complex,8
+https://github.com/google/ExoPlayer/issues/1874,Semantic,Missing case complex,8
+https://github.com/square/okhttp/issues/5422,Semantic,Missing case complex,8
+https://github.com/hazelcast/hazelcast/issues/99,Semantic,Missing case complex,8
+https://github.com/elastic/elasticsearch/issues/8224,Semantic,Missing case complex,8
+https://github.com/netty/netty/issues/309,Semantic,Missing case complex,9
+https://github.com/elastic/elasticsearch/issues/4094,Semantic,Missing case initialization,8
+https://github.com/spring-projects/spring-boot/issues/4698,Semantic,Missing case initialization,8
+https://github.com/elastic/elasticsearch/issues/1321,Semantic,Missing case initialization,7
+https://github.com/elastic/elasticsearch/issues/4927,Semantic,Missing evaluation,8
+https://github.com/redisson/redisson/issues/1110,Semantic,Missing evaluation,8
+https://github.com/elastic/elasticsearch/issues/4273,Semantic,Missing exception handling,9
+https://github.com/elastic/elasticsearch/issues/7086,Semantic,Missing exception handling,9
+https://github.com/spring-projects/spring-boot/issues/10317,Semantic,Missing exception handling,8
+https://github.com/google/ExoPlayer/issues/3845,Semantic,Missing implementation,9
+https://github.com/Automattic/simplenote-android/issues/289,Semantic,Missing implementation,8
+https://github.com/AsyncHttpClient/async-http-client/issues/559,Semantic,Missing implementation,8
+https://github.com/elastic/elasticsearch/issues/1324,Semantic,Missing implementation,8
+https://github.com/google/ExoPlayer/issues/2167,Semantic,Missing implementation,8
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1858,Semantic,Missing implementation,3
+https://github.com/bazelbuild/bazel/issues/1735,Semantic,Missing implementation,8
+https://github.com/elastic/elasticsearch/issues/20912,Semantic,Missing implementation,8
+https://github.com/elastic/elasticsearch/issues/43840,Concurrency,Missing synchronization,10
+https://github.com/bazelbuild/bazel/issues/8160,Concurrency,Missing synchronization,9
+https://github.com/bytedeco/javacv/issues/700,Concurrency,Missing synchronization,9
+https://github.com/JodaOrg/joda-time/issues/44,Concurrency,Missing synchronization,9
+https://github.com/mapsforge/mapsforge/issues/618,Concurrency,Missing synchronization,9
+https://github.com/graphhopper/graphhopper/issues/743,Concurrency,Missing synchronization,8
+https://github.com/codenameone/CodenameOne/issues/1408,Concurrency,Missing synchronization,8
+https://github.com/eclipse/n4js/issues/444,Concurrency,Missing synchronization,9
+https://github.com/orientechnologies/orientdb/issues/7149,Concurrency,Missing synchronization,9
+https://github.com/elastic/elasticsearch/issues/3161,Other,Naming convention,9
+https://github.com/haraldk/TwelveMonkeys/issues/514,Semantic,Native overflow,10
+https://github.com/hazelcast/hazelcast/issues/12079,Semantic,Native overflow,10
+https://github.com/orientechnologies/orientdb/issues/6227,Semantic,Native overflow,10
+https://github.com/elastic/elasticsearch/issues/2785,Semantic,Native overflow,10
+https://github.com/netty/netty/issues/6210,Semantic,Native overflow,10
+https://github.com/google/ExoPlayer/issues/2311,Semantic,Native overflow,9
+https://github.com/google/ExoPlayer/issues/789,Semantic,Native overflow,9
+https://github.com/netty/netty/issues/7760,Semantic,Native overflow,9
+https://github.com/OpenRefine/OpenRefine/issues/2244,Semantic,Native overflow,9
+https://github.com/spring-projects/spring-session/issues/679,Semantic,Native overflow,8
+https://github.com/netty/netty/issues/2589,Semantic,Null check,9
+https://github.com/jankotek/mapdb/issues/538,Semantic,Null check,9
+https://github.com/elastic/elasticsearch/issues/6297,Semantic,Null check,8
+https://github.com/square/leakcanary/issues/417,Semantic,Null check,10
+https://github.com/google/ExoPlayer/issues/6146,Concurrency,Oder violation,9
+https://github.com/AsyncHttpClient/async-http-client/issues/1335,Concurrency,Order violation,9
+https://github.com/elastic/elasticsearch/issues/21126,Concurrency,Order violation,9
+https://github.com/elastic/elasticsearch/issues/5766,Concurrency,Order violation,8
+https://github.com/netty/netty/issues/2144,Concurrency,Order violation,8
+https://github.com/netty/netty/issues/4435,Concurrency,Order violation,9
+https://github.com/netty/netty/issues/6574,Memory,Other,10
+https://github.com/AsyncHttpClient/async-http-client/issues/1314,Concurrency,Other,9
+https://github.com/netty/netty/issues/597,Memory,Other,9
+https://github.com/netty/netty/issues/834,Memory,Other,9
+https://github.com/netty/netty/issues/8814,Memory,Other,9
+https://github.com/brettwooldridge/HikariCP/issues/1186,Memory,Other,9
+https://github.com/google/guava/issues/1558,Concurrency,Other,9
+https://github.com/mybatis/mybatis-3/issues/138,Concurrency,Other,9
+https://github.com/redisson/redisson/issues/1459,Concurrency,Other,9
+https://github.com/eclipse/jetty.project/issues/1448,Memory,Other,9
+https://github.com/thinkaurelius/titan/issues/284,Concurrency,Other,9
+https://github.com/redisson/redisson/issues/338,Memory,Other,9
+https://github.com/intuit/karate/issues/198,Memory,Other,8
+https://github.com/mapsforge/mapsforge/issues/920,Concurrency,Other,8
+https://github.com/netty/netty/issues/2924,Memory,Other,8
+https://github.com/netty/netty/issues/6564,Memory,Other,8
+https://github.com/netty/netty/issues/7383,Memory,Other,8
+https://github.com/netty/netty/issues/7617,Concurrency,Other,8
+https://github.com/redisson/redisson/issues/1158,Memory,Other,8
+https://github.com/redisson/redisson/issues/1935,Memory,other,8
+https://github.com/spring-projects/spring-boot/issues/11338,Memory,Other,8
+https://github.com/spring-projects/spring-boot/issues/14898,Memory,Other,8
+https://github.com/spring-projects/spring-boot/issues/6115,Memory,Other,8
+https://github.com/spring-projects/spring-boot/issues/6361,Concurrency,Other,8
+https://github.com/Automattic/simplenote-android/issues/213,Concurrency,Other,9
+https://github.com/bazelbuild/bazel/issues/1160,Concurrency,Other,8
+https://github.com/bazelbuild/bazel/issues/3927,Concurrency,Other,8
+https://github.com/bazelbuild/bazel/issues/8432,Concurrency,Other,8
+https://github.com/brettwooldridge/HikariCP/issues/19,Concurrency,Other,8
+https://github.com/elastic/elasticsearch/issues/1152,Concurrency,Other,8
+https://github.com/elastic/elasticsearch/issues/23048,Concurrency,Other,8
+https://github.com/elastic/elasticsearch/issues/4712,Concurrency,Other,8
+https://github.com/google/ExoPlayer/issues/2108,Concurrency,Other,8
+https://github.com/naver/pinpoint/issues/2259,Concurrency,Other,8
+https://github.com/naver/pinpoint/issues/3712,Concurrency,Other,8
+https://github.com/OpenRefine/OpenRefine/issues/652,Concurrency,Other,8
+https://github.com/redisson/redisson/issues/1542,Concurrency,Other,8
+https://github.com/redisson/redisson/issues/1593,Concurrency,Other,8
+https://github.com/speedment/speedment/issues/299,Concurrency,Other,8
+https://github.com/netty/netty/issues/6481,Memory,Other,8
+https://github.com/elastic/elasticsearch/issues/1081,Memory,Other,8
+https://github.com/netty/netty/issues/2651,Concurrency,Other,8
+https://github.com/spring-projects/spring-security-oauth/issues/1405,Concurrency,Other,8
+https://github.com/netty/netty/issues/2667,Concurrency,Other,8
+https://github.com/AsyncHttpClient/async-http-client/issues/1325,Memory,Overflow,9
+https://github.com/orientechnologies/orientdb/issues/7418,Memory,Overflow,9
+https://github.com/AsyncHttpClient/async-http-client/issues/1357,Memory,Overflow,9
+https://github.com/haraldk/TwelveMonkeys/issues/172,Memory,Overflow,8
+https://github.com/netty/netty/issues/1380,Memory,Overflow,8
+https://github.com/netty/netty/issues/6620,Memory,Overflow,8
+https://github.com/netty/netty/issues/3166,Memory,Overflow,8
+https://github.com/netty/netty/issues/5976,Memory,Overflow,8
+https://github.com/Automattic/simplenote-android/issues/109,Concurrency,Parallelisation,8
+https://github.com/speedment/speedment/issues/322,Concurrency,Parallelisation,8
+https://github.com/spring-projects/spring-boot/issues/8584,Concurrency,Parallelisation,9
+https://github.com/eclipse/hono/issues/457,Semantic,Missing evaluation,8
+https://github.com/netty/netty/issues/4829,Concurrency,Race condition,10
+https://github.com/intuit/karate/issues/655,Concurrency,Race condition,10
+https://github.com/netty/netty/issues/1739,Concurrency,Race condition,10
+https://github.com/AsyncHttpClient/async-http-client/issues/1365,Concurrency,Race condition,9
+https://github.com/AsyncHttpClient/async-http-client/issues/534,Concurrency,Race condition,9
+https://github.com/bazelbuild/bazel/issues/6890,Concurrency,Race condition,9
+https://github.com/brettwooldridge/HikariCP/issues/236,Concurrency,Race condition,9
+https://github.com/brettwooldridge/HikariCP/issues/880,Concurrency,Race condition,9
+https://github.com/elastic/elasticsearch/issues/1296,Concurrency,Race condition,9
+https://github.com/elastic/elasticsearch/issues/934,Concurrency,Race condition,9
+https://github.com/facebook/buck/issues/1518,Concurrency,Race condition,9
+https://github.com/facebook/fresco/issues/1504,Concurrency,Race condition,9
+https://github.com/netty/netty/issues/1986,Concurrency,Race condition,9
+https://github.com/netty/netty/issues/2013,Concurrency,Race condition,9
+https://github.com/netty/netty/issues/2086,Concurrency,Race condition,9
+https://github.com/netty/netty/issues/440,Concurrency,Race condition,9
+https://github.com/reactor/reactor-core/issues/1973,Concurrency,Race condition,9
+https://github.com/redisson/redisson/issues/106,Concurrency,Race condition,9
+https://github.com/netty/netty/issues/4198,Concurrency,Race condition,9
+https://github.com/square/okhttp/issues/3521,Concurrency,Race condition,9
+https://github.com/apache/pulsar/issues/4790,Concurrency,Race condition,8
+https://github.com/AsyncHttpClient/async-http-client/issues/1049,Concurrency,Race condition,8
+https://github.com/AsyncHttpClient/async-http-client/issues/1059,Concurrency,Race condition,8
+https://github.com/bazelbuild/bazel/issues/4398,Concurrency,Race condition,9
+https://github.com/bazelbuild/bazel/issues/5513,Concurrency,Race condition,8
+https://github.com/eclipse/elk/issues/325,Concurrency,Race condition,8
+https://github.com/eclipse/hono/issues/145,Concurrency,Race condition,8
+https://github.com/eclipse/n4js/issues/373,Concurrency,Race condition,8
+https://github.com/elastic/elasticsearch/issues/2658,Concurrency,Race condition,8
+https://github.com/grpc/grpc-java/issues/1330,Concurrency,Race condition,8
+https://github.com/grpc/grpc-java/issues/5729,Concurrency,Race condition,8
+https://github.com/naver/pinpoint/issues/2993,Concurrency,Race condition,8
+https://github.com/netty/netty/issues/2662,Concurrency,Race condition,8
+https://github.com/reactor/reactor-core/issues/2050,Concurrency,Race condition,8
+https://github.com/realm/realm-java/issues/1728,Concurrency,Race condition,8
+https://github.com/redisson/redisson/issues/1061,Concurrency,Race condition,8
+https://github.com/speedment/speedment/issues/234,Concurrency,Race condition,8
+https://github.com/spring-projects/spring-boot/issues/1061,Concurrency,Race condition,8
+https://github.com/spring-projects/spring-session/issues/1151,Concurrency,Race condition,9
+https://github.com/spring-projects/spring-boot/issues/18936,Concurrency,Race condition,9
+https://github.com/spring-projects/spring-session/issues/93,Concurrency,Race condition,9
+https://github.com/netty/netty/issues/300,Concurrency,Race condition,9
+https://github.com/jankotek/mapdb/issues/664,Concurrency,Race condition,9
+https://github.com/brettwooldridge/HikariCP/issues/44,Memory,Resource leak,10
+https://github.com/brettwooldridge/HikariCP/issues/465,Memory,Resource leak,10
+https://github.com/checkstyle/checkstyle/issues/3962,Memory,Resource leak,10
+https://github.com/grpc/grpc-java/issues/6850,Memory,Resource leak,10
+https://github.com/brettwooldridge/HikariCP/issues/206,Memory,Resource leak,10
+https://github.com/AsyncHttpClient/async-http-client/issues/1418,Memory,Resource leak,9
+https://github.com/AsyncHttpClient/async-http-client/issues/1461,Memory,Resource leak,9
+https://github.com/elastic/elasticsearch/issues/1167,Memory,Resource leak,9
+https://github.com/netty/netty/issues/129,Memory,Resource leak,9
+https://github.com/netty/netty/issues/5553,Memory,Resource leak,9
+https://github.com/redisson/redisson/issues/2845,Memory,Resource leak,9
+https://github.com/spring-projects/spring-boot/issues/17121,Memory,Resource Leak,9
+https://github.com/spring-projects/spring-boot/issues/4921,Memory,Resource Leak,9
+https://github.com/square/okhttp/issues/4258,Memory,Resource leak,9
+https://github.com/square/okhttp/issues/4658,Memory,Resource leak,9
+https://github.com/google/ExoPlayer/issues/1066,Memory,Resource leak,9
+https://github.com/redisson/redisson/issues/2587,Memory,Resource leak,9
+https://github.com/eclipse/jetty.project/issues/365,Memory,Resource leak,9
+https://github.com/jankotek/mapdb/issues/381,Memory,Resource leak,9
+https://github.com/hazelcast/hazelcast/issues/9423,Memory,Resource leak,8
+https://github.com/redisson/redisson/issues/237,Memory,Resource leak,8
+https://github.com/redisson/redisson/issues/2670,Memory,Resource leak,8
+https://github.com/bazelbuild/bazel/issues/5512,Memory,Resource leak,9
+https://github.com/netty/netty/issues/1116,Memory,Resource leak,8
+https://github.com/brettwooldridge/HikariCP/issues/696,Semantic,Runaway recursion,10
+https://github.com/libgdx/libgdx/issues/879,Semantic,Runaway recursion,10
+https://github.com/checkstyle/checkstyle/issues/4563,Semantic,Runaway recursion,9
+https://github.com/eXist-db/exist/issues/139,Semantic,Runaway recursion,9
+https://github.com/google/closure-compiler/issues/2222,Semantic,Runaway recursion,9
+https://github.com/spring-projects/spring-security/issues/5401,Semantic,Runaway recursion,9
+https://github.com/elastic/elasticsearch/issues/3486,Semantic,Runaway recursion,8
+https://github.com/redisson/redisson/issues/642,Semantic,Runaway recursion,9
+https://github.com/redisson/redisson/issues/789,Semantic,Runaway recursion,9
+https://github.com/requery/requery/issues/150,Semantic,Runaway recursion,9
+https://github.com/requery/requery/issues/354,Semantic,Runaway recursion,9
+https://github.com/requery/requery/issues/697,Semantic,Runaway recursion,9
+https://github.com/requery/requery/issues/99,Semantic,Runaway recursion,9
+https://github.com/spring-projects/spring-boot/issues/11037,Semantic,Runaway recursion,8
+https://github.com/spring-projects/spring-boot/issues/18365,Semantic,Runaway recursion,9
+https://github.com/spring-projects/spring-boot/issues/5902,Semantic,Runaway recursion,8
+https://github.com/elastic/elasticsearch/issues/29257,Semantic,Runaway recursion,8
+https://github.com/jankotek/mapdb/issues/776,Semantic,Runaway recursion,8
+https://github.com/reactor/reactor-core/issues/320,Concurrency,Synchronization missing,9
+https://github.com/eclipse/deeplearning4j/issues/4766,Memory,Thread leak,10
+https://github.com/elastic/elasticsearch/issues/9849,Memory,Thread leak,8
+https://github.com/elastic/elasticsearch/issues/9107,Memory,Thread leak,9
+https://github.com/elastic/elasticsearch/issues/6181,Memory,Thread leak,8
+https://github.com/elastic/elasticsearch/issues/18120,Concurrency,Unintentional value sharing,9
+https://github.com/checkstyle/checkstyle/issues/4908,Concurrency,Unintentional value sharing,8
+https://github.com/checkstyle/checkstyle/issues/4925,Concurrency,Unintentional value sharing,8
+https://github.com/eclipse/hono/issues/110,Concurrency,Unintentional value sharing,8
+https://github.com/google/ExoPlayer/issues/3762,Concurrency,Unintentional value sharing,8
+https://github.com/google/ExoPlayer/issues/7273,Concurrency,Unintentional value sharing,8
+https://github.com/graphhopper/graphhopper/issues/1938,Concurrency,Unintentional value sharing,8
+https://github.com/jhy/jsoup/issues/740,Concurrency,Unintentional value sharing,8
+https://github.com/jhy/jsoup/issues/970,Concurrency,Unintentional value sharing,8
+https://github.com/JodaOrg/joda-time/issues/18,Concurrency,Unintentional value sharing,8
+https://github.com/bazelbuild/bazel/issues/6806,Semantic,Wrong class,9
+https://github.com/AsyncHttpClient/async-http-client/issues/794,Semantic,Wrong class used,8
+https://github.com/elastic/elasticsearch/issues/886,Semantic,Wrong class used,0
+https://github.com/elastic/elasticsearch/issues/5817,Semantic,Wrong class used,8
+https://github.com/JetBrains/idea-gitignore/issues/320,Semantic,Wrong class used,8
+https://github.com/netty/netty/issues/1023,Semantic,Wrong datatype,9
+https://github.com/netty/netty/issues/602,Semantic,Wrong datatype,9
+https://github.com/bazelbuild/bazel/issues/2036,Semantic,Wrong datatype,8
+https://github.com/elastic/elasticsearch/issues/1455,Semantic,Wrong evaluation,9
+https://github.com/MenoData/Time4J/issues/360,Semantic,Wrong evaluation,9
+https://github.com/spring-projects/spring-boot/issues/10569,Semantic,Wrong evaluation,9
+https://github.com/netty/netty/issues/2823,Semantic,Wrong evaluation,8
+https://github.com/reactor/reactor-core/issues/342,Semantic,Wrong evaluation,8
+https://github.com/bazelbuild/bazel/issues/9180,Semantic,Wrong exception,9
+https://github.com/elastic/elasticsearch/issues/3513,Semantic,Wrong exception,9
+https://github.com/bazelbuild/bazel/issues/9995,Semantic,Wrong method used,9
+https://github.com/netty/netty/issues/329,Semantic,Wrong method used,8
+https://github.com/hazelcast/hazelcast/issues/575,Semantic,Wrong method used,6
+https://github.com/netty/netty/issues/5541,Semantic,Wrong method used,9
+https://github.com/spring-projects/spring-boot/issues/17927,Semantic,Wrong method used,8
+https://github.com/jhy/jsoup/issues/966,Semantic,Wrong/incorrect algorithm,9
+https://github.com/netty/netty/issues/2354,Semantic,Wrong/incorrect algorithm,9
+https://github.com/netty/netty/issues/6804,Semantic,Wrong/incorrect algorithm,9
+https://github.com/hazelcast/hazelcast/issues/1501,Semantic,Wrong/incorrect algorithm,8
+https://github.com/netty/netty/issues/3504,Security,,8
+https://github.com/netty/netty/issues/7362,Security,,8
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1849,NAB,,0
+https://github.com/bazelbuild/bazel/issues/3295,NAB,,1
+https://github.com/bazelbuild/bazel/issues/8711,NAB,,3
+https://github.com/eclipse/kura/issues/2070,NAB,,3
+https://github.com/google/guava/issues/2254,Semantic,Data missing / not propagated,0
+https://github.com/redisson/redisson/issues/1696,NOT ENGLISH,,0
+https://github.com/redisson/redisson/issues/2055,NOT ENGLISH,,0
+https://github.com/redisson/redisson/issues/2309,NOT ENGLISH,,0
+https://github.com/redisson/redisson/issues/2362,NOT ENGLISH,,0
+https://github.com/square/leakcanary/issues/285,Skip,,0
+https://github.com/square/leakcanary/issues/874,Skip,,0
+https://github.com/square/leakcanary/issues/968,Skip,,0
+https://github.com/apache/shardingsphere/issues/209,NOT ENGLISH,,0
+https://github.com/apache/shardingsphere/issues/2862,NEI,,0
+https://github.com/apache/skywalking/issues/31,NOT ENGLISH,,0
+https://github.com/bazelbuild/bazel/issues/6814,NEI,,0
+https://github.com/eclipse/n4js/issues/1734,NAB,,0
+https://github.com/eclipse/n4js/issues/893,NAB,,0
+https://github.com/elastic/elasticsearch/issues/1154,NAB,,0
+https://github.com/elastic/elasticsearch/issues/1668,NAB,,0
+https://github.com/elastic/elasticsearch/issues/2858,NAB,,0
+https://github.com/elastic/elasticsearch/issues/29509,NC,,0
+https://github.com/elastic/elasticsearch/issues/6260,NEI,,0
+https://github.com/elastic/elasticsearch/issues/8268,NAB,,0
+https://github.com/netty/netty/issues/1797,NEI,,0
+https://github.com/realm/realm-java/issues/5036,NEI,,0
+https://github.com/redisson/redisson/issues/1020,NOT ENGLISH,,0
+https://github.com/redisson/redisson/issues/104,Semantic,Complex change,8
+https://github.com/redisson/redisson/issues/1175,NOT ENGLISH,,0
+https://github.com/redisson/redisson/issues/1337,NOT ENGLISH,,0
+https://github.com/redisson/redisson/issues/1387,NOT ENGLISH,,0
+https://github.com/redisson/redisson/issues/2355,NOT ENGLISH,,0
+https://github.com/orientechnologies/orientdb/issues/5377,TOOBIG,,0
+https://github.com/thinkaurelius/titan/issues/881,TOOBIG,,0
+https://github.com/netty/netty/issues/2677,NAB,,0
+https://github.com/google/ExoPlayer/issues/1732,Semantic,Missing case complex,9
+https://github.com/orientechnologies/orientdb/issues/7489,Concurrency,Deadlock,10
+https://github.com/spring-projects/spring-framework/issues/24265,Concurrency,Not volatile,8
+https://github.com/hazelcast/hazelcast/issues/15497,Concurrency,Deadlock,9
+https://github.com/eclipse/deeplearning4j/issues/4781,Semantic,Exception processing,8
+https://github.com/hazelcast/hazelcast/issues/15950,Concurrency,Race condition,9
+https://github.com/eclipse/jetty.project/issues/730,Semantic,If (branch) missing,8
+https://github.com/netty/netty/issues/7092,Memory,Other,9
+https://github.com/netty/netty/issues/2925,Memory,Other,9
+https://github.com/junit-team/junit5/issues/1524,Concurrency,Race condition,9
+https://github.com/spring-projects/spring-boot/issues/3315,Semantic,Missing case complex,8
+https://github.com/spring-projects/spring-framework/issues/23448,Concurrency,Other,8
+https://github.com/netty/netty/issues/7483,Semantic,Missing exception handling,9
+https://github.com/spring-projects/spring-boot/issues/11360,,,
+https://github.com/elastic/elasticsearch/issues/8396,,,
+https://github.com/junit-team/junit5/issues/1511,,,
+https://github.com/orientechnologies/orientdb/issues/5844,,,
+https://github.com/orientechnologies/orientdb/issues/6979,,,
+https://github.com/eclipse/jetty.project/issues/546,,,
+https://github.com/spring-projects/spring-session/issues/1327,,,
+https://github.com/redisson/redisson/issues/1602,,,
+https://github.com/netty/netty/issues/3797,,,
+https://github.com/square/okhttp/issues/3138,,,
+https://github.com/netty/netty/issues/4704,,,
+https://github.com/jankotek/mapdb/issues/262,,,
+https://github.com/netty/netty/issues/5084,,,
+https://github.com/jhipster/generator-jhipster/issues/3722,,,
+https://github.com/apache/druid/issues/4937,,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/992,Concurrency,Other,9
+https://github.com/spring-projects/spring-security-oauth/issues/458,,,
+https://github.com/redisson/redisson/issues/757,,,
+https://github.com/thinkaurelius/titan/issues/1148,,,
+https://github.com/netty/netty/issues/306,,,
+https://github.com/spring-projects/spring-boot/issues/8917,,,
+https://github.com/netty/netty/issues/5031,,,
+https://github.com/nextcloud/android/issues/1439,,,
+https://github.com/eclipse/jetty.project/issues/1146,,,
+https://github.com/intuit/karate/issues/629,,,
+https://github.com/naver/pinpoint/issues/2920,,,
+https://github.com/jankotek/mapdb/issues/305,,,
+https://github.com/netty/netty/issues/2084,,,
+https://github.com/spring-projects/spring-boot/issues/2593,,,
+https://github.com/spring-projects/spring-framework/issues/23460,,,
+https://github.com/eclipse/jetty.project/issues/298,,,
+https://github.com/spring-projects/spring-framework/issues/22698,,,
+https://github.com/spring-projects/spring-boot/issues/18211,,,
+https://github.com/orientechnologies/orientdb/issues/7536,,,
+https://github.com/netty/netty/issues/8023,,,
+https://github.com/eclipse/jetty.project/issues/1047,,,
+https://github.com/spring-projects/spring-boot/issues/3097,,,
+https://github.com/eclipse/jetty.project/issues/1169,,,
+https://github.com/spring-projects/spring-boot/issues/3343,,,
+https://github.com/netty/netty/issues/5720,,,
+https://github.com/grpc/grpc-java/issues/2444,,,
+https://github.com/spring-projects/spring-framework/issues/23038,,,
+https://github.com/netty/netty/issues/1765,,,
+https://github.com/JodaOrg/joda-time/issues/171,,,
+https://github.com/square/okhttp/issues/1484,,,
+https://github.com/spring-projects/spring-session/issues/1129,,,
+https://github.com/jankotek/mapdb/issues/513,,,
+https://github.com/eclipse/jetty.project/issues/1759,,,
+https://github.com/spring-projects/spring-boot/issues/17017,,,
+https://github.com/spring-projects/spring-boot/issues/2590,,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/380,,,
+https://github.com/redisson/redisson/issues/2503,,,
+https://github.com/orientechnologies/orientdb/issues/7126,,,
+https://github.com/redisson/redisson/issues/724,,,
+https://github.com/netty/netty/issues/3419,,,
+https://github.com/orientechnologies/orientdb/issues/4527,,,
+https://github.com/redisson/redisson/issues/2874,,,
+https://github.com/jankotek/mapdb/issues/157,,,
+https://github.com/spring-projects/spring-framework/issues/23215,,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/909,,,
+https://github.com/hazelcast/hazelcast/issues/13272,,,
+https://github.com/netty/netty/issues/608,,,
+https://github.com/square/okhttp/issues/644,,,
+https://github.com/netty/netty/issues/3249,,,
+https://github.com/reactor/reactor-core/issues/609,,,
+https://github.com/redisson/redisson/issues/1604,,,
+https://github.com/spring-projects/spring-security/issues/3189,,,
+https://github.com/spring-projects/spring-boot/issues/388,,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/789,,,
+https://github.com/netty/netty/issues/5489,,,
+https://github.com/google/ExoPlayer/issues/3407,,,
+https://github.com/spring-projects/spring-boot/issues/4668,,,
+https://github.com/jankotek/mapdb/issues/581,,,
+https://github.com/netty/netty/issues/3297,,,
+https://github.com/eclipse/jetty.project/issues/2388,,,
+https://github.com/spring-projects/spring-boot/issues/14161,,,
+https://github.com/redisson/redisson/issues/1966,,,
+https://github.com/netty/netty/issues/520,,,
+https://github.com/netty/netty/issues/7194,,,
+https://github.com/square/moshi/issues/679,,,
+https://github.com/square/okhttp/issues/3945,,,
+https://github.com/netty/netty/issues/7255,,,
+https://github.com/spring-projects/spring-framework/issues/23542,,,
+https://github.com/spring-projects/spring-boot/issues/5922,,,
+https://github.com/jankotek/mapdb/issues/275,,,
+https://github.com/naver/pinpoint/issues/2881,,,
+https://github.com/netty/netty/issues/2586,,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1490,,,
+https://github.com/orientechnologies/orientdb/issues/5892,,,
+https://github.com/redisson/redisson/issues/421,,,
+https://github.com/jankotek/mapdb/issues/191,,,
+https://github.com/junit-team/junit4/issues/1365,,,
+https://github.com/spring-projects/spring-framework/issues/24671,,,
+https://github.com/bazelbuild/bazel/issues/10890,,,
+https://github.com/spring-projects/spring-session/issues/1153,,,
+https://github.com/redisson/redisson/issues/2790,,,
+https://github.com/netty/netty/issues/8616,,,
+https://github.com/jankotek/mapdb/issues/542,,,
+https://github.com/eclipse/jetty.project/issues/1062,,,
+https://github.com/spring-projects/spring-boot/issues/4593,,,
+https://github.com/spring-projects/spring-session/issues/1440,,,
+https://github.com/elastic/elasticsearch/issues/3531,,,
+https://github.com/jankotek/mapdb/issues/119,,,
+https://github.com/square/okhttp/issues/3146,,,
+https://github.com/netty/netty/issues/2800,,,
+https://github.com/netty/netty/issues/3896,,,
+https://github.com/netty/netty/issues/5297,,,
+https://github.com/apache/shardingsphere/issues/166,,,
+https://github.com/square/okhttp/issues/5761,,,
+https://github.com/spring-projects/spring-session/issues/1399,,,
+https://github.com/redisson/redisson/issues/758,,,
+https://github.com/eclipse/jetty.project/issues/2683,,,
+https://github.com/thinkaurelius/titan/issues/877,,,
+https://github.com/eclipse/jetty.project/issues/1718,,,
+https://github.com/orientechnologies/orientdb/issues/4953,,,
+https://github.com/elastic/elasticsearch/issues/6424,,,
+https://github.com/elastic/elasticsearch/issues/3427,,,
+https://github.com/jankotek/mapdb/issues/534,,,
+https://github.com/orientechnologies/orientdb/issues/5011,,,
+https://github.com/netty/netty/issues/6265,,,
+https://github.com/elastic/elasticsearch/issues/9204,,,
+https://github.com/spring-projects/spring-session/issues/1208,,,
+https://github.com/netty/netty/issues/634,,,
+https://github.com/redisson/redisson/issues/507,,,
+https://github.com/orientechnologies/orientdb/issues/5998,,,
+https://github.com/elastic/elasticsearch/issues/1222,,,
+https://github.com/spring-projects/spring-boot/issues/9869,,,
+https://github.com/netty/netty/issues/6536,,,
+https://github.com/elastic/elasticsearch/issues/4775,,,
+https://github.com/bazelbuild/bazel/issues/2855,,,
+https://github.com/spring-projects/spring-security/issues/7299,,,
+https://github.com/redisson/redisson/issues/2035,,,
+https://github.com/square/okhttp/issues/4419,,,
+https://github.com/netty/netty/issues/3219,,,
+https://github.com/spring-projects/spring-framework/issues/24835,,,
+https://github.com/eclipse/jetty.project/issues/2619,,,
+https://github.com/netty/netty/issues/6165,,,
+https://github.com/spring-projects/spring-boot/issues/4208,,,
+https://github.com/spring-projects/spring-boot/issues/5669,,,
+https://github.com/eclipse/hono/issues/2031,,,
+https://github.com/netty/netty/issues/3662,,,
+https://github.com/netty/netty/issues/454,,,
+https://github.com/eclipse/jetty.project/issues/1418,,,
+https://github.com/redisson/redisson/issues/2095,,,
+https://github.com/netty/netty/issues/7729,,,
+https://github.com/square/okhttp/issues/373,,,
+https://github.com/spring-projects/spring-session/issues/1212,,,
+https://github.com/junit-team/junit5/issues/417,,,
+https://github.com/netty/netty/issues/6507,,,
+https://github.com/eclipse/n4js/issues/813,,,
+https://github.com/hazelcast/hazelcast/issues/5641,,,
+https://github.com/orientechnologies/orientdb/issues/7516,,,
+https://github.com/spring-projects/spring-boot/issues/5357,,,
+https://github.com/elastic/elasticsearch/issues/3515,,,
+https://github.com/pmd/pmd/issues/180,,,
+https://github.com/spring-projects/spring-boot/issues/6360,,,
+https://github.com/eclipse/hono/issues/125,,,
+https://github.com/orientechnologies/orientdb/issues/6842,,,
+https://github.com/eclipse/jetty.project/issues/624,,,
+https://github.com/netty/netty/issues/7458,,,
+https://github.com/spring-projects/spring-boot/issues/12380,,,
+https://github.com/netty/netty/issues/2519,,,
+https://github.com/netty/netty/issues/2675,,,
+https://github.com/netty/netty/issues/4357,,,
+https://github.com/spring-projects/spring-framework/issues/22896,,,
+https://github.com/spring-projects/spring-boot/issues/12742,,,
+https://github.com/netty/netty/issues/3546,,,
+https://github.com/eclipse/jetty.project/issues/362,,,
+https://github.com/netty/netty/issues/387,,,
+https://github.com/thinkaurelius/titan/issues/425,,,
+https://github.com/orientechnologies/orientdb/issues/7125,,,
+https://github.com/spring-projects/spring-boot/issues/4130,,,
+https://github.com/spring-projects/spring-boot/issues/10809,,,
+https://github.com/redisson/redisson/issues/2037,,,
+https://github.com/elastic/elasticsearch/issues/1344,,,
+https://github.com/junit-team/junit5/issues/1591,,,
+https://github.com/spring-projects/spring-framework/issues/23096,,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1027,,,
+https://github.com/eclipse/jetty.project/issues/605,,,
+https://github.com/netty/netty/issues/2762,,,
+https://github.com/spring-projects/spring-boot/issues/1212,,,
+https://github.com/spring-projects/spring-framework/issues/23064,,,
+https://github.com/junit-team/junit5/issues/1697,,,
+https://github.com/redisson/redisson/issues/2018,,,
+https://github.com/redisson/redisson/issues/467,,,
+https://github.com/jankotek/mapdb/issues/209,,,
+https://github.com/netty/netty/issues/1364,,,
+https://github.com/orientechnologies/orientdb/issues/6958,,,
+https://github.com/spring-projects/spring-boot/issues/4871,,,
+https://github.com/spring-projects/spring-boot/issues/4793,,,
+https://github.com/junit-team/junit5/issues/478,,,
+https://github.com/square/okhttp/issues/938,,,
+https://github.com/netty/netty/issues/994,,,
+https://github.com/redisson/redisson/issues/2172,,,
+https://github.com/netty/netty/issues/768,,,
+https://github.com/redisson/redisson/issues/84,,,
+https://github.com/netty/netty/issues/4834,,,
+https://github.com/orientechnologies/orientdb/issues/6836,,,
+https://github.com/eclipse/jetty.project/issues/534,,,
+https://github.com/spring-projects/spring-boot/issues/6053,,,
+https://github.com/neo4j/neo4j/issues/6654,,,
+https://github.com/elastic/elasticsearch/issues/21039,,,
+https://github.com/spring-projects/spring-boot/issues/12171,,,
+https://github.com/redisson/redisson/issues/1661,,,
+https://github.com/square/okhttp/issues/1119,,,
+https://github.com/spring-projects/spring-framework/issues/23160,,,
+https://github.com/redisson/redisson/issues/39,,,
+https://github.com/spring-projects/spring-boot/issues/9141,,,
+https://github.com/netty/netty/issues/654,,,
+https://github.com/eclipse/ceylon-ide-eclipse/issues/1478,,,
+https://github.com/netty/netty/issues/298,,,
+https://github.com/netty/netty/issues/1865,,,
+https://github.com/orientechnologies/orientdb/issues/4940,,,
+https://github.com/netty/netty/issues/3972,,,
+https://github.com/orientechnologies/orientdb/issues/5817,,,
+https://github.com/spring-projects/spring-boot/issues/5968,,,
+https://github.com/redisson/redisson/issues/2144,,,
+https://github.com/BroadleafCommerce/BroadleafCommerce/issues/1448,,,
+https://github.com/spring-projects/spring-session/issues/1120,,,
+https://github.com/redisson/redisson/issues/2875,,,
+https://github.com/spring-projects/spring-boot/issues/21319,,,
+https://github.com/spring-projects/spring-session/issues/1270,,,
+https://github.com/netty/netty/issues/469,,,
+https://github.com/spring-projects/spring-boot/issues/4662,,,
+https://github.com/netty/netty/issues/3675,,,
+https://github.com/netty/netty/issues/90,,,
+https://github.com/checkstyle/checkstyle/issues/4932,,,
+https://github.com/spring-projects/spring-security/issues/4647,,,
+https://github.com/redisson/redisson/issues/543,,,
+https://github.com/netty/netty/issues/3156,,,
+https://github.com/reactor/reactor-core/issues/916,,,
+https://github.com/elastic/elasticsearch/issues/4887,,,
+https://github.com/spring-projects/spring-boot/issues/5464,,,
+https://github.com/eclipse/hono/issues/825,,,
+https://github.com/netty/netty/issues/287,,,
+https://github.com/spring-projects/spring-boot/issues/4748,,,
+https://github.com/eclipse/jetty.project/issues/372,,,
+https://github.com/square/okhttp/issues/2667,,,
+https://github.com/spring-projects/spring-boot/issues/9454,,,
+https://github.com/spring-projects/spring-session/issues/358,,,
+https://github.com/netty/netty/issues/7583,,,
+https://github.com/spring-projects/spring-boot/issues/14666,,,
+https://github.com/google/guava/issues/2463,,,

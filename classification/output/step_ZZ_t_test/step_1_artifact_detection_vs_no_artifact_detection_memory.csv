@@ -1,0 +1,6 @@
+,test,stat,p,h0
+0,shapiro_stat,0.9874933958053589,0.4716345965862274,artifact_removal is normal distributed
+1,dagostino_stat,3.0775287452755755,0.21464616030511977,artifact_removal is normal distributed
+0,shapiro_stat,0.9872469305992126,0.45444053411483765,no_artifact_removal is normal distributed
+1,dagostino_stat,3.3679855044541354,0.18563131454979934,no_artifact_removal is normal distributed
+0,t_test_one_sided,13.564715163614306,2.3756365478104293e-30,artifact_removal is not greater than no_artifact_removal
