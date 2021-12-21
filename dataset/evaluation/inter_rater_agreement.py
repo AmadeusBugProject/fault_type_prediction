@@ -10,7 +10,7 @@ from sklearn.metrics import cohen_kappa_score, ConfusionMatrixDisplay, confusion
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
 
-OUTPUT_DIR = root_dir() + 'evaluation/output/'
+OUTPUT_DIR = root_dir() + 'dataset/evaluation/output/'
 
 
 def load_and_normalize_csv(path):

@@ -4,13 +4,13 @@ import matplotlib.pyplot as plt
 
 from classification.step_Z_plot_evaluation import get_bootstrap_results
 from classification.utils import evaluate_bootstrap, report_classifier_performance
+from dataset.evaluation.krippendorff import krippendorff
 from dataset.excluded import excluded_projects
-from evaluation.krippendorff import krippendorff
 from file_anchor import root_dir
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 import sklearn.metrics as metrics
 
-OUTPUT_DIR = root_dir() + 'evaluation/output/'
+OUTPUT_DIR = root_dir() + 'datatset/evaluation/output/'
 
 target_names = {'concurrency': 0, 'memory': 1, 'other': 2, 'semantic': 3}
 

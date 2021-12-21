@@ -121,9 +121,8 @@ ensembe_performance = ensemble_best_classifiers(nested_cross_val_classifiers, nu
 # Classification schema
 Detailed documentation and examples for our fault type classification schema can be found in [classification_schema.md](classification_schema.md).
 
-# Classification schema
-Detailed documentation and examples for our fault type classification schema can be found in [classification_schema.md](classification_schema.md).
-
 # Licence
 The work contained in this repo is licenced under [LICENSE](AGPLv3), the bug reports contained in the datasets are subject to licence of their origin projects, please see [dataset/licences](dataset/licences) or the corresponding projects GitHub repositories.
 
+# Acknowledgment
+The work has been funded by the Austrian Science Fund (FWF): P 32653 (Automated Debugging in Use).

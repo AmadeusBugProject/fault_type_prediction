@@ -7,7 +7,7 @@ from classification.utils import report_classifier_performance
 from dataset.excluded import excluded_projects
 from file_anchor import root_dir
 
-OUTPUT_DIR = root_dir() + 'evaluation/output/'
+OUTPUT_DIR = root_dir() + 'dataset/evaluation/output/'
 
 target_names = {'concurrency': 0, 'memory': 1, 'other': 2, 'semantic': 3}
 
