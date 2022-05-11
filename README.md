@@ -11,7 +11,7 @@ We identify and discuss issues and limitations of ML classification approaches a
 Our models can support researchers in data collection efforts, as for example bug benchmark creation.
 In future, such models could aid inexperienced developers in debugging tool selection, helping save time and resources.
 More information can be found in the publication:
-> Thomas Hirsch and Birgit Hofer: "Predicting software fault types using bug reports", submitted to the  Journal of Systems and Software, under review.
+> Thomas Hirsch and Birgit Hofer: "Using textual bug reports to predict the fault category of software bugs", submitted to the Array Journal, under review.
 
 # Structure of this repository
 ## `artifact_detection_model`
@@ -79,9 +79,9 @@ The models in this repository utilize a pretrained scikitlearn model to distingu
 Due to filesize restrictions on GitHub, this pretrained model is not included, however there are two options to obtain it:
 1. Download the pretrained model [here](https://drive.google.com/file/d/1elXrmciHrUuN9_iQYPcnRXx18ZlqMqzt/view?usp=sharing) and move the file to [artifact_detection_model/out/](artifact_detection_model/out/)
 2. Train the model yourself.
-   - Clone [https://github.com/AmadeusBugProject/artifact_detection](https://github.com/AmadeusBugProject/artifact_detection)
+   - Clone [https://github.com/AmadeusBugProject/artifact_detection/releases/tag/v1.1](https://github.com/AmadeusBugProject/artifact_detection/releases/tag/v1.1)
    - Execute [https://github.com/AmadeusBugProject/artifact_detection/blob/master/artifact_detection_model/RUN_train_model.py](RUN_train_model.py) (approx. 5min runtime on older Intel i5 processors)
-    - Move the [artifact_detection_model/out/artifact_detection.joblib](artifact_detection_model/out/artifact_detection.joblib) file into the same path in this project.
+   - Move the [artifact_detection_model/out/artifact_detection.joblib](artifact_detection_model/out/artifact_detection.joblib) file into the same path in this project.
 
 ## Training set
 To load the training set of 496 labeled bug reports:
